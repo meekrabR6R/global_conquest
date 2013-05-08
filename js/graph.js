@@ -5,7 +5,6 @@ function Graph() {
     this._node_list = new Array();  
 }
 
-
 Graph.prototype = {
     
     add_node: function(id, data, edges){
@@ -47,12 +46,14 @@ Graph.prototype = {
     },
     
     update_data: function(id, data){
-        
+       
         for (i = 0; i < this._node_list.length; i++) {
             
-            if (this._node_list[i].id == id)
+            if (this._node_list[i].id == id){
                this._node_list[i].data = data;
+            }
             
+             
         }
     },
     

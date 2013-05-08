@@ -73,7 +73,7 @@
             <table>
             <th>World Conquest</th>
             <tr>
-                <td><input id="attk_btn" type="button" value="attack" onclick="attack_mode()"></td>
+                <td><input id="attk_btn" type="button" value="attack"></td>
             </tr>
             <tr id="attk_mode">
                 

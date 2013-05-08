@@ -1,3 +1,5 @@
+
+
 var graph = new Graph();
 
 $(document).ready(function(){
@@ -121,5 +123,18 @@ $(document).ready(function(){
     graph.add_edges(graph._node_list[18].id, graph._node_list[26].id);
     graph.add_edges(graph._node_list[18].id, graph._node_list[32].id);
     graph.add_edges(graph._node_list[18].id, graph._node_list[35].id);
+    
+    
+    graph.update_data(graph._node_list[0].id,{owner: "Nick", armies: 20, name: "Alaska"})
+    graph.update_data(graph._node_list[6].id,{owner: "Frank", armies: 20, name: "NW Territory"})
+    for(i=0; i <= 41; i++){
+        
+        var name = $("#terr"+i).attr('name');
+        if(i === 0 || i === 6) {
+             $("#terr"+i).html('<p>'+graph._node_list[i].data.armies+'</p>');
+        }
+       
+       
+    }
     
 });

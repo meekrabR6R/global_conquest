@@ -57,5 +57,17 @@ Graph.prototype = {
         }
     },
     
-    
+    get_node: function(id){
+        
+        var ret_node = null;
+        for (i = 0; i < this._node_list.length; i++) {
+            if (id === this._node_list[i].id){
+                ret_node = this._node_list[i]
+                break;
+            }
+        }
+        
+        return ret_node;
+    }
+     
 };

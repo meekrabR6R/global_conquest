@@ -29,14 +29,18 @@ $("#attk_btn").ready(function(){
 function roll_attk(){
     
     var attk_armies = $("#dice").val();
-    var def_armies = 0; //change value
+    var def_armies = 0; 
     var attk_roll = [];
     var def_roll = [];
     var attk_result = "";
     var def_result = "";
     
-    var id = $("#attackable option:selected").val();
-    var def_terr = graph.get_node(id);
+
+    var attk_id = $("#attack").text();
+    var attk_terr = graph.get_node(attk_id);
+    
+    var def_id = $("#attackable option:selected").val();
+    var def_terr = graph.get_node(def_id);
 
     if(def_terr.data.armies > 1)
         def_armies = 2;
@@ -52,9 +56,34 @@ function roll_attk(){
         def_roll[i] = Math.floor((Math.random()*6)+1);
         def_result += def_roll[i] + ", ";
     }
-    //TODO: dice win/loss logic!
+    
+    if(attk_armies > 1)
+        attk_roll.sort(function(a,b){return b-a});
+    
+    if(def_armies > 1)
+        def_roll.sort(function(a,b){return b-a});
+    
+    
+    if(attk_roll[0] > def_roll[0]) 
+        def_terr.data.armies--;
+    else
+        attk_terr.data.armies--;
+        
+    if(attk_armies > 1 && def_armies > 1){  
+        if(attk_roll[1] > def_roll[1]) 
+            def_terr.data.armies--;
+        else
+            attk_terr.data.armies--;
+    }
+    alert(attk_terr.data.armies) //show new values on screen (put 0 limit, country takeover, etc.)
     $("#result").val(attk_result + " /// " + def_result);
     
+}
+
+function roll_battle(attk_roll, def_roll) {
+    
+    
+        
 }
 
 function code_click(continent){

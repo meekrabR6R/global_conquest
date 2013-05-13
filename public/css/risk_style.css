@@ -5,7 +5,7 @@
 }
 body{
     font: 12px "Lucida Grande", Sans-Serif;
-    background: url(../media/backg.png);
+    background: url(../images/backg.png);
 }
 h2{
     color: #fa9f00;
@@ -26,7 +26,7 @@ h2{
     margin-right:50px;
     border:4px solid #000000;
     border-radius:5px;
-    background: url(../media/map.jpg);
+    background: url(../images/map.jpg);
     background-size: 100% 100%;
 }
 

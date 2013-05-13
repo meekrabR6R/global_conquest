@@ -12,7 +12,7 @@ $(document).ready(function(){
         graph.add_node(name, {}, []);
     }
     
-    //alaska
+    //alaska 1
     graph.add_edges(graph._node_list[0].id, graph._node_list[1].id);
     graph.add_edges(graph._node_list[0].id, graph._node_list[6].id);
     graph.add_edges(graph._node_list[0].id, graph._node_list[31].id);

@@ -1,67 +1,39 @@
-# [Laravel](http://laravel.com) - A PHP Framework For Web Artisans
+Facebook/Heroku sample app -- PHP
+=================================
 
-Laravel is a clean and classy framework for PHP web development. Freeing you
-from spaghetti code, Laravel helps you create wonderful applications using
-simple, expressive syntax. Development should be a creative experience that you
-enjoy, not something that is painful. Enjoy the fresh air.
+This is a sample app showing use of the Facebook Graph API, written in PHP, designed for deployment to [Heroku](http://www.heroku.com/).
 
-[Official Website & Documentation](http://laravel.com)
+Run locally
+-----------
 
-## Feature Overview
+Configure Apache with a `VirtualHost` that points to the location of this code checkout on your system.
 
-- Simple routing using Closures or controllers.
-- Views and templating.
-- Driver based session and cache handling.
-- Database abstraction with query builder.
-- Authentication.
-- Migrations.
-- PHPUnit Integration.
-- A lot more.
+[Create an app on Facebook](https://developers.facebook.com/apps) and set the Website URL to your local VirtualHost.
 
-## A Few Examples
+Copy the App ID and Secret from the Facebook app settings page into your `VirtualHost` config, something like:
 
-### Hello World:
+    <VirtualHost *:80>
+        DocumentRoot /Users/adam/Sites/myapp
+        ServerName myapp.localhost
+        SetEnv FACEBOOK_APP_ID 12345
+        SetEnv FACEBOOK_SECRET abcde
+    </VirtualHost>
 
-```php
-<?php
+Restart Apache, and you should be able to visit your app at its local URL.
 
-Route::get('/', function()
-{
-	return "Hello World!";
-});
-```
+Deploy to Heroku via Facebook integration
+-----------------------------------------
 
-### Passing Data To Views:
+The easiest way to deploy is to create an app on Facebook and click Cloud Services -> Get Started, then choose PHP from the dropdown.  You can then `git clone` the resulting app from Heroku.
 
-```php
-<?php
+Deploy to Heroku directly
+-------------------------
 
-Route::get('user/(:num)', function($id)
-{
-	$user = DB::table('users')->find($id);
+If you prefer to deploy yourself, push this code to a new Heroku app on the Cedar stack, then copy the App ID and Secret into your config vars:
 
-	return View::make('profile')->with('user', $user);
-});
-```
+    heroku create --stack cedar
+    git push heroku master
+    heroku config:add FACEBOOK_APP_ID=12345 FACEBOOK_SECRET=abcde
 
-### Redirecting & Flashing Data To The Session:
+Enter the URL for your Heroku app into the Website URL section of the Facebook app settings page, hen you can visit your app on the web.
 
-```php
-<?php
-
-return Redirect::to('profile')->with('message', 'Welcome Back!');
-```
-
-## Contributing to Laravel
-
-Contributions are encouraged and welcome; however, please review the Developer
-Certificate of Origin in the "license.txt" file included in the repository. All
-commits must be signed off using the `-s` switch.
-
-```bash
-git commit -s -m "this commit will be signed off automatically!"
-```
-
-## License
-
-Laravel is open-sourced software licensed under the MIT License.

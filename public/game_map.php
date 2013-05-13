@@ -1,8 +1,9 @@
+
 <!DOCTYPE HTML> 
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-         <title>World Domination</title>
+         <title>Global Conquest</title>
         <!--CSS -->
          <link rel="stylesheet" href="css/risk_style.css?v=1" type="text/css">
         
@@ -17,8 +18,8 @@
          <script src="js/territory_setter.js" type="text/javascript"></script>
          <script src="js/jHover.js" type="text/javascript"></script>
          <script src="js/attack.js" type="text/javascript"></script>
+         <script src="js/move_armies.js" type="text/javascript"></script>
 
-         
     </head>
     <body> <!---onload="setInterval('chat.update()', 1000)">-->
         
@@ -71,12 +72,15 @@
             </div>
             
             <table>
-            <th>World Conquest</th>
+            <th>Global Conquest</th>
             <tr>
                 <td><input id="attk_btn" type="button" value="attack"></td>
             </tr>
             <tr id="attk_mode">
                 
+            </tr>
+            <tr>
+                <td><input id="mov_btn" type="button" value="move armies"></td>
             </tr>
             <tr>
                 <td><input type="button" value="cards"></td>
@@ -90,6 +94,13 @@
             <tr>
                 <td><input type="button" value="stats"></td>
             </tr>
+            <tr>
+                <td><input type="button" value="rules"></td>
+            </tr>
+            <tr>
+                <td><input type="button" value="end turn"></td>
+            </tr>
+            
             <tr>
                 <td>
                     <div id=chat_wrap>   

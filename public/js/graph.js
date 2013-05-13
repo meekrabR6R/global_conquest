@@ -1,4 +1,6 @@
-
+/******************************************
+ *Graph class.
+ ******************************************/
 //graph constructor
 function Graph() {
     this._numVertices = 0;

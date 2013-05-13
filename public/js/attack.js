@@ -1,4 +1,13 @@
+/***************************************************
+ *Attack logic. Controls dice rolls, army movements,
+ *etc.
+ ***************************************************/
 
+/*****************************************************
+ *When attack button is clicked, a table is written to
+ *the screen that will hold the attacking country, and
+ *a dropdown of all attackable countries.
+ *****************************************************/
 $("#attk_btn").ready(function(){
    
     $("#attk_btn").click(function(){
@@ -26,6 +35,11 @@ $("#attk_btn").ready(function(){
     });
 });
 
+/*******************************************************
+ *Controls roll mechanics. Sets the amount of dice
+ *available to attacker and defender. Controls army
+ *reductions from attacks, and army movements on victory.
+ ********************************************************/
 function roll_attk(){
     
     var attk_armies = $("#dice").val();
@@ -66,16 +80,7 @@ function roll_attk(){
     
     if(attk_roll[0] > def_roll[0]){
         if (def_terr.data.armies > 0) 
-            def_terr.data.armies--;
-        
-        if(def_terr.data.armies === 0){
-            $("#roll").attr("disabled", true);
-            
-            var mov_armies = prompt("How many armies would you like to move?:");//maybe a popup plugin instead.
-            attk_terr.data.armies -= mov_armies;
-            def_terr.data.armies += mov_armies;
-        }
-        
+            def_terr.data.armies--;  
     }
     else{
         if(attk_terr.data.armies > 1) 
@@ -92,6 +97,7 @@ function roll_attk(){
                 
             if(def_terr.data.armies === 0) 
                 $("#roll").attr("disabled", true);
+                //probably set some card flag here for particular instance of player object
         }
         else{
             if(attk_terr.data.armies > 1) 
@@ -101,25 +107,71 @@ function roll_attk(){
                 $("#roll").attr("disabled", true);     
         }
     }
+    
+    if(def_terr.data.armies === 0){
+        
+        $("#roll").attr("disabled", true);
+        def_terr.data.owner = attk_terr.data.owner;
+        var mov_armies = prompt("How many armies would you like to move?:");//maybe a popup plugin instead.
+        
+        while (1){
+            
+            if (mov_armies > attk_terr.data.armies - 1) {
+                mov_armies = prompt("You cannot move that many armies!");//maybe a popup plugin instead.
+                if(mov_armies <= attk_terr.data.armies - 1)
+                    break;
+            }
+            else if(attk_armies === "3" && mov_armies < 3){
+                mov_armies = prompt("You must move at least 3 armies!");//maybe a popup plugin instead.
+                if (mov_armies >= 3) 
+                    break;
+                
+            }
+            else if(attk_armies === "2" && mov_armies < 2){
+                mov_armies = prompt("You must move at least 2 armies!");//maybe a popup plugin instead.
+                if (mov_armies >= 2) 
+                    break;
+            }
+            else if(attk_armies === "1" && mov_armies < 1){
+                mov_armies = prompt("You must move at least 1 armies!");//maybe a popup plugin instead.
+                if (mov_armies >= 1) 
+                    break;
+            }   
+            else 
+                break;
+        }
+        
+        attk_terr.data.armies -= mov_armies;
+        def_terr.data.armies = mov_armies;
+        
+    }
+    
     //add country take over options.
-    $("div[name="+attk_terr.id+"]").html('<p>'+attk_terr.data.armies+'</p>');
-    $("div[name="+def_terr.id+"]").html('<p>'+def_terr.data.armies+'</p>');
+    //temporary stuff:
+    if(attk_terr.data.owner === "Nick")
+        $("div[name="+attk_terr.id+"]").html('<p style="color:pink;">'+attk_terr.data.armies+'</p>');
+    if(def_terr.data.owner === "Nick") 
+        $("div[name="+def_terr.id+"]").html('<p style="color:pink;">'+def_terr.data.armies+'</p>');
+    
+    if(attk_terr.data.owner === "Frank")
+        $("div[name="+attk_terr.id+"]").html('<p style="color:blue;">'+attk_terr.data.armies+'</p>');
+    if(def_terr.data.owner === "Frank") 
+        $("div[name="+def_terr.id+"]").html('<p style="color:blue;">'+def_terr.data.armies+'</p>');
+        
     $("#result").val(attk_result + " /// " + def_result);
     
 }
 
-function roll_battle(attk_roll, def_roll) {
-    
-    
-        
-}
-
+/*************************************************************
+ *Makes territories clickable. If territory has more than one army,
+ *and is owned by attacker, attack options are written to document.
+ *************************************************************/
 function code_click(continent){
         
        $(continent).each(function(){
             
             var node = graph.get_node($(this).attr('name'));
-            if(node.data.armies > 1) {
+        
                 
                 $(this).click(function(){
             
@@ -159,10 +211,14 @@ function code_click(continent){
                         var country_select = "<select id='attackable'>"+terr_options+"</select>";  
                         $("#defend").html(country_select);
                     }
-                    else
-                        alert("Select a country with more than 1 ARMY.");
+                    else{
+                        $("#attack").html("<p>PLEASE SELECT A TERRITORY WITH MORE THAN 1 ARMY.</p>");
+                        $("#select").html("");
+                    }
+                    
                 }); 
-            }   
+            
+
                 
         });
         

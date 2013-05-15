@@ -6,9 +6,13 @@
 <html>
   <head>
     <title>Global Conquest</title>
+    <!--css-->
+    
     <!---scripts--->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
     <script src="js/make_game.js" type="text/javascript"></script>
+    <script src="js/front_page_stuff.js" type="text/javascript"></script>
+    
   </head>
   <body>
     <div id="fb-root"></div>
@@ -20,8 +24,9 @@
             <tr><th>Games</th></tr>
             <tr><td>------------------------------------------</td></tr>
             <tr>
-              <td><input id="create" type="button" value="invite friends" onclick="getFriends();"></td>
+              <td><input id="invite" type="button" value="invite friends" onclick="getFriends();"></td>
               <td><input id="create" type="button" value="new game"></td>
+              <tr><td><div id="setup"></div></td></tr>
             </tr>
             <tr><td>------------------------------------------</td></tr>
             <tr><td>Games in Progress:</td></tr>

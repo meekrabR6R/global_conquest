@@ -30,11 +30,11 @@
      
      function getFriends() {
                
-           FB.ui({
-             method: 'apprequests',
-             title: 'Global Conquest',
-             message: 'Come get pwned!',
-             }, fbCallback);
+          FB.ui({
+            method: 'apprequests',
+            title: 'Global Conquest',
+            message: 'Come get pwned!',
+            }, fbCallback);
      }
       
      function getPlayers() {

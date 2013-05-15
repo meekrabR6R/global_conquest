@@ -1,5 +1,8 @@
 <?php
-
+require_once('C:/wamp/www/global_conquest/application/models/sdk/src/facebook.php');
+require_once('C:/wamp/www/global_conquest/application/models/utils.php');
+include 'C:/wamp/www/global_conquest/application/models/AppInfo.php';
+  
 class Home_Controller extends Base_Controller {
 
 	/*
@@ -29,10 +32,39 @@ class Home_Controller extends Base_Controller {
 	|		}
 	|
 	*/
-
-	public function action_index()
-	{
+	
+	
+	public function action_index(){
 		return View::make('home.index');
+	}
+	
+	public function action_welcome(){
+		
+		$config = array();
+		$config['appId'] = AppInfo::appID();
+		$config['secret'] = AppInfo::appSecret();
+	  
+		$facebook = new Facebook($config);
+		$uid = $facebook->getUser();
+	
+		if($uid){
+		     try{
+		          $user = $facebook->api('/me');
+		          $img_loc = "http://graph.facebook.com/".$uid."/picture";
+		          return View::make('home.index')
+				->with('user', $user)
+				->with('img_loc', $img_loc);
+		     }
+		     catch(FacebookApiException $e){
+		        if(!$uid)
+		           exit();
+		     }
+	        }
+		else{
+		    $login = $facebook->getLoginUrl();
+		    echo '<a href="'.$login.'">LOGIN!</a>';
+		    
+		 }
 	}
 
 }

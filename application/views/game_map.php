@@ -5,23 +5,15 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
          <title>Global Conquest</title>
         <!--CSS -->
-         <link rel="stylesheet" href="css/risk_style.css?v=1" type="text/css">
+        <?php echo Asset::styles(); ?>
         
         <!--External Libraries/etc. -->
-         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
         
         <!--My scripts-->
-         <script src="js/chat.js" type="text/javascript"></script>
-         <script src="js/new_chat.js" type="text/javascript"></script>
-         <script src="js/graph.js" type="text/javascript"></script>
-         <script src="js/territory_setter.js" type="text/javascript"></script>
-         <script src="js/jHover.js" type="text/javascript"></script>
-         <script src="js/attack.js" type="text/javascript"></script>
-         <script src="js/move_armies.js" type="text/javascript"></script>
+        <?php echo Asset::scripts(); ?>
 
     </head>
-    <body> <!---onload="setInterval('chat.update()', 1000)">-->
+    <body> <!-- onload="setInterval('chat.update()', 1000)"> -->
         
         <div id="page_wrap">
             

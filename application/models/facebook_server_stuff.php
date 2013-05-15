@@ -14,7 +14,7 @@
     try{
       $user = $facebook->api('/me');
       $img_loc = "http://graph.facebook.com/".$uid."/picture";
-      
+     
     }
     catch(FacebookApiException $e){
       if(!$uid)

@@ -3,6 +3,7 @@
     padding: 0;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
+
 body{
     font: 12px "Lucida Grande", Sans-Serif;
     background: url(../images/backg.png);

@@ -110,5 +110,13 @@ Route::filter('auth', function()
 {
 	if (Auth::guest()) return Redirect::to('login');
 });
+
+
+Route::get('/sup', function(){
+	$headers = array('foo' => 'bar');
+	return Response::json($headers);
+});
+
+//Controllers
 Route::controller('home');
 Route::controller('map');

@@ -1,7 +1,7 @@
 <?php
-require_once('C:/wamp/www/global_conquest/application/models/sdk/src/facebook.php');
-require_once('C:/wamp/www/global_conquest/application/models/utils.php');
-include 'C:/wamp/www/global_conquest/application/models/AppInfo.php';
+require_once($_SERVER['DOCUMENT_ROOT'].'/global/application/models/sdk/src/facebook.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/global/application/models/utils.php');
+include $_SERVER['DOCUMENT_ROOT'].'/global/application/models/AppInfo.php';
   
 class Home_Controller extends Base_Controller {
 
@@ -34,11 +34,11 @@ class Home_Controller extends Base_Controller {
 	*/
 	
 	
-	public function action_index(){
-		return View::make('home.index');
-	}
+	//public function action_index(){
+//		return View::make('home.index');
+//	}
 	
-	public function action_welcome(){
+	public function action_index(){
 		
 		$config = array();
 		$config['appId'] = AppInfo::appID();

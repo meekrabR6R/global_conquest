@@ -15,7 +15,7 @@
     
         <h3>Global Conquest</h3>
         <table>
-           <!--- <tr><td><img src="<?php //echo $img_loc;?>"><p><?php //echo $user['name'];?></p></td></tr>-->
+            <tr><td><img src="<?php echo $img_loc;?>"><p><?php echo $user['name'];?></p></td></tr>
             <tr><th>Games</th></tr>
             <tr><td>------------------------------------------</td></tr>
             <tr>

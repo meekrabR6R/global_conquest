@@ -50,14 +50,22 @@ class Home_Controller extends Base_Controller {
 		if($uid){
 		     try{
 		          $user = $facebook->api('/me');
+			  $list = $facebook->api(array('method' => 'fql.query',
+						       'query' => "SELECT uid FROM user WHERE is_app_user = '1' AND uid IN (SELECT uid2 FROM friend
+						       WHERE uid1 = '" . $uid . "');"));
+			  
 		          $img_loc = "http://graph.facebook.com/".$uid."/picture";
+			  
 		          return View::make('home.index')
 				->with('user', $user)
-				->with('img_loc', $img_loc);
+				->with('img_loc', $img_loc)
+				->with('list', $list);
 		     }
 		     catch(FacebookApiException $e){
-		        if(!$uid)
-		           exit();
+		        if(!$uid){
+		           $login = $facebook->getLoginUrl();
+			   echo '<a href="'.$login.'">LOGIN!</a>';
+			}
 		     }
 	        }
 		else{

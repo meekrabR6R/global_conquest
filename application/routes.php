@@ -1,4 +1,12 @@
 <?php
+/*
+ *-------------------------------------------------------------------
+ *Facebook stuff
+ *-------------------------------------------------------------------
+ */
+//require_once($_SERVER['DOCUMENT_ROOT'].'/global/application/models/sdk/src/facebook.php');
+//require_once($_SERVER['DOCUMENT_ROOT'].'/global/application/models/utils.php');
+//include $_SERVER['DOCUMENT_ROOT'].'/global/application/models/AppInfo.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -32,11 +40,106 @@
 |
 */
 
-Route::get('/', function()
-{
-	return View::make('home.index');
+function fb(){
+	
+     $config = array();
+     $config['appId'] = AppInfo::appID();
+     $config['secret'] = AppInfo::appSecret();
+     return $facebook = new Facebook($config);
+}
+
+Route::get('/', function(){
+	
+	$facebook = fb();
+	$uid = $facebook->getUser();
+	
+	if($uid){
+		try{
+		     $user = $facebook->api('/me');
+		     $friend_list = $facebook->api(array('method' => 'fql.query',
+					'query' => "SELECT uid FROM user WHERE is_app_user = '1'
+					AND uid IN (SELECT uid2 FROM friend
+					WHERE uid1 = '" . $uid . "');"));
+		     
+		     $img_loc = "http://graph.facebook.com/".$uid."/picture";
+		     $_SESSION['user'] = $user;
+		     
+		     return View::make('home.index')
+			   ->with('games', Games::all())
+			   ->with('user', $user)
+			   ->with('img_loc', $img_loc)
+			   ->with('list', $friend_list);
+		}
+		catch(FacebookApiException $e){
+		   if(!$uid){
+		      $login = $facebook->getLoginUrl();
+		      echo '<a href="'.$login.'">LOGIN!</a>';
+		   }
+		}
+	}
+	else{
+	    $login = $facebook->getLoginUrl();
+	    echo '<a href="'.$login.'">LOGIN!</a>';
+	    
+	}
 });
 
+Route::get('map', function(){
+	
+	Asset::add('risk_style', 'css/risk_style.css');
+        Asset::add('jquery', 'js/jquery20.js');
+        Asset::add('chat', 'js/chat.js', 'jquery');
+        Asset::add('new_chat', 'js/new_chat.js', 'jquery');
+        Asset::add('graph', 'js/graph.js', 'jquery');
+        Asset::add('territory_setter', 'js/territory_setter.js', 'jquery');
+        Asset::add('attack', 'js/attack.js', 'jquery');
+        Asset::add('move_armies', 'js/move_armies.js', 'jquery');
+           
+	return View::make('game_map');
+});
+
+
+Route::post('db', function(){
+	       
+        if($_POST['funct'] == 'new_game'){
+            $new_game = Input::get('data'); 
+            $add_game = array();
+                                                                   
+            foreach($new_game as $x)
+                $add_game[] = $x['value'];
+             
+                
+	     $new_game = array(
+		'title' => $add_game[0],
+		'plyrs' => $add_game[1],
+		'type' => $add_game[2],
+		'maker_id' => $add_game[3],
+ 	     );
+        
+             Games::create($new_game);
+            
+        }
+        
+        else if($_POST['funct'] == 'new_player'){
+          //  $mysqli->query("insert into players (plyr_id, first_name, last_name, start_date) values('".$_POST['id']."','".$_POST['fn']."','".$_POST['ln']."','".$date."')");
+        }
+       
+       // $mysqli->close();
+});
+
+Route::get('db', function(){
+     
+     $raw_date = getdate();
+     $date = $raw_date['year']."-".$raw_date['mon']."-".$raw_date['mday'];
+        
+     $mysqli = new mysqli('localhost', 'root', null, 'global_conq');
+    
+     if($_GET['funct'] == 'get'){
+          $result = $mysqli->query("select * from games");//finetune this
+          var_dump($result->fetch_all());
+     }
+     $mysqli->close();
+});
 /*
 |--------------------------------------------------------------------------
 | Application 404 & 500 Error Handlers
@@ -112,11 +215,8 @@ Route::filter('auth', function()
 });
 
 
-Route::get('/sup', function(){
-	$headers = array('foo' => 'bar');
-	return Response::json($headers);
-});
+
 
 //Controllers
-Route::controller('home');
-Route::controller('map');
+Route::controller('games');
+Route::controller('players');

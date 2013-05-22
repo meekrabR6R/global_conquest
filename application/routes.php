@@ -115,9 +115,18 @@ Route::post('db', function(){
 		'type' => $add_game[2],
 		'maker_id' => $add_game[3],
  	     );
-        
+	     
+	     
              Games::create($new_game);
-            
+	     
+	     $game = Games::where('title', '=', $add_game[0])->first();
+	     
+	     $plyr_game_record = array(
+		'plyr_id' => $add_game[3],
+		'game_id' => $game->game_id,
+	     );
+	     
+	     Plyrgames::create($plyr_game_record);
         }
         
         else if($_POST['funct'] == 'new_player'){

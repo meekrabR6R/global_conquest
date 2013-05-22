@@ -36,7 +36,7 @@
             <tr><td>Games in Progress:</td></tr>
             <tr><td>------------------------------------------</td></tr>
               @foreach($games as $game)
-                <tr><td>{{ $game->title }}</td></tr>
+                <tr><td><a href="{{ URL::base(); }}/map?game_id={{ $game->game_id }}">{{ $game->title }}</a></td></tr>
               @endforeach
             <div id="curr_games"></div>
         </table>

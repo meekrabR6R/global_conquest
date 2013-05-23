@@ -5,12 +5,25 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
          <title>Global Conquest</title>
         <!--CSS -->
-        <?php echo Asset::styles(); ?>
+        {{ Asset::styles(); }}
         
         <!--External Libraries/etc. -->
         
         <!--My scripts-->
-        <?php echo Asset::scripts(); ?>
+        <script type="text/javascript">
+            var BASE = "{{ URL::base(); }}";
+            var uid = "{{ $uid; }}";
+            var game_id = "{{ $game->game_id; }}";
+            var plyr_limit = {{ $game->plyrs }};
+            var plyr_count = {{ $plyr_count }};
+            var plyrs = [];
+            
+            @foreach($plyr_list as $player)
+                plyrs.push( {{ $player->plyr_id }} );
+            @endforeach
+            
+        </script>
+        {{ Asset::scripts(); }}
 
     </head>
     <body> <!-- onload="setInterval('chat.update()', 1000)"> -->
@@ -64,7 +77,13 @@
             </div>
             
             <table>
-            <th>Global Conquest</th>
+            <th>{{ $game->title; }}</th>
+              
+            <tr>
+                @if($join_flag == 0 && ($plyr_count < $game->plyrs))
+                   <td><input id="join_btn" type="button" value="join"></td>
+                @endif
+            </tr>
             <tr>
                 <td><input id="attk_btn" type="button" value="attack"></td>
             </tr>

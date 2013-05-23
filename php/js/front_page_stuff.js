@@ -30,6 +30,11 @@ $(document).ready(function(){
                        }
                 );
             });
+            
+            
+            $("#add_plyrs").click(function(){
+            
+            });
     
         });
     

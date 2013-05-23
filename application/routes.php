@@ -85,6 +85,8 @@ Route::get('/', function(){
 });
 
 Route::get('map', function(){
+	$facebook = fb();
+	$uid = $facebook->getUser();
 	
 	Asset::add('risk_style', 'css/risk_style.css');
         Asset::add('jquery', 'js/jquery20.js');
@@ -94,14 +96,32 @@ Route::get('map', function(){
         Asset::add('territory_setter', 'js/territory_setter.js', 'jquery');
         Asset::add('attack', 'js/attack.js', 'jquery');
         Asset::add('move_armies', 'js/move_armies.js', 'jquery');
-           
-	return View::make('game_map');
+	Asset::add('make_game', 'js/make_game.js', 'jquery');
+        
+	$game_id = $_GET['game_id'];
+	
+	$game = Games::where('game_id', '=', $game_id)->first();
+	$plyr_list = Plyrgames::where('game_id','=', $game_id)->get();
+	$plyr_count = Plyrgames::where('game_id','=', $game_id)->count();
+	$join_flag = 0;
+	
+	foreach($plyr_list as $player){
+		if($uid == $player->plyr_id)
+			$join_flag = 1;
+	}
+	return View::make('game_map')
+		->with('game', $game)
+		->with('plyr_list', $plyr_list)
+		->with('uid', $uid)
+		->with('join_flag', $join_flag)
+		->with('plyr_count', $plyr_count);
+		
 });
 
 
 Route::post('db', function(){
 	       
-        if($_POST['funct'] == 'new_game'){
+        if(Input::get('funct') == 'new_game'){
             $new_game = Input::get('data'); 
             $add_game = array();
                                                                    
@@ -129,6 +149,16 @@ Route::post('db', function(){
 	     Plyrgames::create($plyr_game_record);
         }
         
+	else if(Input::get('funct') == 'join'){
+		
+		$plyr_join = array(
+			'plyr_id' => Input::get('uid'),
+			'game_id' => Input::get('game_id')
+		);
+		
+		Plyrgames::create($plyr_join);
+		echo "SUCCESS!";
+	}
         else if($_POST['funct'] == 'new_player'){
           //  $mysqli->query("insert into players (plyr_id, first_name, last_name, start_date) values('".$_POST['id']."','".$_POST['fn']."','".$_POST['ln']."','".$date."')");
         }

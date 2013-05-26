@@ -1,14 +1,5 @@
 <?php
 /*
- *-------------------------------------------------------------------
- *Facebook stuff
- *-------------------------------------------------------------------
- */
-//require_once($_SERVER['DOCUMENT_ROOT'].'/global/application/models/sdk/src/facebook.php');
-//require_once($_SERVER['DOCUMENT_ROOT'].'/global/application/models/utils.php');
-//include $_SERVER['DOCUMENT_ROOT'].'/global/application/models/AppInfo.php';
-
-/*
 |--------------------------------------------------------------------------
 | Application Routes
 |--------------------------------------------------------------------------
@@ -55,6 +46,7 @@ Route::get('/', function(){
 	
 	if($uid){
 		try{
+			
 		     $user = $facebook->api('/me');
 		     $friend_list = $facebook->api(array('method' => 'fql.query',
 					'query' => "SELECT uid FROM user WHERE is_app_user = '1'
@@ -85,8 +77,10 @@ Route::get('/', function(){
 });
 
 Route::get('map', function(){
+	
 	$facebook = fb();
-	$uid = $facebook->getUser();
+	$user = $facebook->api('/me');
+	
 	
 	Asset::add('risk_style', 'css/risk_style.css');
         Asset::add('jquery', 'js/jquery20.js');
@@ -99,22 +93,77 @@ Route::get('map', function(){
 	Asset::add('make_game', 'js/make_game.js', 'jquery');
         
 	$game_id = $_GET['game_id'];
-	
 	$game = Games::where('game_id', '=', $game_id)->first();
-	$plyr_list = Plyrgames::where('game_id','=', $game_id)->get();
-	$plyr_count = Plyrgames::where('game_id','=', $game_id)->count();
-	$join_flag = 0;
 	
-	foreach($plyr_list as $player){
-		if($uid == $player->plyr_id)
+	$plyr_id = Plyrgames::where('game_id','=', $game_id)->get();
+	$plyr_count = Plyrgames::where('game_id','=', $game_id)->count();
+	$plyr_fn_qry = DB::query('select first_name from players, plyr_games where plyr_games.plyr_id = players.plyr_id');
+	
+	$game_table = $game->title.''.$game_id;
+	$plyr_fn = array();
+	
+	$join_flag = 0;
+	$fn_addflag = 0;
+	
+	foreach($plyr_fn_qry as $player)
+		array_push($plyr_fn, $player->first_name);
+	
+	foreach($plyr_id as $player){
+		if($user['id'] == $player->plyr_id)
 			$join_flag = 1;
 	}
+	
+	$check = DB::only('SELECT COUNT(*) as `exists`
+			   FROM information_schema.tables
+			   WHERE table_name IN (?)
+			   AND table_schema = database()',$game_table);
+
+	if(!$check){
+		Schema::create($game_table, function($table){
+			$table->increments('id');
+			$table->string('curr_owner');
+			$table->integer('army_cnt')->default(1);
+			//$table->timestamps();
+		});
+		
+		
+	
+	}
+	else if($plyr_count == $game->plyrs){
+		$game_state = DB::query('select * from '. $game_table);
+		$plyr_nm_color = array();
+		
+		foreach($plyr_id as $player){
+			
+			$plyr_index = DB::query('select first_name, plyr_color from plyr_games, players
+				  where plyr_games.plyr_id = players.plyr_id
+                                  and plyr_games.plyr_id ='.$player->plyr_id);
+			
+			array_push($plyr_nm_color, $plyr_index);
+		}
+		
+		
+		return View::make('game_map')
+			->with('game', $game)
+			->with('plyr_id', $plyr_id)
+			->with('plyr_fn', $plyr_fn)
+			->with('join_flag', $join_flag)
+			->with('plyr_count', $plyr_count)
+			->with('uid', $user['id'])
+			->with('user_fn', $user['first_name'])
+			->with('game_state', $game_state)
+			->with('plyr_nm_color', $plyr_nm_color);
+		
+	}
+	
 	return View::make('game_map')
 		->with('game', $game)
-		->with('plyr_list', $plyr_list)
-		->with('uid', $uid)
+		->with('plyr_id', $plyr_id)
+		->with('plyr_fn', $plyr_fn)
 		->with('join_flag', $join_flag)
-		->with('plyr_count', $plyr_count);
+		->with('plyr_count', $plyr_count)
+		->with('uid', $user['id'])
+		->with('user_fn', $user['first_name']);
 		
 });
 
@@ -147,16 +196,43 @@ Route::post('db', function(){
 	     );
 	     
 	     Plyrgames::create($plyr_game_record);
+	     
+	  
         }
         
 	else if(Input::get('funct') == 'join'){
 		
+		$game_id = Input::get('game_id');
+		$game = Games::where('game_id', '=', $game_id)->first();
+		
+		$game_table = $game->title.''.$game_id;
+		
+		$plyr_count = Plyrgames::where('game_id','=', $game_id)->count();
+		
 		$plyr_join = array(
 			'plyr_id' => Input::get('uid'),
-			'game_id' => Input::get('game_id')
+			'game_id' => Input::get('game_id'),
+			'plyr_color' => Input::get('plyr_color')
 		);
 		
-		Plyrgames::create($plyr_join);
+		if($plyr_count < $game->plyrs){
+			Plyrgames::create($plyr_join);
+			$plyr_count++;
+		}
+		
+		if($plyr_count == $game->plyrs){
+			$tot_players = DB::query('select first_name from players, plyr_games 
+						  where  players.plyr_id = plyr_games.plyr_id
+						  and plyr_games.game_id = ?', $game_id);
+			
+			$index = 0;
+			for($i = 0; $i <= 41; $i++){
+				$insert = DB::query("insert into ".$game_table." (curr_owner) values('".$tot_players[$index++]->first_name."')");
+				if($index == $plyr_count)
+					$index = 0;
+			}
+		}
+		
 		echo "SUCCESS!";
 	}
         else if($_POST['funct'] == 'new_player'){

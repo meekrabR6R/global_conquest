@@ -1,6 +1,7 @@
 /******************************************
  *Graph class.
  ******************************************/
+
 //graph constructor
 function Graph() {
     this._numVertices = 0;
@@ -49,14 +50,14 @@ Graph.prototype = {
     
     update_data: function(id, data){
        
-        for (i = 0; i < this._node_list.length; i++) {
+        this._node_list.forEach(function(node){
             
-            if (this._node_list[i].id == id){
-               this._node_list[i].data = data;
+            if(node.id == id){
+               node.data = data;
             }
             
              
-        }
+        });
     },
     
     get_node: function(id){

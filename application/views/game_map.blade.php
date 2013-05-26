@@ -11,17 +11,40 @@
         
         <!--My scripts-->
         <script type="text/javascript">
+        
             var BASE = "{{ URL::base(); }}";
             var uid = "{{ $uid; }}";
+            var user_fn = "{{ $user_fn; }}"
             var game_id = "{{ $game->game_id; }}";
             var plyr_limit = {{ $game->plyrs }};
             var plyr_count = {{ $plyr_count }};
-            var plyrs = [];
             
-            @foreach($plyr_list as $player)
-                plyrs.push( {{ $player->plyr_id }} );
+            var plyr_id = [];
+            var plyr_nm_color = [];
+            var plyr_fn = [];
+            var game_state = [];
+            
+        
+            @foreach($game_state as $state)
+                game_state.push({'terr' : 'terr'+{{ $state->id - 1; }}, 'owner' : '{{ $state->curr_owner; }}', 'army_cnt' : {{ $state->army_cnt; }} });
+            @endforeach
+        
+            @foreach($plyr_id as $player)
+                plyr_id.push( '{{ $player->plyr_id; }}' );
             @endforeach
             
+            @foreach($plyr_fn as $player)
+                plyr_fn.push( '{{ $player; }}' );
+            @endforeach
+            
+            @foreach($plyr_nm_color as $player)
+                @foreach($player as $x)
+                    plyr_nm_color.push({'fn':'{{ $x->first_name }}','color': '{{ $x->plyr_color; }}'});
+                @endforeach
+            @endforeach
+            
+            console.log(plyr_nm_color);
+       
         </script>
         {{ Asset::scripts(); }}
 
@@ -84,6 +107,7 @@
                    <td><input id="join_btn" type="button" value="join"></td>
                 @endif
             </tr>
+            <tr><td id="color_pick"></td></tr>
             <tr>
                 <td><input id="attk_btn" type="button" value="attack"></td>
             </tr>

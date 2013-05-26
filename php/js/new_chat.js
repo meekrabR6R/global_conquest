@@ -1,5 +1,4 @@
-// ask user for name with popup prompt    
-  var name = prompt("Enter your chat name:", "Guest"); //replace with facebook login info!
+  var name = user_fn;
  
   // default name is 'Guest'
   if (!name || name === ' ') {

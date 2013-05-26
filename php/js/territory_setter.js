@@ -255,22 +255,20 @@ $(document).ready(function(){
     graph.add_edges(graph._node_list[40].id, graph._node_list[39].id);
     
     //probably make into different file. owner name to be replaced with fb name.
-    graph.update_data(graph._node_list[0].id,{owner: "Nick", armies: 20, name: "Alaska"});
-    graph.update_data(graph._node_list[6].id,{owner: "Frank", armies: 20, name: "NW Territory"});
-    graph.update_data(graph._node_list[1].id,{owner: "Nick", armies: 2, name: "Alberta"});
-    graph.update_data(graph._node_list[7].id,{owner: "Frank", armies: 1, name: "Ontario"});
+    //this code fires after all players have joined or mod has initiated.
     
     for(i=0; i <= 41; i++){
+        var name = $("#"+game_state[i].terr).attr('name');
+        var color = "";
+        //randomize distribution of territories amongst players
+        graph.update_data(name, {owner_name: game_state[i].owner, armies: game_state[i].army_cnt});
         
-        var name = $("#terr"+i).attr('name');
-        if(i === 0 || i === 6 || i === 1 || i === 7) {
-             if (i === 0 || i === 1) 
-                $("#terr"+i).html('<p style="color:pink;">'+graph._node_list[i].data.armies+'</p>');
-            if (i === 6 || i === 7) 
-                $("#terr"+i).html('<p style="color:blue;">'+graph._node_list[i].data.armies+'</p>');
+        for (j=0; j < plyr_nm_color.length; j++) {
+            if(game_state[i].owner == plyr_nm_color[j].fn)
+                color = plyr_nm_color[j].color;
         }
        
-       
+        $("#terr"+i).html('<p style="color:'+color+'; size=20px;">'+graph._node_list[i].data.armies+'</p>');  
     }
     
 });

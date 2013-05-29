@@ -7,11 +7,9 @@
         <!--CSS -->
         {{ Asset::styles(); }}
         
-        <!--External Libraries/etc. -->
-        
         <!--My scripts-->
         <script type="text/javascript">
-        
+            //Interface between PHP and Javascript variables:
             var BASE = "{{ URL::base(); }}";
             var uid = "{{ $uid; }}";
             var user_fn = "{{ $user_fn; }}"
@@ -22,12 +20,13 @@
             var plyr_id = [];
             var plyr_nm_color = [];
             var plyr_fn = [];
-            var game_state = [];
             
-        
-            @foreach($game_state as $state)
-                game_state.push({'terr' : 'terr'+{{ $state->id - 1; }}, 'owner' : '{{ $state->curr_owner; }}', 'army_cnt' : {{ $state->army_cnt; }} });
-            @endforeach
+            @if(isset($game_state))
+                var game_state = [];
+                @foreach($game_state as $state)
+                    game_state.push({'terr' : 'terr'+{{ $state->id - 1; }}, 'owner' : '{{ $state->curr_owner; }}', 'army_cnt' : {{ $state->army_cnt; }} });
+                @endforeach
+            @endif
         
             @foreach($plyr_id as $player)
                 plyr_id.push( '{{ $player->plyr_id; }}' );
@@ -37,14 +36,14 @@
                 plyr_fn.push( '{{ $player; }}' );
             @endforeach
             
-            @foreach($plyr_nm_color as $player)
-                @foreach($player as $x)
-                    plyr_nm_color.push({'fn':'{{ $x->first_name }}','color': '{{ $x->plyr_color; }}'});
+            @if(isset($plyr_nm_color))
+                @foreach($plyr_nm_color as $player)
+                    @foreach($player as $x)
+                        plyr_nm_color.push({'fn':'{{ $x->first_name }}','color': '{{ $x->plyr_color; }}'});
+                    @endforeach
                 @endforeach
-            @endforeach
-            
-            console.log(plyr_nm_color);
-       
+            @endif
+        
         </script>
         {{ Asset::scripts(); }}
 

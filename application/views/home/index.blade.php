@@ -1,14 +1,13 @@
 <html>
   <head>
     <title>Global Conquest</title>
-    <!--css-->
-    
+ 
     <!---scripts--->
     <script type="text/javascript">
-    var user_id = "{{ $_SESSION['user']['id'] }}";
-    var user_fn = "{{ $_SESSION['user']['first_name'] }}";
-    var user_ln = "{{ $_SESSION['user']['last_name'] }}";
-    var BASE = "{{ URL::base(); }}";
+      var user_id = "{{ $_SESSION['user']['id'] }}";
+      var user_fn = "{{ $_SESSION['user']['first_name'] }}";
+      var user_ln = "{{ $_SESSION['user']['last_name'] }}";
+      var BASE = "{{ URL::base(); }}";
     </script>
   
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>

@@ -8,6 +8,7 @@ class Plyrgames extends Eloquent{
          * @var string
          */
     public static $table = 'plyr_games';
+    public static $key = 'plry_games_id';
     
 }
 

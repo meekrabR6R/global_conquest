@@ -7,6 +7,7 @@ class Players extends Eloquent{
          * @var string
          */
     public static $table = 'players';
+    public static $key = 'plyr_id';
 }
 
 ?>

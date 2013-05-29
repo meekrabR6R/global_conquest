@@ -39,6 +39,7 @@ function fb(){
      return $facebook = new Facebook($config);
 }
 
+
 Route::get('/', function(){
 	
 	$facebook = fb();
@@ -76,101 +77,13 @@ Route::get('/', function(){
 	}
 });
 
-Route::get('map', function(){
-	
-	$facebook = fb();
-	$user = $facebook->api('/me');
-	
-	
-	Asset::add('risk_style', 'css/risk_style.css');
-        Asset::add('jquery', 'js/jquery20.js');
-        Asset::add('chat', 'js/chat.js', 'jquery');
-        Asset::add('new_chat', 'js/new_chat.js', 'jquery');
-        Asset::add('graph', 'js/graph.js', 'jquery');
-        Asset::add('territory_setter', 'js/territory_setter.js', 'jquery');
-        Asset::add('attack', 'js/attack.js', 'jquery');
-        Asset::add('move_armies', 'js/move_armies.js', 'jquery');
-	Asset::add('make_game', 'js/make_game.js', 'jquery');
-        
-	$game_id = $_GET['game_id'];
-	$game = Games::where('game_id', '=', $game_id)->first();
-	
-	$plyr_id = Plyrgames::where('game_id','=', $game_id)->get();
-	$plyr_count = Plyrgames::where('game_id','=', $game_id)->count();
-	$plyr_fn_qry = DB::query('select first_name from players, plyr_games where plyr_games.plyr_id = players.plyr_id');
-	
-	$game_table = $game->title.''.$game_id;
-	$plyr_fn = array();
-	
-	$join_flag = 0;
-	$fn_addflag = 0;
-	
-	foreach($plyr_fn_qry as $player)
-		array_push($plyr_fn, $player->first_name);
-	
-	foreach($plyr_id as $player){
-		if($user['id'] == $player->plyr_id)
-			$join_flag = 1;
-	}
-	
-	$check = DB::only('SELECT COUNT(*) as `exists`
-			   FROM information_schema.tables
-			   WHERE table_name IN (?)
-			   AND table_schema = database()',$game_table);
-
-	if(!$check){
-		Schema::create($game_table, function($table){
-			$table->increments('id');
-			$table->string('curr_owner');
-			$table->integer('army_cnt')->default(1);
-			//$table->timestamps();
-		});
-		
-		
-	
-	}
-	else if($plyr_count == $game->plyrs){
-		$game_state = DB::query('select * from '. $game_table);
-		$plyr_nm_color = array();
-		
-		foreach($plyr_id as $player){
-			
-			$plyr_index = DB::query('select first_name, plyr_color from plyr_games, players
-				  where plyr_games.plyr_id = players.plyr_id
-                                  and plyr_games.plyr_id ='.$player->plyr_id);
-			
-			array_push($plyr_nm_color, $plyr_index);
-		}
-		
-		
-		return View::make('game_map')
-			->with('game', $game)
-			->with('plyr_id', $plyr_id)
-			->with('plyr_fn', $plyr_fn)
-			->with('join_flag', $join_flag)
-			->with('plyr_count', $plyr_count)
-			->with('uid', $user['id'])
-			->with('user_fn', $user['first_name'])
-			->with('game_state', $game_state)
-			->with('plyr_nm_color', $plyr_nm_color);
-		
-	}
-	
-	return View::make('game_map')
-		->with('game', $game)
-		->with('plyr_id', $plyr_id)
-		->with('plyr_fn', $plyr_fn)
-		->with('join_flag', $join_flag)
-		->with('plyr_count', $plyr_count)
-		->with('uid', $user['id'])
-		->with('user_fn', $user['first_name']);
-		
-});
+Route::get('map', array('uses' => 'map@map'));
 
 
 Route::post('db', function(){
 	       
         if(Input::get('funct') == 'new_game'){
+		
             $new_game = Input::get('data'); 
             $add_game = array();
                                                                    
@@ -225,36 +138,28 @@ Route::post('db', function(){
 						  where  players.plyr_id = plyr_games.plyr_id
 						  and plyr_games.game_id = ?', $game_id);
 			
+			$plyr_name = array();
 			$index = 0;
 			for($i = 0; $i <= 41; $i++){
-				$insert = DB::query("insert into ".$game_table." (curr_owner) values('".$tot_players[$index++]->first_name."')");
+				array_push($plyr_name, $tot_players[$index++]->first_name);
 				if($index == $plyr_count)
 					$index = 0;
 			}
+			
+			shuffle($plyr_name);
+			foreach($plyr_name as $name)
+				$insert = DB::query("insert into ".$game_table." (curr_owner) values('".$name."')");
+				
 		}
 		
-		echo "SUCCESS!";
+		
 	}
         else if($_POST['funct'] == 'new_player'){
           //  $mysqli->query("insert into players (plyr_id, first_name, last_name, start_date) values('".$_POST['id']."','".$_POST['fn']."','".$_POST['ln']."','".$date."')");
         }
        
-       // $mysqli->close();
 });
 
-Route::get('db', function(){
-     
-     $raw_date = getdate();
-     $date = $raw_date['year']."-".$raw_date['mon']."-".$raw_date['mday'];
-        
-     $mysqli = new mysqli('localhost', 'root', null, 'global_conq');
-    
-     if($_GET['funct'] == 'get'){
-          $result = $mysqli->query("select * from games");//finetune this
-          var_dump($result->fetch_all());
-     }
-     $mysqli->close();
-});
 /*
 |--------------------------------------------------------------------------
 | Application 404 & 500 Error Handlers

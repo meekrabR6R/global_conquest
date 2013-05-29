@@ -7,6 +7,7 @@ class Games extends Eloquent{
          * @var string
          */
     public static $table = 'games';
+    public static $key = 'game_id';
 }
 
 ?>

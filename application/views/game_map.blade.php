@@ -102,8 +102,24 @@
             <th>{{ $game->title; }}</th>
               
             <tr>
+
                 @if($join_flag == 0 && ($plyr_count < $game->plyrs))
                    <td><input id="join_btn" type="button" value="join"></td>
+                @else
+                    @foreach($plyr_id as $player)
+                        @if($maker_color == null && ($player->plyr_id == $game_maker))
+                            <tr>
+                                <td id="color_pick"> 
+                                     Choose Color: <select id="color">
+                                         <option name="blue">blue</option>
+                                         <option name="green">green</option>
+                                         </select>
+                                         <input id="submit_col" type="button"  value="submit">    
+                                </td>
+                            </tr>
+                        @endif
+                    @endforeach
+                   
                 @endif
             </tr>
             <tr><td id="color_pick"></td></tr>

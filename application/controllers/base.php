@@ -14,4 +14,15 @@ class Base_Controller extends Controller {
 		return Response::error('404');
 	}
 
+	/********************
+	 * Facebook Auth
+	 ********************/
+	public static function getFB(){
+
+		$config = array();
+        $config['appId'] = AppInfo::appID();
+        $config['secret'] = AppInfo::appSecret();
+        return new Facebook($config);
+	}
+
 }

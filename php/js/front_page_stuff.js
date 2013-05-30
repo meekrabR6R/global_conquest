@@ -21,9 +21,8 @@ $(document).ready(function(){
              
                 var form_data = $("#new_game").serializeArray();
                 
-                $.post(BASE+'/db',
-                       {funct: 'new_game',
-                        data: form_data},
+                $.post(BASE+'/new_game',
+                       {data: form_data},
                         function(result){
                            console.log(result);
                            $("#setup").append('<input id="add_plyrs" type="button" value="add players">');
@@ -47,9 +46,8 @@ $(document).ready(function(){
 
 function add_player() {
     
-    $.post(BASE+'/db',
-        {funct: 'new_player',
-         id: user_id,
+    $.post(BASE+'/new_player',
+        {id: user_id,
          fn: user_fn,
          ln: user_ln},
         function(result){
@@ -61,8 +59,7 @@ function add_player() {
 
 function get_games() {
     
-    $.get(BASE+'/db',
-          {funct: "get"},
+    $.get(BASE+'/games',
         function(result){
             console.log(result);
         }

@@ -28,15 +28,19 @@
             
             $game_id = $_GET['game_id'];
             $game = Games::where('game_id', '=', $game_id)->first();
+            $game_maker = $game->maker_id;
             $game_table = $game->title.''.$game_id;
-            
+
+            $maker_color = Plyrgames::where('plyr_id', '=', $game_maker)->first()->plyr_color;
+
             $plyr_id = Plyrgames::where('game_id','=', $game_id)->get();
             $plyr_count = Plyrgames::where('game_id','=', $game_id)->count();
             $plyr_fn_qry = DB::query('select first_name from players, plyr_games where plyr_games.plyr_id = players.plyr_id');
             
             
             $plyr_fn = array();
-            
+            $plyr_nm_color = Map_Controller::getPlyrColor($plyr_id);
+
             $join_flag = 0;
             $fn_addflag = 0;
             
@@ -52,8 +56,6 @@
             
             if($plyr_count == $game->plyrs){
                     
-                   $plyr_nm_color = Map_Controller::getPlyrColor($plyr_id);
-                    
                     
                     return View::make('game_map')
                             ->with('game', $game)
@@ -64,7 +66,9 @@
                             ->with('uid', $user['id'])
                             ->with('user_fn', $user['first_name'])
                             ->with('game_state', $game_state)
-                            ->with('plyr_nm_color', $plyr_nm_color);
+                            ->with('plyr_nm_color', $plyr_nm_color)
+                            ->with('game_maker', $game_maker)
+                            ->with('maker_color', $maker_color);
                     
             }
             
@@ -75,7 +79,9 @@
                     ->with('join_flag', $join_flag)
                     ->with('plyr_count', $plyr_count)
                     ->with('uid', $user['id'])
-                    ->with('user_fn', $user['first_name']);
+                    ->with('user_fn', $user['first_name'])
+                    ->with('game_maker', $game_maker)
+                    ->with('maker_color', $maker_color);
         }
         
         

@@ -12,11 +12,14 @@
             //Interface between PHP and Javascript variables:
             var BASE = "{{ URL::base(); }}";
             var uid = "{{ $uid; }}";
-            var user_fn = "{{ $user_fn; }}"
+            var user_fn = "{{ $user_fn; }}";
             var game_id = "{{ $game->game_id; }}";
-            var plyr_limit = {{ $game->plyrs }};
-            var plyr_count = {{ $plyr_count }};
-            
+            var game_table = "{{ $game_table; }}";
+            var plyr_limit = {{ $game->plyrs; }};
+            var plyr_count = {{ $plyr_count; }};
+            var armies_plcd = {{ $armies_plcd; }};
+            var init_armies = {{ $init_armies; }};
+          
             var plyr_id = [];
             var plyr_nm_color = [];
             var plyr_fn = [];
@@ -28,7 +31,7 @@
                 @endforeach
             @endif
         
-            @foreach($plyr_id as $player)
+            @foreach($plyr_data as $player)
                 plyr_id.push( '{{ $player->plyr_id; }}' );
             @endforeach
             
@@ -53,7 +56,6 @@
         <div id="page_wrap">
             
            <div id="game_map">
-                
                 <div class="north_america" id="terr0" name="alaska"></div>
                 <div class="north_america" id="terr1" name="alberta"></div>
                 <div class="north_america" id="terr2" name="central_america"></div>
@@ -100,46 +102,51 @@
             
             <table>
             <th>{{ $game->title; }}</th>
-              
-            <tr>
-
-                @if($join_flag == 0 && ($plyr_count < $game->plyrs))
-                   <td><input id="join_btn" type="button" value="join"></td>
-                @else
-                    @foreach($plyr_id as $player)
-                        @if($maker_color == null && ($player->plyr_id == $game_maker))
-                            <tr>
-                                <td id="color_pick"> 
-                                     Choose Color: <select id="color">
-                                         <option name="blue">blue</option>
-                                         <option name="green">green</option>
-                                         </select>
-                                         <input id="submit_col" type="button"  value="submit">    
-                                </td>
-                            </tr>
-                        @endif
-                    @endforeach
-                   
-                @endif
-            </tr>
-            <tr><td id="color_pick"></td></tr>
-            <tr>
-                <td><input id="attk_btn" type="button" value="attack"></td>
-            </tr>
-            <tr id="attk_mode">
-                
-            </tr>
-            <tr>
-                <td><input id="mov_btn" type="button" value="move armies"></td>
-            </tr>
+          
+            @if($join_flag == 0 && ($plyr_count < $game->plyrs)) 
+                <tr>
+                    <td><input id="join_btn" type="button" value="join"></td>
+                </tr>
+                <tr><td id="color_pick2"></td></tr> 
+            @endif
+            @if($join_flag == 1 && ($plyr_count < $game->plyrs))
+                <tr>
+                    <td><p>WAITING FOR OTHERS TO JOIN!</p></td>
+                </tr>
+            @endif
+            @if($armies_plcd == 0 && ($plyr_count == $game->plyrs))
+                <tr>
+                    <td><p>WE NEED TO PLACE SOME ARMIES!!</p></td>
+                </tr>
+                 <tr>
+                    <td id="place_armies"><p>{{ $init_armies; }} ARMIES REMANING</p></td>
+                </tr>
+                <tr><tr>&nbsp;</td></tr>
+                 <tr><td>--------------------------------</td></tr>
+            @endif
+            @if($armies_plcd == 1 && $player_up->plyr_id == $uid)
+                <tr>
+                    <td><input id="attk_btn" type="button" value="attack"></td>
+                </tr>
+                <tr id="attk_mode"> 
+                </tr>
+                <tr>
+                    <td><input id="mov_btn" type="button" value="move armies"></td>
+                </tr>
+            @endif
+            @if($armies_plcd == 1 && $player_up->plyr_id != $uid)
+                <tr>
+                    <td><p>WAIT IN LINE, YOUNG BLOOD.</p></td>
+                </tr>
+            @endif
             <tr>
                 <td><input type="button" value="cards"></td>
             </tr>
             <tr>
-                <td><input type="button" value="bug report"></td>
+                <td><input type="button" value="players"></td>
             </tr>
             <tr>
-                <td><input type="button" value="players"></td>
+                <td><input type="button" value="bug report"></td>
             </tr>
             <tr>
                 <td><input type="button" value="stats"></td>

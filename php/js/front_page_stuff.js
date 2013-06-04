@@ -25,10 +25,11 @@ $(document).ready(function(){
                        {data: form_data},
                         function(result){
                            console.log(result);
-                           $("#setup").append('<input id="add_plyrs" type="button" value="add players">');
                        }
                 );
-            });
+
+                $("#game_list").load(BASE+'/games');
+        });
             
             
             $("#add_plyrs").click(function(){

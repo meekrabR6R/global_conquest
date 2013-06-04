@@ -20,8 +20,8 @@ h2{
 }
 
 #game_map{
-    height: 65%;
-    width: 1250px;
+    height: 650px;
+    width: 1150px;
     position:relative;
     float:right;
     margin-right:50px;
@@ -33,48 +33,48 @@ h2{
 
 #terr0{
     position:relative;
-    left:50%;
-    top:80%;
+    left:5%;
+    top:10%;
 }
 #terr1{
     position:relative;
-    left:100px;
-    top:150px;
+    left:7%;
+    top:23%;
 }
 #terr2{
     position:relative;
-    left:120px;
-    top:315px;
+    left:12%;
+    top:45%;
 }
 #terr3{
     position:relative;
-    left:200px;
-    top:220px;
+    left:17%;
+    top:30%;
 }
 #terr4{
     position:relative;
-    left:100px;
-    top:190px;
+    left:9%;
+    top:25%;
 }
 #terr5{
     position:relative;
-    left:330px;
-    top:10px;
+    left:28%;
+    top:1%;
 }
 #terr6{
     position:relative;
-    left:80px;
-    top:15px;
+    left:9%;
+    top:-4%;
 }
 #terr7{
     position:relative;
-    left:180px;
-    top:70px;
+    left:15%;
+    top:5%;
 }
 #terr8{
     position:relative;
-    left:260px;
-    top:50px;
+    left:22%;
+    top:1%;
 }
 #terr9{
     position:relative;

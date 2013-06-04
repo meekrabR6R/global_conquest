@@ -23,13 +23,7 @@ $("#attk_btn").ready(function(){
                         </tr>\
                         <tr><td id="defend"></td></tr>');
         
-         //test clickies
-        code_click(".north_america");
-        code_click(".south_america");
-        code_click(".europe");
-        code_click(".africa");
-        code_click(".asia");
-        code_click(".australia");
+        set_clicks();
         
         $('#attk_btn').attr("disabled", true);	
     });
@@ -44,15 +38,8 @@ function roll_attk(){
     
     var attk_armies = $("#dice").val();
     var def_armies = 0; 
-    var attk_roll = [];
-    var def_roll = [];
-    var attk_result = "";
-    var def_result = "";
-    
-
     var attk_id = $("#attack").text();
     var attk_terr = graph.get_node(attk_id);
-    
     var def_id = $("#attackable option:selected").val();
     var def_terr = graph.get_node(def_id);
 
@@ -61,6 +48,30 @@ function roll_attk(){
     else
         def_armies = 1;
         
+    roll_process(attk_armies, def_armies, attk_terr, def_terr);
+    
+    if(def_terr.data.armies === 0)
+        victory_process(attk_terr, def_terr, attk_armies);
+        
+    battle_process(attk_terr, def_terr); 
+}
+
+/**********************************************************
+ *Processes attacker and defender rolls, and displays results.
+ *Long procedural mess... c'est la vie ...
+ *@param attk_armies
+ *@param def_armies
+ *@param attk_terr
+ *@param def_terr
+ ***********************************************************/
+function roll_process(attk_armies, def_armies, attk_terr, def_terr){
+
+    var attk_result = "";
+    var def_result = "";
+
+    var attk_roll = [];
+    var def_roll = [];
+
     for(i=0; i < attk_armies; i++){
         attk_roll[i] = Math.floor((Math.random()*6)+1);
         attk_result += attk_roll[i] + ", ";
@@ -107,11 +118,14 @@ function roll_attk(){
                 $("#roll").attr("disabled", true);     
         }
     }
-    
-    if(def_terr.data.armies === 0){
-        
-        $("#roll").attr("disabled", true);
-        def_terr.data.owner = attk_terr.data.owner;
+
+    $("#result").val(attk_result + " /// " + def_result);
+}
+
+function victory_process(attk_terr, def_terr, attk_armies){
+
+    $("#roll").attr("disabled", true);
+        def_terr.data.owner_name = attk_terr.data.owner_name;
         var mov_armies = prompt("How many armies would you like to move?:");//maybe a popup plugin instead.
         
         while (1){
@@ -143,23 +157,18 @@ function roll_attk(){
         
         attk_terr.data.armies -= mov_armies;
         def_terr.data.armies = mov_armies;
-        
+        def_terr.data.owner_name = attk_terr.data.owner_name;
+        def_terr.data.color = attk_terr.data.color;
+
+       set_clicks();
+}
+
+function battle_process(attk_terr, def_terr){
+
+    if(attk_terr.data.owner_name === user_fn){
+        $("div[name="+attk_terr.id+"]").html('<p style="color:'+attk_terr.data.color+';">'+attk_terr.data.armies+'</p>');
+        $("div[name="+def_terr.id+"]").html('<p style="color:'+def_terr.data.color+';">'+def_terr.data.armies+'</p>');
     }
-    
-    //add country take over options.
-    //temporary stuff:
-    if(attk_terr.data.owner === "Nick")
-        $("div[name="+attk_terr.id+"]").html('<p style="color:pink;">'+attk_terr.data.armies+'</p>');
-    if(def_terr.data.owner === "Nick") 
-        $("div[name="+def_terr.id+"]").html('<p style="color:pink;">'+def_terr.data.armies+'</p>');
-    
-    if(attk_terr.data.owner === "Frank")
-        $("div[name="+attk_terr.id+"]").html('<p style="color:blue;">'+attk_terr.data.armies+'</p>');
-    if(def_terr.data.owner === "Frank") 
-        $("div[name="+def_terr.id+"]").html('<p style="color:blue;">'+def_terr.data.armies+'</p>');
-        
-    $("#result").val(attk_result + " /// " + def_result);
-    
 }
 
 /*************************************************************
@@ -171,26 +180,35 @@ function code_click(continent){
        $(continent).each(function(){
             
             var node = graph.get_node($(this).attr('name'));
-        
-                
+          
+            if(node.data.owner_name === user_fn){   
+               
                 $(this).click(function(){
-            
+                    
                     border_list = [];
                     $("#attack").text(node.id);
                     
                     node.edges.forEach(function(border){
                         var border_node = graph.get_node(border); 
                         
-                        if(border_node.data.owner !== node.data.owner) 
+                        if(border_node.data.owner_name !== node.data.owner_name) 
                             border_list.push(border);
                                 
                     });
                     
                     if(node.data.armies > 1) {
                       
-                    
                         var dice_options = "";
-                        for(i=1; i < 4; i++){
+                        var attk_count;
+
+                        if(node.data.armies > 3)
+                            attk_count = 3;
+                        else if(node.data.armies === 2 || node.data.armies === 3)
+                            attk_count = 2;
+                        else
+                            attk_count = 1;
+
+                        for(i=1; i <= attk_count; i++){
                             dice_options += '<option id="'+i+'">'+i+'</option>';
                             if(node.data.armies === 3 && i === 2)
                                 break;
@@ -218,8 +236,18 @@ function code_click(continent){
                     
                 }); 
             
-
+            }
                 
         });
         
+}
+
+function set_clicks(){
+
+    code_click(".north_america");
+    code_click(".south_america");
+    code_click(".europe");
+    code_click(".africa");
+    code_click(".asia");
+    code_click(".australia");
 }

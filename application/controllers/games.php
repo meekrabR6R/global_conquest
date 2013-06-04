@@ -6,13 +6,11 @@ class Games_Controller extends Base_Controller{
 
     public function get_games(){
      
-        $mysqli = new mysqli('localhost', 'root', null, 'global_conq');
-        
-        $result = $mysqli->query("select * from games");//finetune this
-        var_dump($result->fetch_all());
+        $result = Games::all();
          
-        $mysqli->close();
-
+        foreach($result as $game){
+            echo  '<tr><td><a href="'. URL::base() .'/map?game_id='. $game->game_id .'>'. $game->title .'</a></td></tr>';
+        }
     }
 
     public function post_new_game(){
@@ -23,22 +21,23 @@ class Games_Controller extends Base_Controller{
         foreach($new_game as $x)
             $add_game[] = $x['value'];
          
-            
-         $new_game = array(
+        
+        $new_game = array(
             'title' => $add_game[0],
             'plyrs' => $add_game[1],
             'type' => $add_game[2],
             'maker_id' => $add_game[3],
-         );
+        );
      
      
          Games::create($new_game);
      
          $game = Games::where('title', '=', $add_game[0])->first();
-     
-         $plyr_game_record = array(
-        'plyr_id' => $add_game[3],
-        'game_id' => $game->game_id,
+        
+        $plyr_game_record = array(
+            'plyr_id' => $add_game[3],
+            'game_id' => $game->game_id,
+            'init_armies' => Games_Controller::setInitArmies($game->plyrs)
          );
      
         Plyrgames::create($plyr_game_record);
@@ -55,11 +54,12 @@ class Games_Controller extends Base_Controller{
         $game_table = $game->title.''.$game_id;
         
         $plyr_count = Plyrgames::where('game_id','=', $game_id)->count();
-        
+
         $plyr_join = array(
             'plyr_id' => Input::get('uid'),
             'game_id' => Input::get('game_id'),
-            'plyr_color' => Input::get('plyr_color')
+            'plyr_color' => Input::get('plyr_color'),
+            'init_armies' =>  Games_Controller::setInitArmies($game->plyrs)
         );
         
         if($plyr_count < $game->plyrs){
@@ -90,6 +90,27 @@ class Games_Controller extends Base_Controller{
 
        
               //  $mysqli->query("insert into players (plyr_id, first_name, last_name, start_date) values('".$_POST['id']."','".$_POST['fn']."','".$_POST['ln']."','".$date."')");
+    }
+
+
+    /********
+     *Various procedural functions
+     ************/
+
+    private static function setInitArmies($plyrs){
+
+        if($plyrs == 2)
+            $init_armies = 40;
+        elseif($plyrs == 3)
+            $init_armies = 35;
+        elseif($plyrs == 4)
+            $init_armies = 30;
+        elseif($plyrs == 5)
+            $init_armies = 25;
+        elseif($plyrs == 6)
+            $init_armies = 20;
+
+        return $init_armies;
     }
     
 }

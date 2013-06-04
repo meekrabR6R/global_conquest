@@ -2,7 +2,7 @@
   <head>
     <title>Global Conquest</title>
  
-    <!---scripts--->
+    <!---scripts-->
     <script type="text/javascript">
       var user_id = "{{ $_SESSION['user']['id'] }}";
       var user_fn = "{{ $_SESSION['user']['first_name'] }}";

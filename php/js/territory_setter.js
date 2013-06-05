@@ -263,8 +263,7 @@ $(document).ready(function(){
             var name = $("#"+game_state[i].terr).attr('name');
             var color = "";
           
-            graph.update_data(name, {owner_name: game_state[i].owner, armies: game_state[i].army_cnt});
-           
+            graph.update_data(name, {owner_name: game_state[i].owner, armies: game_state[i].army_cnt, pk_id: (i+1)});
 
             for (j=0; j < plyr_nm_color.length; j++) {
 

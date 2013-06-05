@@ -120,6 +120,17 @@ function roll_process(attk_armies, def_armies, attk_terr, def_terr){
     }
 
     $("#result").val(attk_result + " /// " + def_result);
+
+    $.post(BASE+'/attack',
+           {game_table: game_table,
+            attk_armies: attk_terr.data.armies,
+            def_armies: def_terr.data.armies,
+            attk_id: attk_terr.data.pk_id,
+            def_id: def_terr.data.pk_id},
+            function(result){
+                console.log(result);
+            }
+    )
 }
 
 function victory_process(attk_terr, def_terr, attk_armies){
@@ -160,7 +171,20 @@ function victory_process(attk_terr, def_terr, attk_armies){
         def_terr.data.owner_name = attk_terr.data.owner_name;
         def_terr.data.color = attk_terr.data.color;
 
-       set_clicks();
+        $.post(BASE+'/take_over',
+               {game_table: game_table,
+                attk_id: attk_terr.data.pk_id,
+                def_id: def_terr.data.pk_id,
+                attk_fn: attk_terr.data.owner_name,
+                def_fn: def_terr.data.owner_name,
+                attk_armies: attk_terr.data.armies,
+                def_armies: def_terr.data.armies},
+                function(result){
+                    console.log(result);
+                }
+        );
+
+        set_clicks();
 }
 
 function battle_process(attk_terr, def_terr){
@@ -203,17 +227,14 @@ function code_click(continent){
 
                         if(node.data.armies > 3)
                             attk_count = 3;
-                        else if(node.data.armies === 2 || node.data.armies === 3)
+                        else if(node.data.armies == 3)
                             attk_count = 2;
                         else
                             attk_count = 1;
-
+                        console.log("attk: "+attk_count+", armies:"+node.data.armies);
                         for(i=1; i <= attk_count; i++){
                             dice_options += '<option id="'+i+'">'+i+'</option>';
-                            if(node.data.armies === 3 && i === 2)
-                                break;
-                            if(node.data.armies === 2 && i === 1)
-                                break;
+                           
                         }
                         
                         $("#select").html('<select id="dice">'+dice_options+'</select>\

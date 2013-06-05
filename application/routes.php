@@ -38,6 +38,8 @@ Route::post('new_player', array('uses' => 'games@new_player'));
 Route::post('new_game', array('uses' => 'games@new_game'));
 Route::post('join', array('uses' => 'games@join'));
 Route::post('place', array('uses' => 'map@place'));
+Route::post('attack', array('uses' => 'map@attack'));
+Route::post('take_over', array('uses' => 'map@take_over'));
 /*
 |--------------------------------------------------------------------------
 | Application 404 & 500 Error Handlers

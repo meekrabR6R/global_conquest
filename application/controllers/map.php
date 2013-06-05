@@ -105,6 +105,42 @@
         }
 
 
+        public function post_attack(){
+
+            $game_table = Input::get('game_table');
+            $attk_armies = Input::get('attk_armies');
+            $def_armies = Input::get('def_armies');
+            $attk_id = Input::get('attk_id');
+            $def_id = Input::get('def_id');
+
+            $bindings = array('army_cnt' => $attk_armies, 'id' => $attk_id);
+            DB::query('update '.$game_table.' set army_cnt = ? where id = ?', $bindings);
+
+            $bindings = array('army_cnt' => $def_armies, 'id' => $def_id);
+            DB::query('update '.$game_table.' set army_cnt = ? where id = ?', $bindings);
+        }
+
+        public function post_take_over(){
+
+            $game_table = Input::get('game_table');
+            $attk_armies = Input::get('attk_armies');
+            $def_armies = Input::get('def_armies');
+            $attk_id = Input::get('attk_id');
+            $def_id = Input::get('def_id');
+            $attk_fn = Input::get('attk_fn');
+            $def_fn = Input::get('def_fn');
+            echo $attk_fn;
+            $bindings = array('army_cnt' => $attk_armies, 'id' => $attk_id);
+            DB::query('update '.$game_table.' set army_cnt = ? where id = ?', $bindings);
+
+            $bindings = array('army_cnt' => $def_armies, 'id' => $def_id);
+            DB::query('update '.$game_table.' set army_cnt = ? where id = ?', $bindings);
+
+            $bindings = array('curr_owner' => $attk_fn, 'id' => $def_id);
+            DB::query('update '.$game_table.' set curr_owner = ? where id = ?', $bindings);
+
+        }
+
 
         /**************************************************
          * -----  Various Procedural Functions -----

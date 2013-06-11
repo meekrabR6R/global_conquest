@@ -21,6 +21,8 @@ class Facebook_Controller extends Base_Controller{
 			     $img_loc = "http://graph.facebook.com/".$uid."/picture";
 			     $_SESSION['user'] = $user;
 			     
+			     Facebook_Controller::new_player($user['id'], $user['first_name'], $user['last_name']);
+
 			     return View::make('home.index')
 				   ->with('games', Games::all())
 				   ->with('user', $user)
@@ -40,6 +42,21 @@ class Facebook_Controller extends Base_Controller{
 		    
 		}
 
+    }
+
+     private static function new_player($id, $fn, $ln){
+        
+        $player_check = Players::find($id);
+
+        if(!$player_check){ 
+	        $new_player = array(
+	                'plyr_id' => $id,
+	                'first_name' => $fn,
+	                'last_name' => $ln
+	        );
+	        
+	        Players::create($new_player);
+	    }
     }
 }
 

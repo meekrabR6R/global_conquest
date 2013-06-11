@@ -11,12 +11,12 @@
         public function get_map() {
            
             Asset::add('risk_style', 'css/risk_style.css');
-            Asset::add('jquery', 'js/jquery20.js');
-            Asset::add('graph', 'js/graph.js', 'jquery');
-            Asset::add('territory_setter', 'js/territory_setter.js', 'jquery');
-            Asset::add('attack', 'js/attack.js', 'jquery');
-            Asset::add('move_armies', 'js/move_armies.js', 'jquery');
-            Asset::add('make_game', 'js/make_game.js', 'jquery');
+            Asset::add('jquery', 'js/libs/jquery20.js');
+            Asset::add('graph', 'js/map/graph.js', 'jquery');
+            Asset::add('territory_setter', 'js/map/territory_setter.js', 'jquery');
+            Asset::add('attack', 'js/map/attack.js', 'jquery');
+            Asset::add('move_armies', 'js/map/move_armies.js', 'jquery');
+            Asset::add('make_game', 'js/map/make_game.js', 'jquery');
          
             $facebook = Map_Controller::getFB();
             $user = $facebook->api('/me');

@@ -23,7 +23,7 @@ $("#attk_btn").ready(function(){
                         </tr>\
                         <tr><td id="defend"></td></tr>');
         
-        set_clicks();
+        make_clicks();
         
         $('#attk_btn').attr("disabled", true);	
     });
@@ -256,7 +256,7 @@ function makeCard(ownerID, gameID){
  *@param: continent - class identifier for territory divs in html view
  *********************************************************************/
 function code_click(continent){
-        
+     
        $(continent).each(function(){
             
             var node = graph.get_node($(this).attr('name'));
@@ -264,7 +264,7 @@ function code_click(continent){
             if(node.data.owner_id === user_id){   
                
                 $(this).click(function(){
-                    
+        
                     border_list = [];
                     $("#attack").text(node.id);
                     
@@ -323,7 +323,7 @@ function code_click(continent){
 * Makes the nodes in each continent
 * clickable.
 ************************************/
-function set_clicks(){
+function make_clicks(){
 
     code_click(".north_america");
     code_click(".south_america");

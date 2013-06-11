@@ -11,14 +11,14 @@
     </script>
   
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-    <script src="js/make_game.js" type="text/javascript"></script>
-    <script src="js/front_page_stuff.js" type="text/javascript"></script>
+    <script src="js/map/make_game.js" type="text/javascript"></script>
+    <script src="js/front_page/front_page_stuff.js" type="text/javascript"></script>
     
   </head>
   <body onload="add_player(); get_games();">
    
     <div id="fb-root"></div>
-    <script src="js/facebook_client_stuff.js" type="text/javascript"></script>
+    <script src="js/front_page/facebook_client_stuff.js" type="text/javascript"></script>
        
         <h3>Global Conquest</h3>
        

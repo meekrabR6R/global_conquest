@@ -47,7 +47,7 @@ $(document).ready(function(){
 
 function add_player() {
     
-    $.post(BASE+'/new_player',
+    $.post(BASE,
         {id: user_id,
          fn: user_fn,
          ln: user_ln},

@@ -87,12 +87,6 @@ class Games_Controller extends Base_Controller{
         }   
     }
     
-    public function post_new_player(){
-
-       
-        //  $mysqli->query("insert into players (plyr_id, first_name, last_name, start_date) values('".$_POST['id']."','".$_POST['fn']."','".$_POST['ln']."','".$date."')");
-    }
-
     
     /********
      *Various procedural functions

@@ -12,15 +12,12 @@
            
             Asset::add('risk_style', 'css/risk_style.css');
             Asset::add('jquery', 'js/jquery20.js');
-            Asset::add('chat', 'js/chat.js', 'jquery');
-            Asset::add('new_chat', 'js/new_chat.js', 'jquery');
             Asset::add('graph', 'js/graph.js', 'jquery');
             Asset::add('territory_setter', 'js/territory_setter.js', 'jquery');
             Asset::add('attack', 'js/attack.js', 'jquery');
             Asset::add('move_armies', 'js/move_armies.js', 'jquery');
             Asset::add('make_game', 'js/make_game.js', 'jquery');
          
-          
             $facebook = Map_Controller::getFB();
             $user = $facebook->api('/me');
             
@@ -28,21 +25,22 @@
 
             $game = Games::where('game_id', '=', $game_id)->first();
             $game_maker = $game->maker_id;
-           // $armies_plcd = $game->armies_plcd;
 
             $game_table = $game->title.''.$game_id;
+            $card_table = 'cards'.$game_id;
 
             $maker_color = Plyrgames::where('plyr_id', '=', $game_maker)->first()->plyr_color;
             $plyr_data = Plyrgames::where('game_id','=', $game_id)->get();
             $plyr_count = Plyrgames::where('game_id','=', $game_id)->count();
             
-            $plyr_fn = Map_Controller::getFirstNames($game_id);
-            $plyr_nm_color = Map_Controller::getPlyrColor($plyr_data);
+            $plyr_fn = Plyrgames::getFirstNames($game_id);
+            $plyr_nm_color = Plyrgames::getPlyrColor($plyr_data);
 
             $init_armies = Map_Controller::getInitArmies($user['id'], $plyr_data);
             $armies_plcd = Map_Controller::setArmiesPlcd($plyr_data);
 
-            Map_Controller::setTurnOrder($armies_plcd, $game, $plyr_data);
+            if($armies_plcd == 1 && $game->turns_set == 0)
+                Plyrgames::setTurnOrder($game, $game_id, $plyr_data, $plyr_count);
 
             $join_flag = 0;
             foreach($plyr_data as $player){
@@ -50,9 +48,12 @@
                             $join_flag = 1;
             }
             
-            $game_state = Map_Controller::makeGameTable($game_table);
+            $game_state = GameTable::getGameState($game_table);
+            $card_state = CardTable::getCardTableState($card_table);
+
             $player_up = Plyrgames::where('game_id','=', $game_id)->where('trn_active','=',1)->first();
 
+            //these returns suck.....refactor ASAP!
             if($plyr_count == $game->plyrs){
                     
                     
@@ -71,6 +72,7 @@
                             ->with('armies_plcd', $armies_plcd)
                             ->with('init_armies', $init_armies)
                             ->with('game_table', $game_table)
+                            ->with('card_table', $card_table)
                             ->with('player_up', $player_up);
                     
             }
@@ -86,7 +88,9 @@
                     ->with('game_maker', $game_maker)
                     ->with('armies_plcd', $armies_plcd)
                     ->with('maker_color', $maker_color)
+                    ->with('init_armies', $init_armies)
                     ->with('game_table', $game_table)
+                    ->with('card_table', $card_table)
                     ->with('player_up', $player_up);
         }
         
@@ -99,7 +103,7 @@
             $game_id = Input::get('game_id');
             $plyr_id = Input::get('uid');
 
-            Map_Controller::updateArmies($game_table, $armies, $terr_num, $game_id, $plyr_id);
+            GameTable::updateArmies($game_table, $armies, $terr_num, $game_id, $plyr_id);
             $new_initarmies = Plyrgames::where('game_id', '=', $game_id)->where('plyr_id', '=', $plyr_id)->first()->init_armies;
             echo $new_initarmies;
         }
@@ -113,11 +117,7 @@
             $attk_id = Input::get('attk_id');
             $def_id = Input::get('def_id');
 
-            $bindings = array('army_cnt' => $attk_armies, 'id' => $attk_id);
-            DB::query('update '.$game_table.' set army_cnt = ? where id = ?', $bindings);
-
-            $bindings = array('army_cnt' => $def_armies, 'id' => $def_id);
-            DB::query('update '.$game_table.' set army_cnt = ? where id = ?', $bindings);
+            GameTable::attack($game_table, $attk_armies, $attk_id, $def_armies, $def_id);
         }
 
         public function post_take_over(){
@@ -127,37 +127,55 @@
             $def_armies = Input::get('def_armies');
             $attk_id = Input::get('attk_id');
             $def_id = Input::get('def_id');
-            $attk_fn = Input::get('attk_fn');
-            $def_fn = Input::get('def_fn');
-            echo $attk_fn;
-            $bindings = array('army_cnt' => $attk_armies, 'id' => $attk_id);
-            DB::query('update '.$game_table.' set army_cnt = ? where id = ?', $bindings);
-
-            $bindings = array('army_cnt' => $def_armies, 'id' => $def_id);
-            DB::query('update '.$game_table.' set army_cnt = ? where id = ?', $bindings);
-
-            $bindings = array('curr_owner' => $attk_fn, 'id' => $def_id);
-            DB::query('update '.$game_table.' set curr_owner = ? where id = ?', $bindings);
+            $attacker_id = Input::get('attacker_id');
+           
+            GameTable::takeOver($game_table, $attk_armies, $attk_id, $attacker_id, $def_armies, $def_id);
 
         }
 
+       public function post_make_card(){
+        //next step: switch 'got_card' bit to 1,
+        //update cards table with new army_id and
+        //terr_id
+
+            $game_id = Input::get('game_id');
+            $card_table = Input::get('card_table');
+            $owner_id = Input::get('owner_id');
+            $army_type = Input::get('army_type');
+            $terr_id = Input::get('terr_id');
+
+            CardTable::insert_card($card_table, $owner_id, $army_type, $terr_id);
+            $game = Plyrgames::where('game_id', '=', $game_id)->where('plyr_id','=', $owner_id)->first();
+            $game->got_card = 1;
+            $game->save();
+
+       }
+
+       // public function get_current_cards(){
+        
+      //  }
+
+        /**********************************************
+        * Checks 'got_card' status (0 for no, 1 for yes)
+        * for players current turn based on owner_id and
+        * game id received from client. It then echoes 
+        * back the status to the client. (0 or 1).
+        ************************************************/
+        public function get_card_status(){
+
+            $owner_id = Input::get('owner_id');
+            $game_id = Input::get('game_id');
+            $got_card = Plyrgames::where('plyr_id', '=', $owner_id)->where('game_id', '=', $game_id)->first()->got_card;
+
+            echo json_encode(array('owner_id' => $owner_id, 'got_card' => $got_card));
+
+        }
 
         /**************************************************
          * -----  Various Procedural Functions -----
          *---------(Likely candidates for model methods)---------
          *************************************************/
-        private static function updateArmies($game_table, $armies, $terr_num, $game_id, $plyr_id){
-
-            $select_armies = DB::query("select army_cnt from ".$game_table." where id= ? ",$terr_num+1);
-            $new_count = $armies + $select_armies[0]->army_cnt;
-            $bindings = array('armies' => $new_count, 'id' => $terr_num+1);
-            $update_armies = DB::query("update ".$game_table." set army_cnt = ? where id= ?", $bindings);
-       
-            $curr_game = Plyrgames::where('game_id', '=', $game_id)->where('plyr_id', '=', $plyr_id)->first();
-            $curr_initarmies = $curr_game->init_armies;
-            $curr_game->init_armies = ($curr_initarmies - $armies);
-            $curr_game->save();
-        }
+        
 
         private static function setArmiesPlcd($plyr_data){
 
@@ -173,86 +191,14 @@
                 return 0;
         }
 
-        private static function setTurnOrder($armies_plcd, $game, $plyr_data){
-
-            if($armies_plcd == 1 && $game->turns_set == 0){
-
-                $turns = array();
-                for($i=1; $i<=$plyr_count; $i++)
-                    array_push($turns, $i);
-
-                shuffle($turns);
-               
-                $i = 0;
-                foreach($plyr_data as $plyr){
-                    $plyr->turn = $turns[$i++];
-                    $plyr->save();
-                }
-                
-                $game->turns_set = 1;
-                $game->save();
-
-                $player_one = Plyrgames::where('game_id','=', $game_id)->where('turn','=',1)->first();
-                $player_one->trn_active = 1;
-                $player_one->save();
-            }
-        }
-        private static function makeGameTable($game_table){
-            
-            $check = DB::only('SELECT COUNT(*) as `exists`
-                               FROM information_schema.tables
-                               WHERE table_name IN (?)
-                               AND table_schema = database()',$game_table);
-            
-            if(!$check){
-                
-                return  Schema::create($game_table, function($table){
-                            $table->increments('id');
-                            $table->string('curr_owner');
-                            $table->integer('army_cnt')->default(1);
-                    });
-            }
-            else {
-                    
-                return DB::query('select * from '. $game_table);       
-            }
-            
-        }
         
-        private static function getPlyrColor($player_data){
-            
-            $plyr_nm_color = array();
-                    
-            foreach($player_data as $player){
-                    
-                    $plyr_index = DB::query('select first_name, plyr_color from plyr_games, players
-                              where plyr_games.plyr_id = players.plyr_id
-                              and plyr_games.plyr_id ='.$player->plyr_id);
-                    
-                    array_push($plyr_nm_color, $plyr_index);
-            }
-            
-            return $plyr_nm_color;       
-        }
-
-        private static function getFirstNames($game_id){
-
-            $plyr_fn = array();
-            $plyr_fn_qry = DB::query('select first_name from players, plyr_games where plyr_games.plyr_id = players.plyr_id and plyr_games.game_id = '.$game_id);
-            
-            foreach($plyr_fn_qry as $player)
-                    array_push($plyr_fn, $player->first_name);
-
-            return $plyr_fn;
-        }
-
         private static function getInitArmies($user_id, $plyr_data){
          
             foreach($plyr_data as $player){
-                    if($user_id == $player->plyr_id){
-                        return $player->init_armies; 
-                      
-                    }     
+                if($user_id == $player->plyr_id){
+                    return $player->init_armies; 
+                  
+                }
             }
         }
     }

@@ -14,7 +14,7 @@ $("#color_pick2").ready(function(){
 
              var color =  $("#color").val();
              $.post(BASE+'/join',
-                   {uid: uid,
+                   {uid: user_id,
                     game_id: game_id,
                     plyr_color: color},
                    function(result){

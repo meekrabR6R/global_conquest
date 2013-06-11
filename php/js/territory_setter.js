@@ -263,11 +263,11 @@ $(document).ready(function(){
             var name = $("#"+game_state[i].terr).attr('name');
             var color = "";
           
-            graph.update_data(name, {owner_name: game_state[i].owner, armies: game_state[i].army_cnt, pk_id: (i+1)});
+            graph.update_data(name, {owner_id: game_state[i].owner_id, armies: game_state[i].army_cnt, pk_id: (i+1)});
 
             for (j=0; j < plyr_nm_color.length; j++) {
 
-                if(game_state[i].owner == plyr_nm_color[j].fn){
+                if(game_state[i].owner_id == plyr_nm_color[j].plyr_id){
                     color = plyr_nm_color[j].color;
                     graph._node_list[i].data.color = color;
                 }
@@ -275,10 +275,10 @@ $(document).ready(function(){
 
             var orig_armycnt =  game_state[i].army_cnt;
             
-            if(armies_plcd === 1 || user_fn !== graph._node_list[i].data.owner_name)
+            if(armies_plcd === 1 || user_id !== graph._node_list[i].data.owner_id)
                 $("#terr"+i).html('<p style="font-style:bold; color:'+color+';">'+graph._node_list[i].data.armies+'</p>');  
             
-            else if(user_fn === graph._node_list[i].data.owner_name){
+            else if(user_id === graph._node_list[i].data.owner_id){
 
                  $("#terr"+i).html('<input id="armies'+i+'" type="text" size="2" value = "'+graph._node_list[i].data.armies+'">\
                                     <input id="place'+i+'" type="button" value="place">\
@@ -289,7 +289,7 @@ $(document).ready(function(){
                                                         if(parseInt(added_armies) <= init_armies && parseInt($("#armies'+i+'").val()) > 0){\
                                                             $.post("'+BASE+'/place",\
                                                                     {armies: added_armies,\
-                                                                     uid: uid,\
+                                                                     uid: user_id,\
                                                                      game_id: game_id,\
                                                                      terr_num: '+i+',\
                                                                      game_table: game_table},\

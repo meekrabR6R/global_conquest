@@ -11,15 +11,17 @@
         <script type="text/javascript">
             //Interface between PHP and Javascript variables:
             var BASE = "{{ URL::base(); }}";
-            var uid = "{{ $uid; }}";
+            var user_id = "{{ $uid; }}";
             var user_fn = "{{ $user_fn; }}";
             var game_id = "{{ $game->game_id; }}";
             var game_table = "{{ $game_table; }}";
+            var card_table = "{{ $card_table; }}";
             var plyr_limit = {{ $game->plyrs; }};
             var plyr_count = {{ $plyr_count; }};
             var armies_plcd = {{ $armies_plcd; }};
-            var init_armies = {{ $init_armies; }};
-          
+            @if(isset($game_state))
+                var init_armies = {{ $init_armies; }};
+            @endif
             var plyr_id = [];
             var plyr_nm_color = [];
             var plyr_fn = [];
@@ -27,7 +29,7 @@
             @if(isset($game_state))
                 var game_state = [];
                 @foreach($game_state as $state)
-                    game_state.push({'terr' : 'terr'+{{ $state->id - 1; }}, 'owner' : '{{ $state->curr_owner; }}', 'army_cnt' : {{ $state->army_cnt; }} });
+                    game_state.push({'terr' : 'terr'+{{ $state->id - 1; }}, 'owner_id' : '{{ $state->owner_id; }}', 'army_cnt' : {{ $state->army_cnt; }} });
                 @endforeach
             @endif
         
@@ -42,7 +44,7 @@
             @if(isset($plyr_nm_color))
                 @foreach($plyr_nm_color as $player)
                     @foreach($player as $x)
-                        plyr_nm_color.push({'fn':'{{ $x->first_name }}','color': '{{ $x->plyr_color; }}'});
+                        plyr_nm_color.push({'plyr_id':'{{ $x->plyr_id }}','color': '{{ $x->plyr_color; }}'});
                     @endforeach
                 @endforeach
             @endif
@@ -132,6 +134,8 @@
                 </tr>
                 <tr>
                     <td><input id="mov_btn" type="button" value="move armies"></td>
+                </tr>
+                 <tr id="mov_mode"> 
                 </tr>
             @endif
             @if($armies_plcd == 1 && $player_up->plyr_id != $uid)

@@ -40,6 +40,8 @@ Route::post('join', array('uses' => 'games@join'));
 Route::post('place', array('uses' => 'map@place'));
 Route::post('attack', array('uses' => 'map@attack'));
 Route::post('take_over', array('uses' => 'map@take_over'));
+Route::post('make_card', array('uses' => 'map@make_card'));
+Route::get('card_status', array('uses' => 'map@card_status'));
 /*
 |--------------------------------------------------------------------------
 | Application 404 & 500 Error Handlers

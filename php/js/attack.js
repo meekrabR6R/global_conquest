@@ -1,6 +1,6 @@
 /***************************************************
  *Attack logic. Controls dice rolls, army movements,
- *etc.
+ *etc. Responds to attack related events on map.
  ***************************************************/
 
 /*****************************************************
@@ -106,9 +106,9 @@ function roll_process(attk_armies, def_armies, attk_terr, def_terr){
             if (def_terr.data.armies > 0) 
                 def_terr.data.armies--;
                 
-            if(def_terr.data.armies === 0) 
+            if(def_terr.data.armies === 0)
                 $("#roll").attr("disabled", true);
-                //probably set some card flag here for particular instance of player object
+
         }
         else{
             if(attk_terr.data.armies > 1) 
@@ -133,6 +133,17 @@ function roll_process(attk_armies, def_armies, attk_terr, def_terr){
     )
 }
 
+/************************************************************
+* Determines the minimum number of armies that must be moved
+* into newly acquired territory. Prompts user to move armies.
+* Updates army counts, and owner IDs over attacker and defender
+* territories. Checks attacker's 'card status' to determine 
+* whether s/he should receive a card for the victory. If this
+* is the first victory in a turn, a card is awarded.
+* @param: attk_terr - attacker territory node in graph
+* @param: def_terr - defender territory node in graph
+* @param: attk_armies - number of armies used in attack (1-3)
+*************************************************************/
 function victory_process(attk_terr, def_terr, attk_armies){
 
     $("#roll").attr("disabled", true);
@@ -168,15 +179,27 @@ function victory_process(attk_terr, def_terr, attk_armies){
         
         attk_terr.data.armies -= mov_armies;
         def_terr.data.armies = mov_armies;
-        def_terr.data.owner_name = attk_terr.data.owner_name;
+        def_terr.data.owner_id = attk_terr.data.owner_id;
         def_terr.data.color = attk_terr.data.color;
+
+        $.get(BASE+'/card_status',
+            {owner_id: attk_terr.data.owner_id,
+            game_id: game_id},
+            function(result){
+                    
+                var res = JSON.parse(result); 
+                if(res.got_card == 0){
+                    console.log(res.got_card);
+                    makeCard(res.owner_id, game_id );
+                }
+            }
+        );
 
         $.post(BASE+'/take_over',
                {game_table: game_table,
                 attk_id: attk_terr.data.pk_id,
                 def_id: def_terr.data.pk_id,
-                attk_fn: attk_terr.data.owner_name,
-                def_fn: def_terr.data.owner_name,
+                attacker_id: attk_terr.data.owner_id,
                 attk_armies: attk_terr.data.armies,
                 def_armies: def_terr.data.armies},
                 function(result){
@@ -187,25 +210,58 @@ function victory_process(attk_terr, def_terr, attk_armies){
         set_clicks();
 }
 
+/****************************************************
+* Updates displayed count and color with 
+* each attack.
+* @param attk_terr - attacker territory node in graph
+* @param def_terr - defender territory node in graph
+*****************************************************/
 function battle_process(attk_terr, def_terr){
 
-    if(attk_terr.data.owner_name === user_fn){
+    if(attk_terr.data.owner_id === user_id){
         $("div[name="+attk_terr.id+"]").html('<p style="color:'+attk_terr.data.color+';">'+attk_terr.data.armies+'</p>');
         $("div[name="+def_terr.id+"]").html('<p style="color:'+def_terr.data.color+';">'+def_terr.data.armies+'</p>');
     }
 }
 
-/*************************************************************
+
+/****************************************************
+* Generates a random number between 1-3 for army type.
+* 1 = infantry, 2 = cavalry, 3 = cannon. Also generates
+* a random number between 0-41 for territory ID. Then
+* posts values to controller method.
+* @param: ownerID owner facebook id number.
+*****************************************************/
+function makeCard(ownerID, gameID){
+
+    armyType = Math.floor((Math.random()*3)+1);
+    terrID = Math.floor((Math.random()*41)); //check against territories in current hand (get currcards)
+
+    //post card shit
+    $.post(BASE+'/make_card',
+           {game_id: game_id,
+            card_table: card_table,
+            owner_id: ownerID,
+            army_type: armyType,
+            terr_id: terrID},
+            function(result){
+                console.log(result);
+            }
+    );
+}
+
+/********************************************************************
  *Makes territories clickable. If territory has more than one army,
  *and is owned by attacker, attack options are written to document.
- *************************************************************/
+ *@param: continent - class identifier for territory divs in html view
+ *********************************************************************/
 function code_click(continent){
         
        $(continent).each(function(){
             
             var node = graph.get_node($(this).attr('name'));
           
-            if(node.data.owner_name === user_fn){   
+            if(node.data.owner_id === user_id){   
                
                 $(this).click(function(){
                     
@@ -215,7 +271,7 @@ function code_click(continent){
                     node.edges.forEach(function(border){
                         var border_node = graph.get_node(border); 
                         
-                        if(border_node.data.owner_name !== node.data.owner_name) 
+                        if(border_node.data.owner_id !== node.data.owner_id) 
                             border_list.push(border);
                                 
                     });
@@ -263,6 +319,10 @@ function code_click(continent){
         
 }
 
+/************************************
+* Makes the nodes in each continent
+* clickable.
+************************************/
 function set_clicks(){
 
     code_click(".north_america");

@@ -68,28 +68,29 @@ class Games_Controller extends Base_Controller{
         }
         
         if($plyr_count == $game->plyrs){
-            $tot_players = DB::query('select first_name from players, plyr_games 
+            $tot_players = DB::query('select players.plyr_id from players, plyr_games 
                           where  players.plyr_id = plyr_games.plyr_id
                           and plyr_games.game_id = ?', $game_id);
             
-            $plyr_name = array();
+            $plyr_id = array();
             $index = 0;
             for($i = 0; $i <= 41; $i++){
-                array_push($plyr_name, $tot_players[$index++]->first_name);
+                array_push($plyr_id, $tot_players[$index++]->plyr_id);
                 if($index == $plyr_count)
                     $index = 0;
             }
             
-            shuffle($plyr_name);
-            foreach($plyr_name as $name)
-                $insert = DB::query("insert into ".$game_table." (curr_owner) values('".$name."')");        
+            shuffle($plyr_id);
+
+            foreach($plyr_id as $id)
+                $insert = DB::query("insert into ".$game_table." (owner_id) values('".$id."')");        
         }   
     }
     
     public function post_new_player(){
 
        
-              //  $mysqli->query("insert into players (plyr_id, first_name, last_name, start_date) values('".$_POST['id']."','".$_POST['fn']."','".$_POST['ln']."','".$date."')");
+        //  $mysqli->query("insert into players (plyr_id, first_name, last_name, start_date) values('".$_POST['id']."','".$_POST['fn']."','".$_POST['ln']."','".$date."')");
     }
 
     

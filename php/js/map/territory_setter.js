@@ -1,5 +1,5 @@
 /*********************************************************
- *Initializes a Graph instance, and sets the nodes and edges.
+ *Initializes a Graph instance, and sets the nodes and edges. 
  *********************************************************/
 
 var graph = new Graph();
@@ -263,7 +263,7 @@ $(document).ready(function(){
             var name = $("#"+game_state[i].terr).attr('name');
             var color = "";
           
-            graph.update_data(name, {owner_id: game_state[i].owner_id, armies: game_state[i].army_cnt, pk_id: (i+1)});
+            graph.update_data(name, {owner_id: game_state[i].owner_id, armies: game_state[i].army_cnt, pk_id: (i+1)});//change to territory.etc.etc.
 
             for (j=0; j < plyr_nm_color.length; j++) {
 

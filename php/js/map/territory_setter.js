@@ -10,6 +10,7 @@ $(document).ready(function(){
         var name = $("#terr"+i).attr('name');
         $("#terr"+i).append('<p>'+name+'</p>');
         graph.add_node(name, {}, []);
+        
     }
     
     //alaska 1

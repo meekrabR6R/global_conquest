@@ -2,23 +2,8 @@
 * Territory prototype (inherits Graph)
 **************************************/
 
-var territory = new Graph();
+function Territory(){
+	Graph.call(this);
+}
 
-territory.prototype = {
-
-	placeArmies: function(){
-
-	},
-
-	moveArmies: function(){
-
-	},
-
-	attack: function(){
-
-	},
-
-	setTerritories: function(){
-
-	}
-};
+Territory.prototype = new Graph();

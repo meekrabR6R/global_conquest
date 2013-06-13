@@ -283,7 +283,7 @@ function code_click(continent){
 
                         if(node.data.armies > 3)
                             attk_count = 3;
-                        else if(node.data.armies == 3)
+                        else if(node.data.armies === 3)
                             attk_count = 2;
                         else
                             attk_count = 1;

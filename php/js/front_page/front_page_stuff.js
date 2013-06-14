@@ -1,3 +1,39 @@
+
+
+/*********************************
+* Form validation for new games
+**********************************/
+function checkForm(newGame){
+
+    var element = document.getElementById('error');
+
+    if(newGame.title.value === ""){
+        var element = document.getElementById('error');
+        element.className += ' ' + 'error';
+
+        $('#error_text').text('Game title cannot be blank.'); 
+    }
+    else{
+        var form_data = $("#new_game").serializeArray();
+        
+        if(element.className === 'control-group error'){         
+            element.className = 'control-group success';
+            $('#error_text').text("Isn't that better?"); 
+        }
+        
+        $.post(BASE+'/new_game',
+               {data: form_data},
+                function(result){
+                   console.log(result);
+               }
+        );
+        $('#game_made').text("Game made!");
+        $("#game_list").load(BASE+'/games');
+    }
+
+    return false;
+}
+
 $(document).ready(function(){
     
     $("#create").click(function(){
@@ -15,29 +51,24 @@ $(document).ready(function(){
                             <tr><td><input id="game_submit" type="submit" value="make game"></tr>\
                             </table></form>');
         
-        $("#game_submit").ready(function(){
+        //$("#game_submit").ready(function(){
     
-            $("#game_submit").click(function(){
+          //  $("#game_submit").click(function(){
              
-                var form_data = $("#new_game").serializeArray();
+              //  var form_data = $("#new_game").serializeArray();
                 
-                $.post(BASE+'/new_game',
-                       {data: form_data},
-                        function(result){
-                           console.log(result);
-                       }
-                );
+              //  $.post(BASE+'/new_game',
+                //       {data: form_data},
+                  //      function(result){
+                    //       console.log(result);
+                    //   }
+               // );
 
-                $("#game_list").load(BASE+'/games');
-        });
+              //  $("#game_list").load(BASE+'/games');
+       // });
             
             
-            $("#add_plyrs").click(function(){
-            
-            });
-    
-        });
-    
+             
     
     });
     

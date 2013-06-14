@@ -2,7 +2,7 @@
  *Attack logic. Controls dice rolls, army movements,
  *etc. Responds to attack related events on map.
  ***************************************************/
-
+make_clicks();
 /*****************************************************
  *When attack button is clicked, a table is written to
  *the screen that will hold the attacking country, and

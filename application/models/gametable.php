@@ -1,7 +1,15 @@
 <?php
-
+/********************************************************
+* ------- Model class for all game tables --------------
+********************************************************/
 class GameTable{
 
+    /*************************************************
+    * Gets current state of territories (army amounts, 
+    * owners, etc.) of current game.
+    * @param $game_table - name of table of current
+    * game territories
+    ***************************************************/
 	public static function getGameState($game_table){
             
             $check = DB::only('SELECT COUNT(*) as `exists`
@@ -32,6 +40,14 @@ class GameTable{
             
     }
 
+    /****************************************************************************************
+    * Updates territory army counts with value of armies placed at beginning of game or turn.
+    * @param $game_table - table of territories for game
+    * @param $armies - number of armies to place
+    * @param terr_num - number of terr div in view
+    * @param $game_id - ID number of game
+    * @param $plyr_id - facebook ID of player
+    *****************************************************************************************/
     public static function updateArmies($game_table, $armies, $terr_num, $game_id, $plyr_id){
 
         $select_armies = DB::query("select army_cnt from ".$game_table." where id= ? ",$terr_num+1);
@@ -45,7 +61,13 @@ class GameTable{
         $curr_game->save();
     }
 
-
+    /*****************************************************************************************
+    * Updates army counts of attacker and defender territories during attack
+    * @param $game_table - table of territories for current game
+    * @param $attk_armies - number of armies in attacking territory
+    * @param $def_armies - number of armies in defending territory
+    * @param $def_id - ID of defending territory
+    ******************************************************************************************/
     public static function attack($game_table, $attk_armies, $attk_id, $def_armies, $def_id){
 
     	$bindings = array('army_cnt' => $attk_armies, 'id' => $attk_id);
@@ -55,7 +77,16 @@ class GameTable{
         DB::query('update '.$game_table.' set army_cnt = ? where id = ?', $bindings);
     }
 
-
+    /*********************************************************************************************
+    * Updates owner ID and army count of defeated defending territory (owner ID shifts from defender's
+    * ID to attacker's).
+    * @param $game_table - table of territories for current game
+    * @param $attk_armies - number of armies in attacking territory
+    * @param $attk_id - ID of attacking territory
+    * @param $attk_owner - ID of owner of attacking territory
+    * @param $def_armies - number of armies in defending territory
+    * @param $def_id - ID of defending territory
+    **************************************************************************************************/
     public static function takeOver($game_table, $attk_armies, $attk_id, $attk_owner, $def_armies, $def_id){
 
 	    $bindings = array('army_cnt' => $attk_armies, 'id' => $attk_id);
@@ -66,6 +97,20 @@ class GameTable{
 
         $bindings = array('owner_id' => $attk_owner, 'id' => $def_id);
         DB::query('update '.$game_table.' set owner_id = ? where id = ?', $bindings);
+    }
+
+    /*******************************************************************************************
+    * Updates army counts in 'from' and 'to' territories after 'end of turn' army move is executed.
+    * @param
+    */
+    public static function moveArmies($game_table, $from_id, $to_id, $from_amount, $to_amount){
+
+        $bindings = array('army_cnt' =>  $from_amount, 'id' => $from_id);
+        DB::query('update '.$game_table.' set army_cnt = ? where id = ?', $bindings);
+
+        $bindings = array('army_cnt' =>  $to_amount, 'id' => $to_id);
+        DB::query('update '.$game_table.' set army_cnt = ? where id = ?', $bindings);
+
     }
 }
 ?>

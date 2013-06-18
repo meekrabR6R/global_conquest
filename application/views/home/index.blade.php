@@ -57,7 +57,7 @@
           </div> 
           </div> 
           <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Make Game</button>
+            <button type="submit" class="btn btn-primary" onclick="location.reload();">Make Game</button>
             <input name="maker_id" type="hidden" value="{{ $_SESSION['user']['id'] }}">
             <span id="game_made" class="help-inline"></span>
           </div>

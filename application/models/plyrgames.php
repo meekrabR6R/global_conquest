@@ -44,20 +44,47 @@ class Plyrgames extends Eloquent{
         
     }
 
-    public static function getPlyrColor($player_data){
+    public static function getPlyrColor($player_data, $game_id){
             
         $plyr_nm_color = array();
-                
+           
         foreach($player_data as $player){
-                
+                $bindings = array('plyr_games.plyr_id' => $player->plyr_id, 'game_id' => $game_id);
                 $plyr_index = DB::query('select players.plyr_id, plyr_color from plyr_games, players
                           where plyr_games.plyr_id = players.plyr_id
-                          and plyr_games.plyr_id ='.$player->plyr_id);
+                          and plyr_games.plyr_id = ?
+                          and game_id = ?', $bindings);
                 
                 array_push($plyr_nm_color, $plyr_index);
         }
         
         return $plyr_nm_color;       
+    }
+
+    /*************************************************************
+    * Transfers active turn status to next player in turn queue.
+    **************************************************************/
+    public static function nextTurn($user_id, $game_id){
+
+        $curr_plyr = Plyrgames::where('plyr_id', '=', $user_id)->where('game_id', '=', $game_id)->first();
+        
+        $curr_turn = $curr_plyr->turn;
+        
+        $tot_plyrs = Games::where('game_id', '=',$game_id)->first()->plyrs;
+
+        if($curr_turn < $tot_plyrs)
+            $next_turn = $curr_turn + 1;
+        else
+            $next_turn = 1;
+
+        
+        $bindings = array('game_id' => $game_id, 'plyr_id' => $user_id);
+        $pass_turn = DB::query('update plyr_games set trn_active = 0 where game_id = ? and plyr_id = ?', $bindings);
+        
+        $next_plyr = Plyrgames::where('game_id', '=', $game_id)->where('turn', '=', $next_turn)->first();
+        $next_plyr->trn_active = 1;
+        $next_plyr->save();
+        
     }
 
     /*************************************************************

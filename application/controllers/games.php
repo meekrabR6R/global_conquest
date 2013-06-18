@@ -42,7 +42,7 @@ class Games_Controller extends Base_Controller{
      
         Plyrgames::create($plyr_game_record);
          
-      
+        return view
         
     }
 

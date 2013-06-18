@@ -287,7 +287,7 @@ function code_click(continent){
                             attk_count = 2;
                         else
                             attk_count = 1;
-                        console.log("attk: "+attk_count+", armies:"+node.data.armies);
+                        
                         for(i=1; i <= attk_count; i++){
                             dice_options += '<option id="'+i+'">'+i+'</option>';
                            

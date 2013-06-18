@@ -79,20 +79,13 @@
                             <div id="place_armies"><p>{{ $init_armies; }} ARMIES REMANING</p></div>
                       
                     @endif
-                    @if($armies_plcd == 1 && $player_up->plyr_id == $uid)
-                        
-                           
-                        
-                        <div id="attk_mode"></div>
-                        
-                        <input id="mov_btn" type="button" class="btn btn-inverse" value="move armies">
-                        
-                         <div id="mov_mode"></div>
-                        
-                    @endif
+
                     @if($armies_plcd == 1 && $player_up->plyr_id != $uid)
-                       <p>WAIT IN LINE, YOUNG BLOOD.</p>
+                        <div class="hero-unit">
+                             <h5>WAIT IN LINE, YOUNG BLOOD.</h5>
+                        </div>
                     @endif
+
                    <input type="button" class="btn btn-inverse" value="cards">
                    
                         <input type="button" class="btn btn-inverse" value="players">
@@ -108,8 +101,8 @@
                     <div class="tabbable"> 
                         <ul class="nav nav-tabs">
                             @if($armies_plcd == 1 && $player_up->plyr_id == $uid)
-                                <li id="attk_btn" class="active"><a href="#tab1" data-toggle="tab">attack</a></li>
-                                <li><a href="#tab2" data-toggle="tab">move armies</a></li>
+                                <li class="active"><a href="#tab1" data-toggle="tab">attack</a></li>
+                                <li id="mov_btn"><a href="#tab2" data-toggle="tab">move armies</a></li>
                             @endif
                             <li><a href="#tab3" data-toggle="tab">cards</a></li>
                             <li><a href="#tab4" data-toggle="tab">players</a></li>
@@ -117,10 +110,30 @@
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="tab1">
-                                <p>I'm in Section 1.</p>
+
+                                <div class="row">
+                                    <div class="span1"></div>
+                                    <div class="span5" id="select"></div>
+                                    <div class="span2">
+                                        <p id="attack">Click one of your countries to begin attacking.</p>
+                                    </div>
+                                    <div class="span2" id="defend"></div>
+                                </div>
+
                             </div>
                             <div class="tab-pane" id="tab2">
-                                <p>Howdy, I'm in Section 2.</p>
+                                <div class="row">
+                                    <div class="span1"></div>
+                                    <div class="span1">
+                                        <div id="select_text">SELECT COUNTRY</div>
+                                    </div>
+                                    <div class="span4">
+                                        <div id="select_from"></div>
+                                    </div>
+                                    <div class="span4">
+                                        <div id="select_to"></div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="tab-pane" id="tab3">
                                 <p>Howdy, I'm in Section 3.</p>

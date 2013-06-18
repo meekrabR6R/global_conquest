@@ -10,8 +10,8 @@ class Facebook_Controller extends Base_Controller{
 		$uid = $facebook->getUser();
 		
 		if($uid){
+			
 			try{
-				
 			     $user = $facebook->api('/me');
 			     $friend_list = $facebook->api(array('method' => 'fql.query',
 						'query' => "SELECT uid FROM user WHERE is_app_user = '1'
@@ -30,10 +30,7 @@ class Facebook_Controller extends Base_Controller{
 				   ->with('list', $friend_list);
 			}
 			catch(FacebookApiException $e){
-			   if(!$uid){
-			      $login = $facebook->getLoginUrl();
-			      echo '<a href="'.$login.'">LOGIN!</a>';
-			   }
+				$user = null;
 			}
 		}
 		else{

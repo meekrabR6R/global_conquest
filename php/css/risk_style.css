@@ -7,10 +7,13 @@ body{
 .container{
     width:90%;
 }
+
 #game_map{
     border:4px solid #000000;
     border-radius:5px;
 }
+
+
 /*
 #terr0{
     position:relative;

@@ -35,7 +35,7 @@
                     $game = Games::where('game_id', '=', $game_id)->first();
                     $game_maker = $game->maker_id;
 
-                    $game_table = $game->title.''.$game_id;
+                    $game_table = 'game'.$game_id;
                     $card_table = 'cards'.$game_id;
 
                     $maker_color = Plyrgames::where('plyr_id', '=', $game_maker)->first()->plyr_color;
@@ -201,6 +201,16 @@
             $to_amount = Input::get('to_amount');
 
             GameTable::moveArmies($game_table, $from_id, $to_id, $from_amount, $to_amount);
+            Plyrgames::nextTurn($user_id, $game_id);
+        }
+
+        /***************************************************
+        * Ends turn and passes turn to next player
+        ****************************************************/
+        public function post_end_turn(){
+
+            $user_id = Input::get('user_id');
+            $game_id = Input::get('game_id');
             Plyrgames::nextTurn($user_id, $game_id);
         }
 

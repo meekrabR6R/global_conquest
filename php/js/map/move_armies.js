@@ -1,4 +1,7 @@
 
+/***********************************
+* Sets 'move army' clicks
+************************************/
 $("#mov_btn").ready(function(){
     
     $("#mov_btn").click(function(){
@@ -47,7 +50,7 @@ function moveArmies(){
              from_amount: fromAmount,
              to_amount: toAmount},
             function(result){
-
+                location.reload();
             }
     );
         
@@ -120,3 +123,21 @@ function set_clicks(){
     move_click(".asia");
     move_click(".australia");
 }
+
+
+/**************************************
+* Ends turn
+***************************************/
+$("#end").ready(function(){
+
+    $("#end").click(function(){
+
+        $.post(BASE+'/end_turn',
+                {user_id: user_id,
+                 game_id: game_id},
+                 function(result){
+                    location.reload();
+                 }
+        );
+    });
+});

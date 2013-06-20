@@ -42,6 +42,7 @@ Route::post('take_over', array('uses' => 'map@take_over'));
 Route::post('make_card', array('uses' => 'map@make_card'));
 Route::post('move_armies', array('uses' => 'map@move_armies'));
 Route::get('card_status', array('uses' => 'map@card_status'));
+Route::post('end_turn', array('uses' => 'map@end_turn'));
 /*
 |--------------------------------------------------------------------------
 | Application 404 & 500 Error Handlers

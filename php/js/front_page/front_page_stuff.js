@@ -21,14 +21,17 @@ function checkForm(newGame){
             $('#error_text').text("Isn't that better?"); 
         }
         
-        $.post(BASE+'/new_game',
+       
+        $('#game_made').text("Game made!");
+
+         $.post(BASE+'/new_game',
                {data: form_data},
                 function(result){
-                   console.log(result);
+                   location.reload();
                }
         );
-        $('#game_made').text("Game made!");
-        $("#game_list").load(BASE+'/games');
+       
+        
     }
 
     return false;
@@ -51,25 +54,6 @@ $(document).ready(function(){
                             <tr><td><input id="game_submit" type="submit" value="make game"></tr>\
                             </table></form>');
         
-        //$("#game_submit").ready(function(){
-    
-          //  $("#game_submit").click(function(){
-             
-              //  var form_data = $("#new_game").serializeArray();
-                
-              //  $.post(BASE+'/new_game',
-                //       {data: form_data},
-                  //      function(result){
-                    //       console.log(result);
-                    //   }
-               // );
-
-              //  $("#game_list").load(BASE+'/games');
-       // });
-            
-            
-             
-    
     });
     
     

@@ -73,11 +73,11 @@
                        
                     @endif
                     @if($armies_plcd == 0 && ($plyr_count == $game->plyrs))
-                        
+                        <div class="hero-unit">
                             <p>WE NEED TO PLACE SOME ARMIES!!</p>
                         
                             <div id="place_armies"><p>{{ $init_armies; }} ARMIES REMANING</p></div>
-                      
+                        </div>
                     @endif
 
                     @if($armies_plcd == 1 && $player_up->plyr_id != $uid)
@@ -106,7 +106,9 @@
                             @endif
                             <li><a href="#tab3" data-toggle="tab">cards</a></li>
                             <li><a href="#tab4" data-toggle="tab">players</a></li>
-                            <li><a href="#tab5" data-toggle="tab">end turn</a></li>
+                            @if($armies_plcd == 1 && $player_up->plyr_id == $uid)
+                                <li><a href="#tab5" data-toggle="tab">end turn</a></li>
+                            @endif
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="tab1">
@@ -115,7 +117,9 @@
                                     <div class="span1"></div>
                                     <div class="span5" id="select"></div>
                                     <div class="span2">
-                                        <p id="attack">Click one of your countries to begin attacking.</p>
+                                        @if($armies_plcd == 1 && $player_up->plyr_id == $uid)
+                                            <p id="attack">Click one of your countries to begin attacking.</p>
+                                        @endif
                                     </div>
                                     <div class="span2" id="defend"></div>
                                 </div>
@@ -142,7 +146,7 @@
                                 <p>Howdy, I'm in Section 4.</p>
                             </div>
                             <div class="tab-pane" id="tab5">
-                                <p>Howdy, I'm in Section 5.</p>
+                                 <input id="end" type="button" class="btn btn-inverse" value="end turn">
                             </div>
                         </div>
                     </div>

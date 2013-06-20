@@ -67,7 +67,6 @@ class Plyrgames extends Eloquent{
     public static function nextTurn($user_id, $game_id){
 
         $curr_plyr = Plyrgames::where('plyr_id', '=', $user_id)->where('game_id', '=', $game_id)->first();
-        
         $curr_turn = $curr_plyr->turn;
         
         $tot_plyrs = Games::where('game_id', '=',$game_id)->first()->plyrs;
@@ -80,13 +79,34 @@ class Plyrgames extends Eloquent{
         
         $bindings = array('game_id' => $game_id, 'plyr_id' => $user_id);
         $pass_turn = DB::query('update plyr_games set trn_active = 0 where game_id = ? and plyr_id = ?', $bindings);
+        $reset_cards = DB::query('update plyr_games set got_card = 0 where game_id = ? and plyr_id = ?', $bindings);
         
+        $turn_armies = Plyrgames::getTurnArmies($game_id, $user_id);
+
+        $bindings = array('init_armies' =>$turn_armies, 'plyr_id' => $user_id, 'game_id' => $game_id);
+        $update_armies = DB::query('update plyr_games set init_armies = ? where plyr_id = ? and game_id = ?', $bindings);
+
         $next_plyr = Plyrgames::where('game_id', '=', $game_id)->where('turn', '=', $next_turn)->first();
         $next_plyr->trn_active = 1;
         $next_plyr->save();
         
+       
+        //reset card status here..
     }
 
+    public static function getTurnArmies($game_id, $user_id){
+
+        $game_table = 'game'.$game_id;
+
+        $bindings = array('owner_id' => $user_id);
+        $terr_count = (int)DB::query('select count(owner_id) from '.$game_table.' where owner_id = ?', $bindings);
+        $turn_armies = $terr_count / 3;
+
+        var_dump($turn_armies);
+        die();
+        //consider factoring in continent bullshit here..
+        return $turn_armies;
+    }
     /*************************************************************
     *Checks status of 'got_card' bit in plyr_games table to see if
     *player has already received a card during his/her current turn.

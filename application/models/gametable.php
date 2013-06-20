@@ -112,5 +112,13 @@ class GameTable{
         DB::query('update '.$game_table.' set army_cnt = ? where id = ?', $bindings);
 
     }
+
+    public static function getTerritoryNumber($game_id, $user_id){
+
+        $game_table = 'game'.$game_id;
+       
+        $bindings = array('owner_id' => $user_id);
+        return (int)DB::query('select count(owner_id) from '.$game_table.' where owner_id = ?', $bindings);
+    }
 }
 ?>

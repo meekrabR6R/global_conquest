@@ -41,8 +41,6 @@ class Games_Controller extends Base_Controller{
          );
      
         Plyrgames::create($plyr_game_record);
-         
-        return view
         
     }
 
@@ -51,7 +49,7 @@ class Games_Controller extends Base_Controller{
         $game_id = Input::get('game_id');
         $game = Games::where('game_id', '=', $game_id)->first();
         
-        $game_table = $game->title.''.$game_id;
+        $game_table = 'game'.$game_id;
         
         $plyr_count = Plyrgames::where('game_id','=', $game_id)->count();
 

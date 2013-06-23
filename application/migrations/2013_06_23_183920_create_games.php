@@ -36,6 +36,9 @@ class Create_Games {
 			$table->integer('init_armies');
 			// created_at | updated_at DATETIME
 			$table->timestamps();
+
+			$table->foreign('plyr_id')->references('plyr_id')->on('players');
+			$table->foreign('game_id')->references('game_id')->on('games');
 		});
 			
 	}

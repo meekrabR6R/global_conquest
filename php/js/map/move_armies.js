@@ -131,7 +131,7 @@ function set_clicks(){
 $("#end").ready(function(){
 
     $("#end").click(function(){
-
+      
         $.post(BASE+'/end_turn',
                 {user_id: user_id,
                  game_id: game_id},

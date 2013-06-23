@@ -44,6 +44,12 @@ class Plyrgames extends Eloquent{
         
     }
 
+    /*********************************************************
+    * Gets player's color
+    * @param $player_data - single player record from db
+    * @param $game_id - int id value for game
+    * @return $plyr_nm_color - player id and color
+    **********************************************************/
     public static function getPlyrColor($player_data, $game_id){
             
         $plyr_nm_color = array();
@@ -76,50 +82,60 @@ class Plyrgames extends Eloquent{
         else
             $next_turn = 1;
 
-        
+        //sets current player (who is ending turn)  in queue to 'inactive'
         $bindings = array('game_id' => $game_id, 'plyr_id' => $user_id);
         $pass_turn = DB::query('update plyr_games set trn_active = 0 where game_id = ? and plyr_id = ?', $bindings);
         $reset_cards = DB::query('update plyr_games set got_card = 0 where game_id = ? and plyr_id = ?', $bindings);
         
-        $turn_armies = Plyrgames::getTurnArmies($game_id, $user_id);
-
-        $bindings = array('init_armies' =>$turn_armies, 'plyr_id' => $user_id, 'game_id' => $game_id);
-        $update_armies = DB::query('update plyr_games set init_armies = ? where plyr_id = ? and game_id = ?', $bindings);
-
+        
+        //sets next player in queue to 'active'
         $next_plyr = Plyrgames::where('game_id', '=', $game_id)->where('turn', '=', $next_turn)->first();
         $next_plyr->trn_active = 1;
         $next_plyr->save();
         
+         //reset card status here..
+        $turn_armies = Plyrgames::getTurnArmies($game_id, $next_plyr->plyr_id);
+
+        $bindings = array('init_armies' => $turn_armies, 'plyr_id' => $next_plyr->plyr_id, 'game_id' => $game_id);
+        $update_armies = DB::query('update plyr_games set init_armies = ? where plyr_id = ? and game_id = ?', $bindings);
        
-        //reset card status here..
     }
 
+    //get turn armies
     public static function getTurnArmies($game_id, $user_id){
 
         $game_table = 'game'.$game_id;
 
         $bindings = array('owner_id' => $user_id);
-        $terr_count = (int)DB::query('select count(owner_id) from '.$game_table.' where owner_id = ?', $bindings);
+        $terr_count = DB::query('select count(owner_id) as count from '.$game_table.' where owner_id = ?', $bindings)[0]->count;
+        
         $turn_armies = $terr_count / 3;
 
-        var_dump($turn_armies);
-        die();
+        if($turn_armies < 3)
+            $turn_armies = 3;
+
         //consider factoring in continent bullshit here..
         return $turn_armies;
     }
-    /*************************************************************
-    *Checks status of 'got_card' bit in plyr_games table to see if
-    *player has already received a card during his/her current turn.
-    *@param: $owner_id: facebook id of current player
-    *@param: $game_id: id of game
-    *@return: value of 'got_card' bit (0 for no card received, 1 for
-    *card received).
-    *************************************************************/
-    public static function getPlyrCardStatus($owner_id, $game_id){
-        
-
-    }
     
+    //gets bonus armies from turn in
+    public static function getBonusArmies($turn_ins){
+
+        if($turn_ins < 5){
+
+            if($turn_ins == 0)
+                return 4;
+            else
+                return Plyrgames::getBonusArmies($turn_ins - 1) + 2;
+        }
+        else{
+
+            if($turn_ins == 5)
+                return 15;
+            else
+                return Plyrgames::getBonusArmies($turn_ins - 1) + 5;
+        }
+    }
 }
 
 ?>

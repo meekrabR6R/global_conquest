@@ -4,7 +4,6 @@ use Laravel\File;
 use Laravel\Bundle;
 use Laravel\Request;
 use Laravel\CLI\Tasks\Task;
-
 class Runner extends Task {
 
 	/**
@@ -87,8 +86,9 @@ class Runner extends Task {
 		// fix the spaced directories problem when using the command line
 		// strings with spaces inside should be wrapped in quotes.
 		$esc_path = escapeshellarg($path);
-
-		passthru('LARAVEL_ENV='.Request::env().' phpunit --configuration '.$esc_path, $status);
+ 		
+ 		putenv('LARAVEL_ENV='.Request::env());
+    	passthru('phpunit --configuration '.$esc_path, $status);
 
 		@unlink($path);
 

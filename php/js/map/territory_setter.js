@@ -276,7 +276,7 @@ $(document).ready(function(){
 
             var orig_armycnt =  game_state[i].army_cnt;
             
-            if(armies_plcd === 1 || user_id !== graph._node_list[i].data.owner_id)
+            if(armies_plcd === 1 || user_id !== graph._node_list[i].data.owner_id || user_id != upPlayer)
                 $("#terr"+i).html('<p style="font-style:bold; color:'+color+';">'+graph._node_list[i].data.armies+'</p>');  
             
             else if(user_id === graph._node_list[i].data.owner_id){

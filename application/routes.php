@@ -43,6 +43,8 @@ Route::post('make_card', array('uses' => 'map@make_card'));
 Route::post('move_armies', array('uses' => 'map@move_armies'));
 Route::get('card_status', array('uses' => 'map@card_status'));
 Route::post('end_turn', array('uses' => 'map@end_turn'));
+Route::post('card_turn_in', array('uses' => 'map@card_turn_in'));
+Route::get('test', array('uses' => 'map@test')); //temporary test route
 /*
 |--------------------------------------------------------------------------
 | Application 404 & 500 Error Handlers

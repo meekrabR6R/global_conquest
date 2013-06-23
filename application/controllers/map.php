@@ -8,6 +8,13 @@
          * -----  RESTful functions -----
          *************************************************/
         
+        public function get_test(){
+
+            $stat = CardTable::checkTurnIn('1075847234', 'cards19');
+          
+
+            var_dump($stat);
+        }
         /**************************************************
         * Returns map view for selected game. !!Needs some
         * work!!
@@ -30,21 +37,32 @@
                     $facebook = Map_Controller::getFB();
                     $user = $facebook->api('/me');
                     
+                    //Most of this stuff can be moved to models and actual instances
+                    //of model classes can be used here. COMMIT FIRST!
                     $game_id = $_GET['game_id'];
 
-                    $game = Games::where('game_id', '=', $game_id)->first();
+                    //$game = new Game($game_id);
+                    $game = Games::where('game_id', '=', $game_id)->first();//card id will come from this array.
                     $game_maker = $game->maker_id;
 
                     $game_table = 'game'.$game_id;
                     $card_table = 'cards'.$game_id;
 
-                    $maker_color = Plyrgames::where('plyr_id', '=', $game_maker)->first()->plyr_color;
+                    //$curr_player = new $Player($user['id']); ?
+                    
+                    
+                    
+                    //$plyr_list = new Plyrgames($game_id);
+                    
+                    $maker_color = Plyrgames::where('plyr_id', '=', $game_maker)->first()->plyr_color; //this should be exported to Game.php to maintain logical consistency.
                     $plyr_data = Plyrgames::where('game_id','=', $game_id)->get();
                     $plyr_count = Plyrgames::where('game_id','=', $game_id)->count();
                     
                     $plyr_fn = Plyrgames::getFirstNames($game_id);
                     $plyr_nm_color = Plyrgames::getPlyrColor($plyr_data, $game_id);
 
+
+                    //not sure what to do with these guys
                     $init_armies = Map_Controller::getInitArmies($user['id'], $plyr_data);
                     $armies_plcd = Map_Controller::setArmiesPlcd($plyr_data);
 
@@ -57,9 +75,34 @@
                                     $join_flag = 1;
                     }
                     
+                    //probably part of Game() instance?
                     $game_state = GameTable::getGameState($game_table);
                     $card_state = CardTable::getCardTableState($card_table);
 
+                    $cards = CardTable::getNumberOfCards($user['id'], $card_table); //keep this here for 'if 5'
+                    
+                    $player_cards = array();
+                    foreach($card_state as $card){
+                       if($card->owner_id == $user['id'])
+                            array_push($player_cards, array('army_type' => $card->army_type, 'terr_name' => $card->terr_name));   
+                    }
+                    //if($cards >= 3){
+                      //check if cards
+                    //  $turn_in_armies = PlyrGames::getBonusArmies($game->turn_ins);
+                    //  $game->turn_ins = $game->turn_ins + 1;
+                    //  $game->save();
+
+                    //  $init_armies += $turn_in_armies;
+
+                   // }
+                    //function in CardTable to check if a) the current  player has at least three cards,
+                    //b) if yes to a), if the player has a hand (1,2,3) or 3-of-a-kind, c) if yes to b),
+                    //if the player als has a territory in the hand.
+                    //need to add a 'turn in count' field to games table. 
+                    //number will determine turn in armies (0 -> 4 armies, 1 -> 6 armies, etc.)
+                    //above calculations will be carried out in function which will be in cardtable.php
+
+                    //part of Game() instance, too?
                     $player_up = Plyrgames::where('game_id','=', $game_id)->where('trn_active','=',1)->first();
 
                     //these returns suck.....refactor ASAP!
@@ -82,6 +125,7 @@
                                     ->with('init_armies', $init_armies)
                                     ->with('game_table', $game_table)
                                     ->with('card_table', $card_table)
+                                    ->with('player_cards', $player_cards)
                                     ->with('player_up', $player_up);
                             
                     }
@@ -100,6 +144,7 @@
                             ->with('init_armies', $init_armies)
                             ->with('game_table', $game_table)
                             ->with('card_table', $card_table)
+                            ->with('player_cards', $player_cards)
                             ->with('player_up', $player_up);
                 }
                 catch(FacebookApiException $e){
@@ -158,9 +203,9 @@
             $card_table = Input::get('card_table');
             $owner_id = Input::get('owner_id');
             $army_type = Input::get('army_type');
-            $terr_id = Input::get('terr_id');
+            $terr_name = Input::get('terr_name');
 
-            CardTable::insert_card($card_table, $owner_id, $army_type, $terr_id);
+            CardTable::insert_card($card_table, $owner_id, $army_type, $terr_name);
             $game = Plyrgames::where('game_id', '=', $game_id)->where('plyr_id','=', $owner_id)->first();
             $game->got_card = 1;
             $game->save();
@@ -184,6 +229,12 @@
 
         }
 
+        /***********************************************
+        * Checks if cards are valid for turn in
+        ************************************************/
+        public function post_card_turn_in(){
+            var_dump(Input::get('data'));
+        }
 
         /***********************************************
         * Updates army counts in territories in which
@@ -214,6 +265,7 @@
             Plyrgames::nextTurn($user_id, $game_id);
         }
 
+   
         /**************************************************
          * -----  Various Procedural Functions -----
          *---------(Likely candidates for model methods)---------

@@ -20,6 +20,7 @@
             var plyr_limit = {{ $game->plyrs; }};
             var plyr_count = {{ $plyr_count; }};
             var armies_plcd = {{ $armies_plcd; }};
+            var upPlayer = {{ $player_up->plyr_id; }};
             @if(isset($game_state))
                 var init_armies = {{ $init_armies; }};
             @endif
@@ -49,6 +50,12 @@
                     @endforeach
                 @endforeach
             @endif
+
+            var plyr_cards = [];
+            @foreach($player_cards as $card)
+                plyr_cards.push({'army_type' : '{{ $card['army_type']; }}', 'terr_name' : '{{ $card['terr_name']; }}' });
+            @endforeach
+            console.log(plyr_cards);
         
         </script>
         {{ Asset::scripts(); }}
@@ -72,7 +79,7 @@
                             <p>WAITING FOR OTHERS TO JOIN!</p>
                        
                     @endif
-                    @if($armies_plcd == 0 && ($plyr_count == $game->plyrs))
+                    @if($armies_plcd == 0 && ($plyr_count == $game->plyrs) && $player_up->plyr_id == $uid)
                         <div class="hero-unit">
                             <p>WE NEED TO PLACE SOME ARMIES!!</p>
                         
@@ -80,35 +87,33 @@
                         </div>
                     @endif
 
-                    @if($armies_plcd == 1 && $player_up->plyr_id != $uid)
+                    @if($player_up->plyr_id != $uid)
                         <div class="hero-unit">
                              <h5>WAIT IN LINE, YOUNG BLOOD.</h5>
                         </div>
                     @endif
 
-                   <input type="button" class="btn btn-inverse" value="cards">
-                   
-                        <input type="button" class="btn btn-inverse" value="players">
-                        <input type="button" class="btn btn-inverse" value="bug report">
-                        <input type="button" class="btn btn-inverse" value="stats">
-                    
-                        <input type="button" class="btn btn-inverse" value="rules">
-                        <input type="button" class="btn btn-inverse" value="end turn">
-                
+                    <input type="button" class="btn btn-inverse" value="bug report">
+                    <input type="button" class="btn btn-inverse" value="stats">
+                    <input type="button" class="btn btn-inverse" value="rules">
                 </div>
                 <div class='span10 main'>
                     </br>
                     <div class="tabbable"> 
                         <ul class="nav nav-tabs">
+
                             @if($armies_plcd == 1 && $player_up->plyr_id == $uid)
                                 <li class="active"><a href="#tab1" data-toggle="tab">attack</a></li>
                                 <li id="mov_btn"><a href="#tab2" data-toggle="tab">move armies</a></li>
                             @endif
+
                             <li><a href="#tab3" data-toggle="tab">cards</a></li>
                             <li><a href="#tab4" data-toggle="tab">players</a></li>
+
                             @if($armies_plcd == 1 && $player_up->plyr_id == $uid)
                                 <li><a href="#tab5" data-toggle="tab">end turn</a></li>
                             @endif
+
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="tab1">
@@ -117,9 +122,11 @@
                                     <div class="span1"></div>
                                     <div class="span5" id="select"></div>
                                     <div class="span2">
+
                                         @if($armies_plcd == 1 && $player_up->plyr_id == $uid)
                                             <p id="attack">Click one of your countries to begin attacking.</p>
                                         @endif
+
                                     </div>
                                     <div class="span2" id="defend"></div>
                                 </div>
@@ -140,7 +147,27 @@
                                 </div>
                             </div>
                             <div class="tab-pane" id="tab3">
-                                <p>Howdy, I'm in Section 3.</p>
+                                <div class="row" id="cards">
+                                    <div class="span1"></div>
+
+                                    <form id="cards_check" action="{{ URL::base() }}/card_turn_in" method="post" onsubmit="return checkCards(this);">
+
+                                        @foreach($player_cards as $card)
+                                            <div class="card span2">
+                                                <h6>{{ $card['army_type'] }}</h6></br>
+                                                </br>
+                                                <h7>{{ $card['terr_name'] }}</h7>
+                                                <input type="checkbox" name="{{ $card['terr_name']; }}" value="{ 'army_type' : '{{ $card['army_type']; }}', 'terr_name' : '{{ $card['terr_name']; }}' }">
+                                            </div>
+                                        @endforeach
+
+                                        <div class="span1">
+                                             <button type="submit" class="btn btn-primary">Turn In</button>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </br>
                             </div>
                             <div class="tab-pane" id="tab4">
                                 <p>Howdy, I'm in Section 4.</p>
@@ -171,7 +198,7 @@
                     <div class="europe" id="terr16" name="scandinavia"></div>
                     <div class="europe" id="terr17" name="southern_eur"></div>
                     <div class="europe" id="terr18" name="ukraine"></div>
-                    <div class="europe" id="terr19" name="western_eur"></div>
+                    <div class="europe" id="terr19" name="Western Europe"></div>
                     <div class="africa" id="terr20" name="congo"></div>
                     <div class="africa" id="terr21" name="east_africa"></div>
                     <div class="africa" id="terr22" name="egypt"></div>

@@ -38,3 +38,7 @@ return array(
 	'docs' => array('handles' => 'docs'),
         'facebook-sdk' => array('auto' => true)
 );
+
+return array(
+    'composer' => array('auto' => true),
+);

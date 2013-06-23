@@ -96,8 +96,24 @@ function roll_process(attk_armies, def_armies, attk_terr, def_terr){
             def_terr.data.armies--;  
     }
     else{
-        if(attk_terr.data.armies > 1) 
+        if(attk_terr.data.armies > 1){
+            
             attk_terr.data.armies--;
+
+            if(attk_terr.data.armies <= 3){
+
+                var dice_options = '';
+
+                if(attk_terr.data.armies == 3)
+                    attk_armies = 2;
+                if(attk_terr.data.armies == 2)
+                    attk_armies = 1;
+
+                
+                //make into a function
+                diceMaker(attk_armies);
+            }
+        }
         
         if(attk_terr.data.armies === 1)
             $("#roll").attr("disabled", true);     
@@ -108,9 +124,9 @@ function roll_process(attk_armies, def_armies, attk_terr, def_terr){
             if (def_terr.data.armies > 0) 
                 def_terr.data.armies--;
                 
-            if(def_terr.data.armies === 0)
+            if(def_terr.data.armies === 0){
                 $("#roll").attr("disabled", true);
-
+            }
         }
         else{
             if(attk_terr.data.armies > 1) 
@@ -236,8 +252,17 @@ function battle_process(attk_terr, def_terr){
 *****************************************************/
 function makeCard(ownerID, gameID){
 
-    armyType = Math.floor((Math.random()*3)+1);
-    terrID = Math.floor((Math.random()*41)); //check against territories in current hand (get currcards)
+    var armyNum = Math.floor((Math.random()*3)+1);
+    var terrID = Math.floor((Math.random()*41)); //check against territories in current hand (get currcards)
+    var armyType = 0;
+    var terrName = $("#terr"+terrID).attr('name');
+    
+    if(armyNum == 1)
+        armyType = 'Infantry';
+    if(armyNum == 2)
+        armyType = 'Cavalry';
+    if(armyNum == 3)
+        armyType = 'Cannon';
 
     //post card shit
     $.post(BASE+'/make_card',
@@ -245,11 +270,29 @@ function makeCard(ownerID, gameID){
             card_table: card_table,
             owner_id: ownerID,
             army_type: armyType,
-            terr_id: terrID},
+            terr_name: terrName},
             function(result){
                 console.log(result);
             }
     );
+}
+
+/*******************************************************************
+* Checks if cards are valid for turn in to receive bonus armies.
+********************************************************************/
+function checkCards(cards){
+
+    var form_data = $("#cards_check").serializeArray();
+    
+    if(form_data.length === 3){
+        $.post(BASE+'/card_turn_in',
+               {data: form_data},
+               function(result){
+                    console.log(result);
+               }
+        );
+    }
+    return false;
 }
 
 /********************************************************************
@@ -280,7 +323,6 @@ function code_click(continent){
                     
                     if(node.data.armies > 1) {
                       
-                        var dice_options = "";
                         var attk_count;
 
                         if(node.data.armies > 3)
@@ -290,15 +332,9 @@ function code_click(continent){
                         else
                             attk_count = 1;
                         
-                        for(i=1; i <= attk_count; i++){
-                            dice_options += '<option id="'+i+'">'+i+'</option>';
-                           
-                        }
-                        
-                        $("#select").html('<select id="dice">'+dice_options+'</select>\
-                                            <input id="roll" type="submit" value="roll" onclick="roll_attk()">\
-                                            <input id="result" type="text" width="100px" value="roll_result">');
-                        
+                        //make into a function
+                        diceMaker(attk_count);
+
                         var terr_options = "";
                         var def_count = 0;
                         
@@ -333,4 +369,21 @@ function make_clicks(){
     code_click(".africa");
     code_click(".asia");
     code_click(".australia");
+}
+
+
+/***********************************
+* Dice make
+************************************/
+function diceMaker(attk_count){
+
+    var dice_options = '';
+    for(i=1; i <= attk_count; i++){
+        dice_options += '<option id="'+i+'">'+i+'</option>';
+                           
+    }
+                        
+    $("#select").html('<select id="dice">'+dice_options+'</select>\
+        <input id="roll" type="submit" value="roll" onclick="roll_attk()">\
+        <input id="result" type="text" width="100px" value="roll_result">');
 }

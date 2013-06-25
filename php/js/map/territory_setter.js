@@ -288,7 +288,7 @@ $(document).ready(function(){
                                                     $("#place'+i+'").click(function(){\
                                                         var added_armies = $("#armies'+i+'").val() - '+orig_armycnt+';\
                                                         if(parseInt(added_armies) <= init_armies && parseInt($("#armies'+i+'").val()) > 0){\
-                                                            $.post("'+BASE+'/place",\
+                                                            $.post("'+BASE+'/place?game_id='+game_id+'",\
                                                                     {armies: added_armies,\
                                                                      uid: user_id,\
                                                                      game_id: game_id,\

@@ -55,22 +55,36 @@ class CardTable{
     }
 
     //check if turn in
-    public static function checkTurnIn($owner_id, $card_table){
+    public static function isTurnIn($owner_id, $cards){
 
-        $check_key = ['Infantry', 'Cavalry', 'Cannon'];
-        $bindings = array('owner_id' => $owner_id);
-        $cards = DB::query('select army_type, terr_name from '.$card_table.' where owner_id = ?', $bindings);
+        $check_123 = ['Infantry', 'Cavalry', 'Cannon'];
+        $check_infantry = ['Infantry', 'Infantry', 'Infantry'];
+        $check_cavalry = ['Cavalry', 'Cavalry', 'Cavalry'];
+        $check_cannon = ['Cannon', 'Cannon', 'Cannon'];
 
         $types = array();
         foreach($cards as $card)
-            array_push($types, $card->army_type);
+            array_push($types, $card['value']);
         
-        $result = array_diff($check_key, $types);
-        if(count($result) == 0)
-            return 1;
+        sort($types);
+
+        if($check_123 === $types || $check_infantry === $types ||
+            $check_cavalry === $types || $check_cannon === $types)
+            return true;
         else
-            return $result;
+            return false;
         
     }
+
+    //deletes cards on turn in
+    public static function deleteCards($owner_id, $cards, $card_table){
+
+       
+        foreach($cards as $card){
+            $bindings = array('owner_id' => $owner_id, 'army_type' => $card['value'], 'terr_name' => $card['name']);
+            DB::query('delete from '.$card_table.' where owner_id = ? and army_type = ? and terr_name = ?', $bindings);
+        }
+    }
+    
 }
 ?>

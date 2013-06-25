@@ -139,7 +139,7 @@ function roll_process(attk_armies, def_armies, attk_terr, def_terr){
 
     $("#result").val(attk_result + " /// " + def_result);
 
-    $.post(BASE+'/attack',
+    $.post(BASE+'/attack?game_id='+game_id,
            {game_table: game_table,
             attk_armies: attk_terr.data.armies,
             def_armies: def_terr.data.armies,
@@ -200,7 +200,7 @@ function victory_process(attk_terr, def_terr, attk_armies){
         def_terr.data.owner_id = attk_terr.data.owner_id;
         def_terr.data.color = attk_terr.data.color;
 
-        $.get(BASE+'/card_status',
+        $.get(BASE+'/card_status?game_id='+game_id,
             {owner_id: attk_terr.data.owner_id,
             game_id: game_id},
             function(result){
@@ -213,7 +213,7 @@ function victory_process(attk_terr, def_terr, attk_armies){
             }
         );
 
-        $.post(BASE+'/take_over',
+        $.post(BASE+'/take_over?game_id='+game_id,
                {game_table: game_table,
                 attk_id: attk_terr.data.pk_id,
                 def_id: def_terr.data.pk_id,
@@ -265,7 +265,7 @@ function makeCard(ownerID, gameID){
         armyType = 'Cannon';
 
     //post card shit
-    $.post(BASE+'/make_card',
+    $.post(BASE+'/make_card?game_id='+game_id,
            {game_id: game_id,
             card_table: card_table, //need to refactor so this isn't needed
             owner_id: ownerID,
@@ -285,8 +285,9 @@ function checkCards(cards){
     var form_data = $("#cards_check").serializeArray();
     
     if(form_data.length === 3){
-        $.post(BASE+'/card_turn_in',
-               {data: form_data},
+        $.post(BASE+'/card_turn_in?game_id='+game_id,
+               {owner_id: user_id,
+                data: form_data},
                function(result){
                     console.log(result);
                }

@@ -5,6 +5,7 @@
         public $restful = true;
         
         private $game;
+        private $game_id;
         private $game_title;
         private $game_maker;
         private $game_table;
@@ -20,15 +21,16 @@
         private $player_cards;
         private $player_up;
         private $uid;
+        private $facebook;
 
         //constructor
         public function __construct(){
 
-            $facebook = Map_Controller::getFB();
-            $this->uid = $facebook->getUser();
+            $this->facebook = Map_Controller::getFB();
+            $this->uid = $this->facebook->getUser();
 
-            $game_id = $_GET['game_id'];
-            $this->game = new CurrentGame($game_id);
+            $this->game_id = $_GET['game_id'];
+            $this->game = new CurrentGame($this->game_id);
             $this->game_title    = $this->game->getTitle();
             $this->game_maker    = $this->game->getGameMaker();
             $this->game_table    = $this->game->getTableName();
@@ -68,14 +70,12 @@
                     Asset::add('move_armies', 'js/map/move_armies.js', 'jquery');
                     Asset::add('make_game', 'js/map/make_game.js', 'jquery');
                  
-                    $facebook = Map_Controller::getFB();
-                    $user = $facebook->api('/me');
+                    //$facebook = Map_Controller::getFB();
+                    $user = $this->facebook->api('/me');
                     
-                    $game_id = $_GET['game_id'];
-
                     //this is stupid and needs to be changed.
                     $maker_color = Plyrgames::where('plyr_id', '=', $this->game_maker)->first()->plyr_color; 
-                    $card_table = 'cards'.$game_id; //temporary!
+                    $card_table = 'cards'.$this->game_id; //temporary!
                     
                     return View::make('game_map')   
                         ->with('game', $this->game)
@@ -107,7 +107,7 @@
 
             }
             else{
-                $login = $facebook->getLoginUrl();
+                $login = $this->facebook->getLoginUrl();
                 echo '<a href="'.$login.'">LOGIN!</a>';
             }
         }
@@ -187,7 +187,14 @@
         * Checks if cards are valid for turn in
         ************************************************/
         public function post_card_turn_in(){
-            var_dump(Input::get('data'));
+
+            $owner_id = Input::get('owner_id');
+            $cards = Input::get('data');
+            $turn_in = CardTable::isTurnIn($owner_id, $cards);
+            if($turn_in)
+                echo $this->game->turnInCards($owner_id, $cards);
+
+
         }
 
         /***********************************************

@@ -99,24 +99,6 @@ class Plyrgames extends Eloquent{
         return $turn_armies;
     }
     
-    //gets bonus armies from turn in
-    public static function getBonusArmies($turn_ins){
-
-        if($turn_ins < 5){
-
-            if($turn_ins == 0)
-                return 4;
-            else
-                return Plyrgames::getBonusArmies($turn_ins - 1) + 2;
-        }
-        else{
-
-            if($turn_ins == 5)
-                return 15;
-            else
-                return Plyrgames::getBonusArmies($turn_ins - 1) + 5;
-        }
-    }
 }
 
 ?>

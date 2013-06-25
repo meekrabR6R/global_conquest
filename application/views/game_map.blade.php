@@ -79,15 +79,18 @@
                 
                 <div class='span2 sidebar'>
                     <h1>{{ $game_title; }}</h1>
+
                     @if($join_flag == 0 && ($plyr_count < $plyr_limit)) 
                         <input id="join_btn" type="button" class="btn btn-inverse" value="join">
                         <div id="color_pick2"></div>
                     @endif
+
                     @if($join_flag == 1 && ($plyr_count < $plyr_limit))
                       
                             <p>WAITING FOR OTHERS TO JOIN!</p>
                        
                     @endif
+
                     @if($armies_plcd == false && ($plyr_count == $plyr_limit) || isset($player_up->plyr_id) == $uid)
                         <div class="hero-unit">
                             <p>WE NEED TO PLACE SOME ARMIES!!</p>
@@ -96,7 +99,6 @@
                         </div>
                     @endif
 
-            
                     @if(isset($player_up->plyr_id)!= $uid)
                         <div class="hero-unit">
                              <h5>WAIT IN LINE, YOUNG BLOOD.</h5>
@@ -168,7 +170,7 @@
                                                     <h6>{{ $card['army_type'] }}</h6></br>
                                                     </br>
                                                     <h7>{{ $card['terr_name'] }}</h7>
-                                                    <input type="checkbox" name="{{ $card['terr_name']; }}" value="{ 'army_type' : '{{ $card['army_type']; }}', 'terr_name' : '{{ $card['terr_name']; }}' }">
+                                                    <input type="checkbox" name="{{ $card['terr_name']; }}" value="{{ $card['army_type']; }}">
                                                 </div>
                                             @endforeach
                                         @endif

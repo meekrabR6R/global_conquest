@@ -41,7 +41,7 @@ function moveArmies(){
     
     $('#roll').attr("disabled", true); //change to end turn
            
-    $.post(BASE+'/move_armies',
+    $.post(BASE+'/move_armies?game_id='+game_id,
             {game_table: game_table,
              game_id: game_id,
              user_id: user_id,
@@ -132,7 +132,7 @@ $("#end").ready(function(){
 
     $("#end").click(function(){
       
-        $.post(BASE+'/end_turn',
+        $.post(BASE+'/end_turn?game_id='+game_id,
                 {user_id: user_id,
                  game_id: game_id},
                  function(result){

@@ -80,6 +80,46 @@ class CurrentGame{
         return $player_cards;
     }
 
+    /********************************************************************
+    * Turn in cards
+    *********************************************************************/
+    public function turnInCards($owner_id, $cards){
+
+    	 $turn_ins = $this->game->turn_ins;
+    	 $this->game->turn_ins += 1;
+    	 $this->game->save();
+    	 
+    	 $bonus_armies = $this->getBonusArmies($turn_ins);
+
+    	 //maybe this bit needs to be elsewhere?
+    	 $player = Plyrgames::where('plyr_id', '=', $owner_id)->first();
+    	 $player->init_armies += $bonus_armies;
+    	 $player->save();
+    	 
+    	 CardTable::deleteCards($owner_id, $cards, $this->card_table);
+
+    	 return $bonus_armies;
+
+    }
+
+    /********************************************
+    * Gets bonus armies from turn in.
+    *********************************************/
+    private function getBonusArmies($turn_ins){
+
+        if($turn_ins < 5){
+            if($turn_ins == 0)
+                return 4;
+            else
+                return $this->getBonusArmies($turn_ins - 1) + 2;
+        }
+        else{
+            if($turn_ins == 5)
+                return 15;
+            else
+                return $this->getBonusArmies($turn_ins - 1) + 5;
+        }
+    }
 
 	/********************************************************************
 	* Sets turn order.

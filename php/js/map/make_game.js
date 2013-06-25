@@ -13,7 +13,7 @@ $("#color_pick2").ready(function(){
         $("#submit_col").click(function(){
 
              var color =  $("#color").val();
-             $.post(BASE+'/join',
+             $.post(BASE+'/join?game_id='+game_id,
                    {uid: user_id,
                     game_id: game_id,
                     plyr_color: color},

@@ -257,8 +257,8 @@ $(document).ready(function(){
     
     //probably make into different file.
     //this code fires after all players have joined or mod has initiated.
-    
-    if (typeof game_state !== "undefined" && typeof plyr_nm_color !== "undefined") {
+
+    if (game_state.length > 0 && typeof plyr_nm_color !== "undefined") {
      
         for(i=0; i <= 41; i++){
             var name = $("#"+game_state[i].terr).attr('name');
@@ -276,7 +276,7 @@ $(document).ready(function(){
 
             var orig_armycnt =  game_state[i].army_cnt;
             
-            if(armies_plcd === 1 || user_id !== graph._node_list[i].data.owner_id || user_id != upPlayer)
+            if(armies_plcd === true || user_id !== graph._node_list[i].data.owner_id)
                 $("#terr"+i).html('<p style="font-style:bold; color:'+color+';">'+graph._node_list[i].data.armies+'</p>');  
             
             else if(user_id === graph._node_list[i].data.owner_id){

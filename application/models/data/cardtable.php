@@ -29,7 +29,7 @@ class CardTable{
                     $table->foreign('owner_id')->references('plyr_id')->on('players');
                 });
 
-                return $new_table;
+                return DB::query('select * from '.$card_table);
 
             }
             else {

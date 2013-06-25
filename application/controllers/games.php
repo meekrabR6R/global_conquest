@@ -1,5 +1,9 @@
-<?php
+<?php 
 
+/**********************************************
+* THIS CONTROLLER CLASS NEEDS A SHIT LOAD OF
+* CLEANING UP!
+***********************************************/
 class Games_Controller extends Base_Controller{
     
     public $restful = true;

@@ -1,6 +1,6 @@
 <?php
 
-class Create_Games {
+class Create_Games_Plyrgames {
 
 	/**
 	 * Make changes to the database.
@@ -12,11 +12,11 @@ class Create_Games {
 		Schema::create('games', function($table) {
 		// auto incremental id (PK)
 			$table->increments('game_id');
-			
+			$table->string('title', 20);
 			$table->integer('plyrs');
 			$table->string('type', 20);
 			$table->string('maker_id', 20);
-			$table->boolean('active')->default(0);
+			$table->boolean('active')->default(1);
 			$table->boolean('turns_set')->default(0);
 			$table->integer('turn_ins')->default(0);
 			// created_at | updated_at DATETIME
@@ -28,19 +28,23 @@ class Create_Games {
 			$table->increments('plyr_games_id');
 			
 			$table->string('plyr_id', 20);
-			$table->string('game_id', 20);
+			$table->integer('game_id')->unsigned();
 			$table->string('plyr_color', 20);
 			$table->integer('turn');
-			$table->boolean('turn_active')->default(0);
+			$table->boolean('trn_active')->default(0);
 			$table->boolean('got_card')->default(0);
 			$table->integer('init_armies');
 			// created_at | updated_at DATETIME
 			$table->timestamps();
 
+		});
+
+		Schema::table('plyr_games', function($table){
+
 			$table->foreign('plyr_id')->references('plyr_id')->on('players');
 			$table->foreign('game_id')->references('game_id')->on('games');
+
 		});
-			
 	}
 
 	/**

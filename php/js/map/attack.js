@@ -267,7 +267,7 @@ function makeCard(ownerID, gameID){
     //post card shit
     $.post(BASE+'/make_card',
            {game_id: game_id,
-            card_table: card_table,
+            card_table: card_table, //need to refactor so this isn't needed
             owner_id: ownerID,
             army_type: armyType,
             terr_name: terrName},

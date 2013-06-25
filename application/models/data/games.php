@@ -1,4 +1,5 @@
-<?php
+<?php 
+
 class Games extends Eloquent{
     
     /**
@@ -8,6 +9,8 @@ class Games extends Eloquent{
          */
     public static $table = 'games';
     public static $key = 'game_id';
+
+ 
 }
 
 ?>

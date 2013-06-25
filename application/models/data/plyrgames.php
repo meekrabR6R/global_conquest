@@ -10,6 +10,9 @@ class Plyrgames extends Eloquent{
     public static $table = 'plyr_games';
     public static $key = 'plyr_games_id';
 
+    /**********************************************
+    * Gets list of players' first names
+    ***********************************************/
     public static function getFirstNames($game_id){
 
         $plyr_fn = array();
@@ -21,29 +24,7 @@ class Plyrgames extends Eloquent{
         return $plyr_fn;
     }
 
-	public static function setTurnOrder($game, $game_id, $plyr_data, $plyr_count){
-
-        $turns = array();
-        for($i=1; $i<=$plyr_count; $i++)
-            array_push($turns, $i);
-
-        shuffle($turns);
-       
-        $i = 0;
-        foreach($plyr_data as $plyr){
-            $plyr->turn = $turns[$i++];
-            $plyr->save();
-        }
-        
-        $game->turns_set = 1;
-        $game->save();
-
-        $player_one = Plyrgames::where('game_id','=', $game_id)->where('turn','=',1)->first();
-        $player_one->trn_active = 1;
-        $player_one->save();
-        
-    }
-
+	
     /*********************************************************
     * Gets player's color
     * @param $player_data - single player record from db

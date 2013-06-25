@@ -14,14 +14,18 @@
             var BASE = "{{ URL::base(); }}";
             var user_id = "{{ $uid; }}";
             var user_fn = "{{ $user_fn; }}";
-            var game_id = "{{ $game->game_id; }}";
+            var game_id = "{{ $game_id; }}";
             var game_table = "{{ $game_table; }}";
             var card_table = "{{ $card_table; }}";
-            var plyr_limit = {{ $game->plyrs; }};
+            var plyr_limit = {{ $plyr_limit; }};
             var plyr_count = {{ $plyr_count; }};
-            var armies_plcd = {{ $armies_plcd; }};
-            var upPlayer = {{ $player_up->plyr_id; }};
-            @if(isset($game_state))
+            var armies_plcd = {{ json_encode($armies_plcd); }};
+          
+            var upPlayer = '';
+            @if(isset($player_up))           
+                var upPlayer = {{ $player_up->plyr_id; }};
+            @endif
+            @if(isset($game_state) && $init_armies != null)
                 var init_armies = {{ $init_armies; }};
             @endif
             var plyr_id = [];
@@ -51,13 +55,18 @@
                 @endforeach
             @endif
 
-            var plyr_cards = [];
-            @foreach($player_cards as $card)
-                plyr_cards.push({'army_type' : '{{ $card['army_type']; }}', 'terr_name' : '{{ $card['terr_name']; }}' });
-            @endforeach
-            console.log(plyr_cards);
+           
+            @if(isset($player_cards))
+                var plyr_cards = [];
+                @foreach($player_cards as $card)
+
+                    plyr_cards.push({'army_type' : '{{ $card['army_type']; }}', 'terr_name' : '{{ $card['terr_name']; }}' });
+                @endforeach
+                console.log(plyr_cards);
+            @endif
         
         </script>
+        
         {{ Asset::scripts(); }}
         <script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 
@@ -69,17 +78,17 @@
             <div id='content' class='row-fluid'>
                 
                 <div class='span2 sidebar'>
-                    <h1>{{ $game->title; }}</h1>
-                    @if($join_flag == 0 && ($plyr_count < $game->plyrs)) 
+                    <h1>{{ $game_title; }}</h1>
+                    @if($join_flag == 0 && ($plyr_count < $plyr_limit)) 
                         <input id="join_btn" type="button" class="btn btn-inverse" value="join">
                         <div id="color_pick2"></div>
                     @endif
-                    @if($join_flag == 1 && ($plyr_count < $game->plyrs))
+                    @if($join_flag == 1 && ($plyr_count < $plyr_limit))
                       
                             <p>WAITING FOR OTHERS TO JOIN!</p>
                        
                     @endif
-                    @if($armies_plcd == 0 && ($plyr_count == $game->plyrs) && $player_up->plyr_id == $uid)
+                    @if($armies_plcd == false && ($plyr_count == $plyr_limit) || isset($player_up->plyr_id) == $uid)
                         <div class="hero-unit">
                             <p>WE NEED TO PLACE SOME ARMIES!!</p>
                         
@@ -87,7 +96,8 @@
                         </div>
                     @endif
 
-                    @if($player_up->plyr_id != $uid)
+            
+                    @if(isset($player_up->plyr_id)!= $uid)
                         <div class="hero-unit">
                              <h5>WAIT IN LINE, YOUNG BLOOD.</h5>
                         </div>
@@ -102,7 +112,7 @@
                     <div class="tabbable"> 
                         <ul class="nav nav-tabs">
 
-                            @if($armies_plcd == 1 && $player_up->plyr_id == $uid)
+                            @if($armies_plcd == true && $player_up->plyr_id == $uid)
                                 <li class="active"><a href="#tab1" data-toggle="tab">attack</a></li>
                                 <li id="mov_btn"><a href="#tab2" data-toggle="tab">move armies</a></li>
                             @endif
@@ -110,7 +120,7 @@
                             <li><a href="#tab3" data-toggle="tab">cards</a></li>
                             <li><a href="#tab4" data-toggle="tab">players</a></li>
 
-                            @if($armies_plcd == 1 && $player_up->plyr_id == $uid)
+                            @if($armies_plcd == true && $player_up->plyr_id == $uid)
                                 <li><a href="#tab5" data-toggle="tab">end turn</a></li>
                             @endif
 
@@ -123,7 +133,7 @@
                                     <div class="span5" id="select"></div>
                                     <div class="span2">
 
-                                        @if($armies_plcd == 1 && $player_up->plyr_id == $uid)
+                                        @if($armies_plcd == true && $player_up->plyr_id == $uid)
                                             <p id="attack">Click one of your countries to begin attacking.</p>
                                         @endif
 
@@ -152,14 +162,16 @@
 
                                     <form id="cards_check" action="{{ URL::base() }}/card_turn_in" method="post" onsubmit="return checkCards(this);">
 
-                                        @foreach($player_cards as $card)
-                                            <div class="card span2">
-                                                <h6>{{ $card['army_type'] }}</h6></br>
-                                                </br>
-                                                <h7>{{ $card['terr_name'] }}</h7>
-                                                <input type="checkbox" name="{{ $card['terr_name']; }}" value="{ 'army_type' : '{{ $card['army_type']; }}', 'terr_name' : '{{ $card['terr_name']; }}' }">
-                                            </div>
-                                        @endforeach
+                                        @if(isset($player_cards))
+                                            @foreach($player_cards as $card)
+                                                <div class="card span2">
+                                                    <h6>{{ $card['army_type'] }}</h6></br>
+                                                    </br>
+                                                    <h7>{{ $card['terr_name'] }}</h7>
+                                                    <input type="checkbox" name="{{ $card['terr_name']; }}" value="{ 'army_type' : '{{ $card['army_type']; }}', 'terr_name' : '{{ $card['terr_name']; }}' }">
+                                                </div>
+                                            @endforeach
+                                        @endif
 
                                         <div class="span1">
                                              <button type="submit" class="btn btn-primary">Turn In</button>

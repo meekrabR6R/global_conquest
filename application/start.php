@@ -60,6 +60,12 @@ Laravel\Autoloader::$aliases = $aliases;
 
 Autoloader::map(array(
 	'Base_Controller' => path('app').'controllers/base.php',
+	'Games' => path('app').'models/data/games.php',
+	'CardTable' => path('app').'models/data/cardtable.php',
+	'GameTable' => path('app').'models/data/gametable.php',
+	'Plyrgames' => path('app').'models/data/plyrgames.php',
+	'Players' => path('app').'models/data/players.php',
+	'CurrentGame' => path('app').'models/domain/current_game.php',
 ));
 
 /*

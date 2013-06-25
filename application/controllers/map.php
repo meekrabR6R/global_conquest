@@ -4,27 +4,61 @@
         
         public $restful = true;
         
+        private $game;
+        private $game_title;
+        private $game_maker;
+        private $game_table;
+        private $game_state;
+        private $plyr_data; //rename this shit
+        private $plyr_count;
+        private $plyr_limit;
+        private $player_list;
+        private $plyr_nm_color;//rename this too!
+        private $armies_plcd;
+        private $join_flag;
+        private $init_armies;
+        private $player_cards;
+        private $player_up;
+        private $uid;
+
+        //constructor
+        public function __construct(){
+
+            $facebook = Map_Controller::getFB();
+            $this->uid = $facebook->getUser();
+
+            $game_id = $_GET['game_id'];
+            $this->game = new CurrentGame($game_id);
+            $this->game_title    = $this->game->getTitle();
+            $this->game_maker    = $this->game->getGameMaker();
+            $this->game_table    = $this->game->getTableName();
+            $this->game_state    = $this->game->getGameState();
+            $this->plyr_data     = $this->game->getPlayers(); //rename this shit
+            $this->plyr_count    = $this->game->getPlayerCount();
+            $this->plyr_limit    = $this->game->getPlayerLimit();
+            $this->player_list   = $this->game->getPlayerList();
+            $this->plyr_nm_color = $this->game->getPlayerColors();//rename this too!
+            $this->armies_plcd   = $this->game->armiesPlaced();
+            $this->join_flag     = $this->game->isMember($this->uid);
+            $this->init_armies   = $this->game->getInitArmies($this->uid);
+            $this->player_cards  = $this->game->getHand($this->uid);
+            $this->player_up     = $this->game->getUpPlayer();
+        }
+
         /**************************************************
          * -----  RESTful functions -----
          *************************************************/
-        
-        public function get_test(){
-
-            $stat = CardTable::checkTurnIn('1075847234', 'cards19');
-          
-
-            var_dump($stat);
-        }
+    
         /**************************************************
         * Returns map view for selected game. !!Needs some
         * work!!
         **************************************************/
         public function get_map() {
            
-            $facebook = Map_Controller::getFB();
-            $uid = $facebook->getUser();
+            //$facebook = Map_Controller::getFB();
+            //$uid = $facebook->getUser();
 
-            if($uid){
+            if($this->uid){
                 try{
                     Asset::add('risk_style', 'css/risk_style.css');
                     Asset::add('jquery', 'js/libs/jquery20.js');
@@ -37,115 +71,35 @@
                     $facebook = Map_Controller::getFB();
                     $user = $facebook->api('/me');
                     
-                    //Most of this stuff can be moved to models and actual instances
-                    //of model classes can be used here. COMMIT FIRST!
                     $game_id = $_GET['game_id'];
 
-                    //$game = new Game($game_id);
-                    $game = Games::where('game_id', '=', $game_id)->first();//card id will come from this array.
-                    $game_maker = $game->maker_id;
-
-                    $game_table = 'game'.$game_id;
-                    $card_table = 'cards'.$game_id;
-
-                    //$curr_player = new $Player($user['id']); ?
+                    //this is stupid and needs to be changed.
+                    $maker_color = Plyrgames::where('plyr_id', '=', $this->game_maker)->first()->plyr_color; 
+                    $card_table = 'cards'.$game_id; //temporary!
                     
-                    
-                    
-                    //$plyr_list = new Plyrgames($game_id);
-                    
-                    $maker_color = Plyrgames::where('plyr_id', '=', $game_maker)->first()->plyr_color; //this should be exported to Game.php to maintain logical consistency.
-                    $plyr_data = Plyrgames::where('game_id','=', $game_id)->get();
-                    $plyr_count = Plyrgames::where('game_id','=', $game_id)->count();
-                    
-                    $plyr_fn = Plyrgames::getFirstNames($game_id);
-                    $plyr_nm_color = Plyrgames::getPlyrColor($plyr_data, $game_id);
+                    return View::make('game_map')   
+                        ->with('game', $this->game)
+                        ->with('game_id', $this->game_id)
+                        ->with('game_title', $this->game_title)
+                        ->with('plyr_limit', $this->plyr_limit)
+                        ->with('plyr_data', $this->plyr_data)
+                        ->with('plyr_fn', $this->player_list)
+                        ->with('join_flag', $this->join_flag)
+                        ->with('plyr_count', $this->plyr_count)
+                        ->with('uid', $user['id'])
+                        ->with('user_fn', $user['first_name'])
+                        ->with('game_state', $this->game_state)
+                        ->with('plyr_nm_color', $this->plyr_nm_color)
+                        ->with('game_maker', $this->game_maker)
+                        ->with('maker_color', $maker_color)
+                        ->with('armies_plcd', $this->armies_plcd)
+                        ->with('init_armies', $this->init_armies)
+                        ->with('game_table', $this->game_table)
+                        ->with('card_table', $card_table)
+                        ->with('player_cards', $this->player_cards)
+                        ->with('player_up', $this->player_up);
 
-
-                    //not sure what to do with these guys
-                    $init_armies = Map_Controller::getInitArmies($user['id'], $plyr_data);
-                    $armies_plcd = Map_Controller::setArmiesPlcd($plyr_data);
-
-                    if($armies_plcd == 1 && $game->turns_set == 0)
-                        Plyrgames::setTurnOrder($game, $game_id, $plyr_data, $plyr_count);
-
-                    $join_flag = 0;
-                    foreach($plyr_data as $player){
-                            if($user['id'] == $player->plyr_id)
-                                    $join_flag = 1;
-                    }
-                    
-                    //probably part of Game() instance?
-                    $game_state = GameTable::getGameState($game_table);
-                    $card_state = CardTable::getCardTableState($card_table);
-
-                    $cards = CardTable::getNumberOfCards($user['id'], $card_table); //keep this here for 'if 5'
-                    
-                    $player_cards = array();
-                    foreach($card_state as $card){
-                       if($card->owner_id == $user['id'])
-                            array_push($player_cards, array('army_type' => $card->army_type, 'terr_name' => $card->terr_name));   
-                    }
-                    //if($cards >= 3){
-                      //check if cards
-                    //  $turn_in_armies = PlyrGames::getBonusArmies($game->turn_ins);
-                    //  $game->turn_ins = $game->turn_ins + 1;
-                    //  $game->save();
-
-                    //  $init_armies += $turn_in_armies;
-
-                   // }
-                    //function in CardTable to check if a) the current  player has at least three cards,
-                    //b) if yes to a), if the player has a hand (1,2,3) or 3-of-a-kind, c) if yes to b),
-                    //if the player als has a territory in the hand.
-                    //need to add a 'turn in count' field to games table. 
-                    //number will determine turn in armies (0 -> 4 armies, 1 -> 6 armies, etc.)
-                    //above calculations will be carried out in function which will be in cardtable.php
-
-                    //part of Game() instance, too?
-                    $player_up = Plyrgames::where('game_id','=', $game_id)->where('trn_active','=',1)->first();
-
-                    //these returns suck.....refactor ASAP!
-                    if($plyr_count == $game->plyrs){
-                            
-                            
-                            return View::make('game_map')
-                                    ->with('game', $game)
-                                    ->with('plyr_data', $plyr_data)
-                                    ->with('plyr_fn', $plyr_fn)
-                                    ->with('join_flag', $join_flag)
-                                    ->with('plyr_count', $plyr_count)
-                                    ->with('uid', $user['id'])
-                                    ->with('user_fn', $user['first_name'])
-                                    ->with('game_state', $game_state)
-                                    ->with('plyr_nm_color', $plyr_nm_color)
-                                    ->with('game_maker', $game_maker)
-                                    ->with('maker_color', $maker_color)
-                                    ->with('armies_plcd', $armies_plcd)
-                                    ->with('init_armies', $init_armies)
-                                    ->with('game_table', $game_table)
-                                    ->with('card_table', $card_table)
-                                    ->with('player_cards', $player_cards)
-                                    ->with('player_up', $player_up);
-                            
-                    }
-                    
-                    return View::make('game_map')
-                            ->with('game', $game)
-                            ->with('plyr_data', $plyr_data)
-                            ->with('plyr_fn', $plyr_fn)
-                            ->with('join_flag', $join_flag)
-                            ->with('plyr_count', $plyr_count)
-                            ->with('uid', $user['id'])
-                            ->with('user_fn', $user['first_name'])
-                            ->with('game_maker', $game_maker)
-                            ->with('armies_plcd', $armies_plcd)
-                            ->with('maker_color', $maker_color)
-                            ->with('init_armies', $init_armies)
-                            ->with('game_table', $game_table)
-                            ->with('card_table', $card_table)
-                            ->with('player_cards', $player_cards)
-                            ->with('player_up', $player_up);
+                      
                 }
                 catch(FacebookApiException $e){
                     $user = null;
@@ -265,37 +219,6 @@
             Plyrgames::nextTurn($user_id, $game_id);
         }
 
-   
-        /**************************************************
-         * -----  Various Procedural Functions -----
-         *---------(Likely candidates for model methods)---------
-         *************************************************/
-        
-
-        private static function setArmiesPlcd($plyr_data){
-
-            $set_flag = 0;
-            foreach($plyr_data as $player){
-                if($player->init_armies > 0)
-                    $set_flag = 1;
-            }
-
-            if($set_flag == 0)
-                return 1;
-            else
-                return 0;
-        }
-
-        
-        private static function getInitArmies($user_id, $plyr_data){
-         
-            foreach($plyr_data as $player){
-                if($user_id == $player->plyr_id){
-                    return $player->init_armies; 
-                  
-                }
-            }
-        }
     }
     
 ?>

@@ -69,6 +69,7 @@
                     Asset::add('attack', 'js/map/attack.js', 'jquery');
                     Asset::add('move_armies', 'js/map/move_armies.js', 'jquery');
                     Asset::add('make_game', 'js/map/make_game.js', 'jquery');
+
                  
                     //$facebook = Map_Controller::getFB();
                     $user = $this->facebook->api('/me');

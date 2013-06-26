@@ -31,6 +31,8 @@ class Facebook_Controller extends Base_Controller{
 			}
 			catch(FacebookApiException $e){
 				$user = null;
+				$login = $facebook->getLoginUrl();
+		    	echo '<a href="'.$login.'">LOGIN!</a>';
 			}
 		}
 		else{

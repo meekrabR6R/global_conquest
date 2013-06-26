@@ -30,13 +30,13 @@ class GameTable{
                     $table->foreign('owner_id')->references('plyr_id')->on('players');
                 });
 
-                return $new_table;
+               // return $new_table;
 
             }
-            else {
+           // else {
                     
                 return DB::query('select * from '. $game_table);       
-            }
+          //  }
             
     }
 

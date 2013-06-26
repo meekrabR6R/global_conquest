@@ -50,7 +50,7 @@
         /**************************************************
          * -----  RESTful functions -----
          *************************************************/
-    
+        
         /**************************************************
         * Returns map view for selected game. !!Needs some
         * work!!
@@ -190,13 +190,22 @@
 
             $owner_id = Input::get('owner_id');
             $cards = Input::get('data');
-            $turn_in = CardTable::isTurnIn($owner_id, $cards);
+            $turn_in = $this->game->isTurnIn($cards);
             if($turn_in)
                 echo $this->game->turnInCards($owner_id, $cards);
 
 
         }
 
+        public function get_test(){
+
+            $cards = [['name' => 'a', 'value' => 'Infantry'], ['name' => 'b', 'value' => 'Cavalry'], ['name' => 'c', 'value' => 'Cannon']];
+
+            if($this->game->isTurnIn($cards))
+                echo 'turn in!';
+            else
+                echo 'nope';
+        }
         /***********************************************
         * Updates army counts in territories in which
         * armies were removed and added during end of

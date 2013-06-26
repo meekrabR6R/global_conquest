@@ -80,6 +80,30 @@ class CurrentGame{
         return $player_cards;
     }
 
+    /***************************************************
+    * Checks if turn in
+    ***************************************************/
+    public function isTurnIn($cards){
+
+        $check_123 = ['Cannon', 'Cavalry', 'Infantry'];
+        $check_infantry = ['Infantry', 'Infantry', 'Infantry'];
+        $check_cavalry = ['Cavalry', 'Cavalry', 'Cavalry'];
+        $check_cannon = ['Cannon', 'Cannon', 'Cannon'];
+
+        $types = array();
+        foreach($cards as $card)
+            array_push($types, $card['value']);
+        
+        sort($types);
+
+        if($check_123 === $types || $check_infantry === $types ||
+            $check_cavalry === $types || $check_cannon === $types)
+            return true;
+        else
+            return false;
+        
+    }
+
     /********************************************************************
     * Turn in cards
     *********************************************************************/

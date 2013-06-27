@@ -31,8 +31,10 @@ class CurrentGame{
 		if($this->game->turns_set == 0 && $this->player_count == $this->game->plyrs)
            $this->makeTurns($this->game, $game_id, $this->players, $this->player_count);
         
-        elseif($this->player_count == $this->game->plyrs)
+        elseif($this->player_count == $this->game->plyrs){
         	$this->player_up = Plyrgames::where('game_id','=', $game_id)->where('trn_active','=',1)->first();
+           
+        }
 	
 	}
 
@@ -191,7 +193,10 @@ class CurrentGame{
             return false;
     }
 
+    public function setTurnArmies($plyr_id){
 
+        Plyrgames::updateTurnArmies($this->game_id, $plyr_id);
+    }
 	/**********************************
 	* Various getters (ugly, I know)
 	**********************************/

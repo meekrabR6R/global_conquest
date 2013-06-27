@@ -54,8 +54,11 @@ class Plyrgames extends Eloquent{
     public static function nextTurn($user_id, $game_id){
 
         $curr_plyr = Plyrgames::where('plyr_id', '=', $user_id)->where('game_id', '=', $game_id)->first();
+        $curr_plyr->turn_armies_set = 0;
+        $curr_plyr->save();
+
+
         $curr_turn = $curr_plyr->turn;
-        
         $tot_plyrs = Games::where('game_id', '=',$game_id)->first()->plyrs;
 
         if($curr_turn < $tot_plyrs)
@@ -74,12 +77,19 @@ class Plyrgames extends Eloquent{
         $next_plyr->trn_active = 1;
         $next_plyr->save();
         
-         //reset card status here..
-        $turn_armies = Plyrgames::getTurnArmies($game_id, $next_plyr->plyr_id);
+        return $curr_plyr;
+    }
 
-        $bindings = array('init_armies' => $turn_armies, 'plyr_id' => $next_plyr->plyr_id, 'game_id' => $game_id);
+    //updates turn armies for next player
+    public static function updateTurnArmies($game_id, $plyr_id){
+        
+        $turn_armies = Plyrgames::getTurnArmies($game_id, $plyr_id);
+
+        $bindings = array('init_armies' => $turn_armies, 'plyr_id' => $plyr_id ,'game_id' => $game_id);
         $update_armies = DB::query('update plyr_games set init_armies = ? where plyr_id = ? and game_id = ?', $bindings);
-       
+
+        $bindings = array('plyr_id' => $plyr_id, 'game_id' => $game_id);
+        $update_set_army = DB::query('update plyr_games set turn_armies_set = 1 where plyr_id = ? and game_id = ?', $bindings);
     }
 
     //get turn armies

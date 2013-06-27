@@ -10,12 +10,15 @@ body{
 }
 
 #game_map{
-    border:4px solid #000000;
-    border-radius:5px;
+   position:relative;
 }
 
 #image{
+    border:4px solid #000000;
+    border-radius:5px;
     position:relative;
+    min-width:900px;
+    max-width:1400px;
 }
 .card{
     border:4px solid #000000;

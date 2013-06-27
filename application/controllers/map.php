@@ -69,11 +69,13 @@
                     Asset::add('attack', 'js/map/attack.js', 'jquery');
                     Asset::add('move_armies', 'js/map/move_armies.js', 'jquery');
                     Asset::add('make_game', 'js/map/make_game.js', 'jquery');
+                    Asset::add('place_armies', 'js/map/place_armies.js', 'jquery');
+
 
                  
                     //$facebook = Map_Controller::getFB();
                     $user = $this->facebook->api('/me');
-                    
+                
                     //this is stupid and needs to be changed.
                     $maker_color = Plyrgames::where('plyr_id', '=', $this->game_maker)->first()->plyr_color; 
                     $card_table = 'cards'.$this->game_id; //temporary!
@@ -233,7 +235,7 @@
 
             $user_id = Input::get('user_id');
             $game_id = Input::get('game_id');
-            Plyrgames::nextTurn($user_id, $game_id);
+            var_dump(Plyrgames::nextTurn($user_id, $game_id));
         }
 
     }

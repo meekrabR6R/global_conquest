@@ -8,7 +8,7 @@ $(document).ready(function(){
     for(i=0; i <= 41; i++){
         
         var name = $("#terr"+i).attr('name');
-        $("#terr"+i).append('<p>'+name+'</p>');
+     
         graph.add_node(name, {}, []);
         
     }
@@ -264,7 +264,7 @@ $(document).ready(function(){
             var name = $("#"+game_state[i].terr).attr('name');
             var color = "";
           
-            graph.update_data(name, {owner_id: game_state[i].owner_id, armies: game_state[i].army_cnt, pk_id: (i+1)});//change to territory.etc.etc.
+            graph.update_data(name, {owner_id: game_state[i].owner_id, armies: game_state[i].army_cnt, pk_id: (i+1)});
 
             for (j=0; j < plyr_nm_color.length; j++) {
 
@@ -276,39 +276,9 @@ $(document).ready(function(){
 
             var orig_armycnt =  game_state[i].army_cnt;
             
-            if(armies_plcd === true || user_id !== graph._node_list[i].data.owner_id)
-                $("#terr"+i).html('<h3 style="color:'+color+';">'+graph._node_list[i].data.armies+'</h3>');  
+            $("#terr"+i).html('<h3 style="color:'+color+';">'+graph._node_list[i].data.armies+'</h3>');  
             
-            else if(user_id === graph._node_list[i].data.owner_id){
-
-                 $("#terr"+i).html('<input id="armies'+i+'" type="text" size="2" value = "'+graph._node_list[i].data.armies+'">\
-                                    <input id="place'+i+'" type="button" value="place">\
-                                    <script type="text/javascript">\
-                                            $("#place'+i+'").ready(function(){\
-                                                    $("#place'+i+'").click(function(){\
-                                                        var added_armies = $("#armies'+i+'").val() - '+orig_armycnt+';\
-                                                        if(parseInt(added_armies) <= init_armies && parseInt($("#armies'+i+'").val()) > 0){\
-                                                            $.post("'+BASE+'/place?game_id='+game_id+'",\
-                                                                    {armies: added_armies,\
-                                                                     uid: user_id,\
-                                                                     game_id: game_id,\
-                                                                     terr_num: '+i+',\
-                                                                     game_table: game_table},\
-                                                                    function(result){\
-                                                                        $("#place_armies").html("<p>"+result+" ARMIES REMANING</p>");\
-                                                                        init_armies = result;\
-                                                            });\
-                                                         }\
-                                                         else{\
-                                                            if(parseInt($("#armies'+i+'").val()) > 0)\
-                                                                alert("TOO MANY ARMIES, FOOL!");\
-                                                            else\
-                                                                alert("TOO FEW ARMIES, CRETEN!");\
-                                                        }\
-                                                    });\
-                                            });\
-                                    </script>');
-            }
+            
         }
     }
 });

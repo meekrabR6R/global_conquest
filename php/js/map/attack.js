@@ -8,7 +8,9 @@
  *the screen that will hold the attacking country, and
  *a dropdown of all attackable countries.
  *****************************************************/
- make_clicks();
+$('#attk_btn').ready(function(){
+    make_clicks();
+});
  
 
 
@@ -218,8 +220,10 @@ function victory_process(attk_terr, def_terr, attk_armies){
 function battle_process(attk_terr, def_terr){
 
     if(attk_terr.data.owner_id === user_id){
-        $("div[name="+attk_terr.id+"]").html('<p style="color:'+attk_terr.data.color+';">'+attk_terr.data.armies+'</p>');
-        $("div[name="+def_terr.id+"]").html('<p style="color:'+def_terr.data.color+';">'+def_terr.data.armies+'</p>');
+        $("div[name="+attk_terr.id+"]").html('<h3 style="color:'+attk_terr.data.color+';">'+attk_terr.data.armies+'</h3>');
+        $("div[name="+def_terr.id+"]").html('<h3 style="color:'+def_terr.data.color+';">'+def_terr.data.armies+'</h3>');
+
+        make_clicks();
     }
 }
 

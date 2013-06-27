@@ -25,7 +25,7 @@
             @if(isset($player_up))           
                 var upPlayer = {{ $player_up->plyr_id; }};
             @endif
-            @if(isset($game_state) && $init_armies != null)
+            @if(isset($game_state))
                 var init_armies = {{ $init_armies; }};
             @endif
             var plyr_id = [];
@@ -91,7 +91,7 @@
                        
                     @endif
 
-                    @if($armies_plcd == false && ($plyr_count == $plyr_limit) || isset($player_up->plyr_id) == $uid)
+                    @if($armies_plcd == false && ($plyr_count == $plyr_limit) || isset($player_up->plyr_id) == $uid && $init_armies > 0)
                         <div class="hero-unit">
                             <p>WE NEED TO PLACE SOME ARMIES!!</p>
                         
@@ -99,10 +99,12 @@
                         </div>
                     @endif
 
-                    @if(isset($player_up->plyr_id)!= $uid)
-                        <div class="hero-unit">
-                             <h5>WAIT IN LINE, YOUNG BLOOD.</h5>
-                        </div>
+                    @if(isset($player_up->plyr_id))
+                        @if($player_up->plyr_id != $uid)
+                            <div class="hero-unit">
+                                 <h5>WAIT IN LINE, YOUNG BLOOD.</h5>
+                            </div>
+                        @endif
                     @endif
 
                     <input type="button" class="btn btn-inverse" value="bug report">
@@ -117,6 +119,8 @@
                             @if($armies_plcd == true && $player_up->plyr_id == $uid)
                                 <li class="active"><a href="#tab1" data-toggle="tab">attack</a></li>
                                 <li id="mov_btn"><a href="#tab2" data-toggle="tab">move armies</a></li>
+                            @else
+                                <li id="place_btn" class="active"><a href="#tab1" data-toggle="tab">place armies</a></li>
                             @endif
 
                             <li><a href="#tab3" data-toggle="tab">cards</a></li>
@@ -132,11 +136,14 @@
 
                                 <div class="row">
                                     <div class="span1"></div>
-                                    <div class="span5" id="select"></div>
-                                    <div class="span2">
-
+                                  
                                         @if($armies_plcd == true && $player_up->plyr_id == $uid)
-                                            <p id="attack">Click one of your countries to begin attacking.</p>
+                                            <div class="span5" id="select"></div>
+                                            <div class="span2">
+                                                <p id="attack">Click one of your countries to begin attacking.</p>
+                                        @else
+                                                <div class="span7">
+                                                    <p id="place">Click one of your countries to place armies.</p>
                                         @endif
 
                                     </div>

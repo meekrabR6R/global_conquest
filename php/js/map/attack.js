@@ -10,26 +10,7 @@
  *****************************************************/
  make_clicks();
  
-$("#attk_btn").ready(function(){
-   
-    $("#attk_btn").click(function(){
-        
-        $('#attk_mode').append('<table><tr><td>\
-                             <div id="select"></div>\
-                           </td>\
-                        </tr>\
-                        <tr>\
-                        <td>\
-                          <p id="attack">ATTACKING COUNTRY</p> --->\
-                        </td>\
-                        </tr>\
-                        <tr><td id="defend"></td></tr>');
-        
-        make_clicks();
-        
-        $('#attk_btn').attr("disabled", true);	
-    });
-});
+
 
 /*******************************************************
  *Controls roll mechanics. Sets the amount of dice

@@ -277,7 +277,7 @@ $(document).ready(function(){
             var orig_armycnt =  game_state[i].army_cnt;
             
             if(armies_plcd === true || user_id !== graph._node_list[i].data.owner_id)
-                $("#terr"+i).html('<p style="font-style:bold; color:'+color+';">'+graph._node_list[i].data.armies+'</p>');  
+                $("#terr"+i).html('<h3 style="color:'+color+';">'+graph._node_list[i].data.armies+'</h3>');  
             
             else if(user_id === graph._node_list[i].data.owner_id){
 

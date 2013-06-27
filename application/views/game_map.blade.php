@@ -192,50 +192,52 @@
                         </div>
                     </div>
 
-                    <img id="game_map" src="{{ URL::base(); }}/images/map.jpg">
-                    <div class="north_america" id="terr0" name="alaska"></div>
-                    <div class="north_america" id="terr1" name="alberta"></div>
-                    <div class="north_america" id="terr2" name="central_america"></div>
-                    <div class="north_america" id="terr3" name="eastern_us"></div>
-                    <div class="north_america" id="terr4" name="western_us"></div>
-                    <div class="north_america" id="terr5" name="greenland"></div>
-                    <div class="north_america" id="terr6" name="nw_territory"></div>
-                    <div class="north_america" id="terr7" name="ontario"></div>
-                    <div class="north_america" id="terr8" name="quebec"></div>
-                    <div class="south_america" id="terr9" name="argentina"></div>
-                    <div class="south_america" id="terr10" name="brazil"></div>
-                    <div class="south_america" id="terr11" name="peru"></div>
-                    <div class="south_america" id="terr12" name="venezuela"></div>
-                    <div class="europe" id="terr13" name="great_britain"></div>
-                    <div class="europe" id="terr14" name="iceland"></div>
-                    <div class="europe" id="terr15" name="northern_eur"></div>
-                    <div class="europe" id="terr16" name="scandinavia"></div>
-                    <div class="europe" id="terr17" name="southern_eur"></div>
-                    <div class="europe" id="terr18" name="ukraine"></div>
-                    <div class="europe" id="terr19" name="Western Europe"></div>
-                    <div class="africa" id="terr20" name="congo"></div>
-                    <div class="africa" id="terr21" name="east_africa"></div>
-                    <div class="africa" id="terr22" name="egypt"></div>
-                    <div class="africa" id="terr23" name="madagascar"></div>
-                    <div class="africa" id="terr24" name="north_africa"></div>
-                    <div class="africa" id="terr25" name="south_africa"></div>
-                    <div class="asia" id="terr26" name="afghanistan"></div>
-                    <div class="asia" id="terr27" name="china"></div>
-                    <div class="asia" id="terr28" name="india"></div>
-                    <div class="asia" id="terr29" name="irkutsk"></div>
-                    <div class="asia" id="terr30" name="japan"></div>
-                    <div class="asia" id="terr31" name="kamchatka"></div>
-                    <div class="asia" id="terr32" name="middle_east"></div>
-                    <div class="asia" id="terr33" name="siam"></div>
-                    <div class="asia" id="terr34" name="siberia"></div>
-                    <div class="asia" id="terr35" name="ural"></div>
-                    <div class="asia" id="terr36" name="yakutsk"></div>
-                    <div class="asia" id="terr37" name="mongolia"></div>
-                    <div class="australia" id="terr38" name="east_australia"></div>
-                    <div class="australia" id="terr39" name="indonesia"></div>
-                    <div class="australia" id="terr40" name="new_guinea"></div>
-                    <div class="australia" id="terr41" name="west_australia"></div>
-              
+                    <div id="image">
+                        <img id="game_map" src="{{ URL::base(); }}/images/map.jpg">
+                    
+                        <div class="north_america" id="terr0" name="alaska"></div>
+                        <div class="north_america" id="terr1" name="alberta"></div>
+                        <div class="north_america" id="terr2" name="central_america"></div>
+                        <div class="north_america" id="terr3" name="eastern_us"></div>
+                        <div class="north_america" id="terr4" name="western_us"></div>
+                        <div class="north_america" id="terr5" name="greenland"></div>
+                        <div class="north_america" id="terr6" name="nw_territory"></div>
+                        <div class="north_america" id="terr7" name="ontario"></div>
+                        <div class="north_america" id="terr8" name="quebec"></div>
+                        <div class="south_america" id="terr9" name="argentina"></div>
+                        <div class="south_america" id="terr10" name="brazil"></div>
+                        <div class="south_america" id="terr11" name="peru"></div>
+                        <div class="south_america" id="terr12" name="venezuela"></div>
+                        <div class="europe" id="terr13" name="great_britain"></div>
+                        <div class="europe" id="terr14" name="iceland"></div>
+                        <div class="europe" id="terr15" name="northern_eur"></div>
+                        <div class="europe" id="terr16" name="scandinavia"></div>
+                        <div class="europe" id="terr17" name="southern_eur"></div>
+                        <div class="europe" id="terr18" name="ukraine"></div>
+                        <div class="europe" id="terr19" name="western_europe"></div>
+                        <div class="africa" id="terr20" name="congo"></div>
+                        <div class="africa" id="terr21" name="east_africa"></div>
+                        <div class="africa" id="terr22" name="egypt"></div>
+                        <div class="africa" id="terr23" name="madagascar"></div>
+                        <div class="africa" id="terr24" name="north_africa"></div>
+                        <div class="africa" id="terr25" name="south_africa"></div>
+                        <div class="asia" id="terr26" name="afghanistan"></div>
+                        <div class="asia" id="terr27" name="china"></div>
+                        <div class="asia" id="terr28" name="india"></div>
+                        <div class="asia" id="terr29" name="irkutsk"></div>
+                        <div class="asia" id="terr30" name="japan"></div>
+                        <div class="asia" id="terr31" name="kamchatka"></div>
+                        <div class="asia" id="terr32" name="middle_east"></div>
+                        <div class="asia" id="terr33" name="siam"></div>
+                        <div class="asia" id="terr34" name="siberia"></div>
+                        <div class="asia" id="terr35" name="ural"></div>
+                        <div class="asia" id="terr36" name="yakutsk"></div>
+                        <div class="asia" id="terr37" name="mongolia"></div>
+                        <div class="australia" id="terr38" name="east_australia"></div>
+                        <div class="australia" id="terr39" name="indonesia"></div>
+                        <div class="australia" id="terr40" name="new_guinea"></div>
+                        <div class="australia" id="terr41" name="west_australia"></div>
+                    </div>
                     
                 
                 </div>

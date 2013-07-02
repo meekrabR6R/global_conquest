@@ -8,7 +8,6 @@ $(document).ready(function(){
     for(i=0; i <= 41; i++){
         
         var name = $("#terr"+i).attr('name');
-     
         graph.add_node(name, {}, []);
         
     }
@@ -81,7 +80,7 @@ $(document).ready(function(){
     graph.add_edges(graph._node_list[10].id, graph._node_list[12].id);
     graph.add_edges(graph._node_list[10].id, graph._node_list[11].id);
     graph.add_edges(graph._node_list[10].id, graph._node_list[9].id);
-    
+    graph.add_edges(graph._node_list[10].id, graph._node_list[24].id);  
     //great_britain
     graph.add_edges(graph._node_list[13].id, graph._node_list[14].id);
     graph.add_edges(graph._node_list[13].id, graph._node_list[15].id);
@@ -178,8 +177,8 @@ $(document).ready(function(){
     
     //ural
     graph.add_edges(graph._node_list[35].id, graph._node_list[18].id);
-    graph.add_edges(graph._node_list[26].id, graph._node_list[26].id);
-    graph.add_edges(graph._node_list[26].id, graph._node_list[34].id);
+    graph.add_edges(graph._node_list[35].id, graph._node_list[26].id);
+    graph.add_edges(graph._node_list[35].id, graph._node_list[34].id);
     
     //siberia
     graph.add_edges(graph._node_list[34].id, graph._node_list[35].id);
@@ -259,12 +258,12 @@ $(document).ready(function(){
     //this code fires after all players have joined or mod has initiated.
 
     if (game_state.length > 0 && typeof plyr_nm_color !== "undefined") {
-     
+        
         for(i=0; i <= 41; i++){
             var name = $("#"+game_state[i].terr).attr('name');
             var color = "";
           
-            graph.update_data(name, {owner_id: game_state[i].owner_id, armies: game_state[i].army_cnt, pk_id: (i+1)});
+            graph.add_data(name, {owner_id: game_state[i].owner_id, armies: game_state[i].army_cnt, pk_id: (i+1)});
 
             for (j=0; j < plyr_nm_color.length; j++) {
 

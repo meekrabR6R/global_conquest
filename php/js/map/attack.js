@@ -124,12 +124,15 @@ function roll_process(attk_armies, def_armies, attk_terr, def_terr){
 
     $.post(BASE+'/attack?game_id='+game_id,
            {game_table: game_table,
+            attk_owner: attk_terr.data.owner_id,
+            def_owner: def_terr.data.owner_id,
             attk_armies: attk_terr.data.armies,
             def_armies: def_terr.data.armies,
             attk_id: attk_terr.data.pk_id,
             def_id: def_terr.data.pk_id},
             function(result){
                 console.log(result);
+
             }
     )
 }
@@ -178,6 +181,8 @@ function victory_process(attk_terr, def_terr, attk_armies){
                 break;
         }
         
+        var def_id_holder = def_terr.data.owner_id;
+
         attk_terr.data.armies -= mov_armies;
         def_terr.data.armies = mov_armies;
         def_terr.data.owner_id = attk_terr.data.owner_id;
@@ -201,10 +206,16 @@ function victory_process(attk_terr, def_terr, attk_armies){
                 attk_id: attk_terr.data.pk_id,
                 def_id: def_terr.data.pk_id,
                 attacker_id: attk_terr.data.owner_id,
+                defender_id: def_id_holder,
                 attk_armies: attk_terr.data.armies,
                 def_armies: def_terr.data.armies},
+                
                 function(result){
-                    console.log(result);
+                    var terr = JSON.parse(result); 
+                    if(terr.attk_terr === 42){
+                        alert('You are victorious!');
+                        location.reload();
+                    }
                 }
         );
 

@@ -66,6 +66,8 @@ Autoloader::map(array(
 	'Plyrgames' => path('app').'models/data/plyrgames.php',
 	'Players' => path('app').'models/data/players.php',
 	'CurrentGame' => path('app').'models/domain/current_game.php',
+	'Player' => path('app').'models/domain/player.php',
+
 ));
 
 /*

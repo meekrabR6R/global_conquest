@@ -48,7 +48,7 @@ Graph.prototype = {
             console.log("Node not added.");
     },
     
-    update_data: function(id, data){
+    add_data: function(id, data){
        
         this._node_list.forEach(function(node){
             

@@ -102,7 +102,7 @@ class GameTable{
     /*******************************************************************************************
     * Updates army counts in 'from' and 'to' territories after 'end of turn' army move is executed.
     * @param
-    */
+    **********************************************************************************************/
     public static function moveArmies($game_table, $from_id, $to_id, $from_amount, $to_amount){
 
         $bindings = array('army_cnt' =>  $from_amount, 'id' => $from_id);
@@ -113,6 +113,9 @@ class GameTable{
 
     }
 
+    /*************************************************************
+    * Get number of territories owned by player
+    *************************************************************/
     public static function getTerritoryNumber($game_id, $user_id){
 
         $game_table = 'game'.$game_id;
@@ -120,5 +123,6 @@ class GameTable{
         $bindings = array('owner_id' => $user_id);
         return (int)DB::query('select count(owner_id) from '.$game_table.' where owner_id = ?', $bindings);
     }
+
 }
 ?>

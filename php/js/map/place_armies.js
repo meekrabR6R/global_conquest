@@ -31,6 +31,8 @@ function placeArmies(placeName){
               function(result){
                 $("#place_armies").html("<p>"+result+" ARMIES REMANING</p>");
                 init_armies = result;
+                if(result == 0)
+                    location.reload();
               }
     );
         
@@ -46,7 +48,7 @@ function place_click(continent){
             if(node.data.owner_id === user_id && init_armies > 0){   
                
                 $(this).click(function(){
-                     
+                    
                     var armies = "";
                    
                     for(i=1; i <= init_armies; i++)

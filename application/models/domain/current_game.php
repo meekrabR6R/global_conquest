@@ -4,39 +4,62 @@ class CurrentGame{
 
 	//fields
 	private $game;
+    private $game_id;
 	private $game_maker;
 	private $game_table;
 	private $game_state;
 	private $players;
 	private $player_count;
 	private $player_up;
-	private $player_list;
-	private $player_colors;
 	private $card_tabe;
-
 	//constructor
 	public function __construct($game_id){
 
+        $this->game_id = $game_id;
 		$this->game = Games::where('game_id', '=', $game_id)->first();
 		$this->game_maker = $this->game->maker_id;
 		$this->game_table = 'game'.$game_id;
 		$this->game_state = GameTable::getGameState($this->game_table);
 		$this->card_table = 'cards'.$game_id;
-
-		$this->players = Plyrgames::where('game_id','=', $game_id)->get();
-		$this->player_count = Plyrgames::where('game_id','=', $game_id)->count();
-		$this->player_list = Plyrgames::getFirstNames($game_id);//maybe brin this method into this class?
-		$this->player_colors = Plyrgames::getPlyrColor($this->players, $game_id);
-
-		if($this->game->turns_set == 0 && $this->player_count == $this->game->plyrs)
-           $this->makeTurns($this->game, $game_id, $this->players, $this->player_count);
+    
+        //creates player list
+        $plyr_records = Plyrgames::where('game_id','=', $game_id)->get();
+        $this->players = [];
         
+        foreach($plyr_records as $plyr_record)
+            array_push($this->players, new Player($plyr_record->plyr_id, $game_id));
+        
+        $this->player_count = sizeof($this->players);
+
+        //sets turn order
+		if($this->game->turns_set == 0 && $this->player_count == $this->game->plyrs)
+           $this->makeTurns($this->game, $game_id, $plyr_records, $this->player_count);
+        //processes 'up player's' army count (export to own method)
         elseif($this->player_count == $this->game->plyrs){
-        	$this->player_up = Plyrgames::where('game_id','=', $game_id)->where('trn_active','=',1)->first();
+        	$this->player_up = Plyrgames::where('game_id','=', $game_id)->where('trn_active','=',true)->first();
+
+            if($this->player_up->turn_armies_set == false && $this->player_up->init_armies === 0){
+                $turn_armies = Plyrgames::getTurnArmies($game_id, $this->player_up->plyr_id);
+
+                $this->player_up->init_armies = $turn_armies;
+                $this->player_up->save();
+
+                $this->player_up->turn_armies_set = true;
+                $this->player_up->save();
+            }
            
         }
 	
 	}
+
+    /***************************************
+    * Get status of starting army placements.
+    ****************************************/
+    public function startArmiesPlaced(){
+
+        return  $this->game->init_placed;
+    }
+
 
 	/***************************************
 	* Gets init armies for 'up player'
@@ -45,8 +68,8 @@ class CurrentGame{
      
         foreach($this->players as $player){
             
-            if($user_id == $player->plyr_id)
-                return $player->init_armies;  
+            if($user_id == $player->getPlyrID())
+                return $player->getInitArmies();  
         }
     }
 
@@ -57,12 +80,86 @@ class CurrentGame{
     public function isMember($user_id){
 
         foreach($this->players as $player){
-            if($user_id == $player->plyr_id)
+            if($user_id == $player->getPlyrID())
                 return true;
         }
 
         return false;
 
+    }
+
+    /*************************************************************
+    * Transfers active turn status to next player in turn queue.
+    **************************************************************/
+    public function nextTurn($user_id){
+
+        $curr_plyr = Plyrgames::where('plyr_id', '=', $user_id)->where('game_id', '=', $this->game_id)->first();
+        $curr_plyr->turn_armies_set = false;
+        $curr_plyr->save();
+
+        $curr_plyr->trn_active = false;
+        $curr_plyr->save();
+
+        $curr_plyr->got_card = false;
+        $curr_plyr->save();
+
+        $curr_turn = $curr_plyr->turn;
+        $tot_plyrs = Games::where('game_id', '=',$this->game_id)->first()->plyrs;
+
+        if($curr_turn < $tot_plyrs)
+            $next_turn = $curr_turn + 1;
+        else
+            $next_turn = 1;
+ 
+        //sets next player in queue to 'active'
+        $next_plyr = Plyrgames::where('game_id', '=', $this->game_id)->where('turn', '=', $next_turn)->first();
+        $next_plyr->trn_active = 1;
+        $next_plyr->save();
+        
+        return $curr_plyr;
+    }
+
+    /*****************************************
+    * Move armies, end turn, and pass turn to
+    * next player.
+    ******************************************/
+    public function moveArmies($user_id, $from_id, $to_id, $from_amount, $to_amount){
+
+        GameTable::moveArmies($this->game_table, $from_id, $to_id, $from_amount, $to_amount);
+        $this->nextTurn($user_id);
+    }
+    
+    /*****************************************
+    * Updates attacker/defender army counts 
+    * and checks new counts of each.
+    ******************************************/
+    public function attack($attk_owner, $def_owner, $attk_armies, $attk_id, $def_armies, $def_id){
+
+        GameTable::attack($this->game_table, $attk_armies, $attk_id, $def_armies, $def_id);
+
+     
+    }
+
+    /****************************************
+    * Update terrs for attacker/defender
+    *****************************************/
+    public function takeOver($attk_owner, $def_owner, $attk_id, $def_id, $attk_armies, $def_armies){
+
+        GameTable::takeOver($this->game_table, $attk_armies, $attk_id, $attk_owner, $def_armies, $def_id);
+
+        $territory_count = [];
+        foreach($this->players as $player){
+
+            if($player->getPlyrID() == $attk_owner)
+                $territory_count['attk_terr'] = $player->getTerrCount();
+            
+            if($player->getPlyrID() == $def_owner)
+                $territory_count['def_terr'] = $player->getTerrCount();
+        }
+
+        Plyrgames::checkTerrCounts($this->game_id, $attk_owner, $def_owner, $territory_count);
+        
+        return $territory_count;
     }
 
     /*****************************************
@@ -107,6 +204,17 @@ class CurrentGame{
     }
 
     /********************************************************************
+    * Awards card
+    *********************************************************************/
+    public function awardCard($owner_id, $army_type, $terr_name){
+        
+        CardTable::insert_card($this->card_table, $owner_id, $army_type, $terr_name);
+        $player = Plyrgames::where('game_id', '=', $this->game_id)->where('plyr_id','=', $owner_id)->first();
+        $player->got_card = 1;
+        $player->save();
+    }
+
+    /********************************************************************
     * Turn in cards
     *********************************************************************/
     public function turnInCards($owner_id, $cards){
@@ -126,6 +234,20 @@ class CurrentGame{
 
     	 return $bonus_armies;
 
+    }
+
+    /******************************************************************
+    * Check if game has winner.
+    *******************************************************************/
+    public function getWinner(){
+
+        foreach($this->players as $player){
+
+            if($player->isWinner() == true)
+                return $player;
+
+            return false;
+        }
     }
 
     /********************************************
@@ -174,26 +296,43 @@ class CurrentGame{
         
     }
 
-    
+    /********************************************
+    * Places armies and returns new init army
+    * count.
+    *********************************************/
+    public function placeArmies($plyr_id, $armies, $terr_num){
+
+        GameTable::updateArmies($this->game_table, $armies, $terr_num, $this->game_id, $plyr_id);
+        $new_initarmies = Plyrgames::where('game_id', '=', $this->game_id)->where('plyr_id', '=', $plyr_id)->first()->init_armies;
+        return $new_initarmies;
+    }
+
     /********************************************
     * Checks if all players' initial armies are 
-    * placed
+    * placed.. pretty sure this is being used 
+    * incorrectly (at least in the client)
     *********************************************/
      public function armiesPlaced(){
 
         $set_flag = 0;
         foreach($this->players as $player){
-            if($player->init_armies > 0)
+            if($player->getInitArmies() > 0)
                 $set_flag = 1;
         }
 
-        if($set_flag == 0)
+        if($set_flag == 0){
+
+            if($this->startArmiesPlaced() == false){
+                $this->game->init_placed = true;
+                $this->game->save();
+            }
             return true;
+        }
         else
             return false;
     }
 
-    public function setTurnArmies($plyr_id){
+    private function setTurnArmies($plyr_id){
 
         Plyrgames::updateTurnArmies($this->game_id, $plyr_id);
     }
@@ -235,20 +374,30 @@ class CurrentGame{
 		return $this->game->plyrs;
 	}
 
-	public function getPlayerList(){
+    public function getUpPlayer(){
 
-		return $this->player_list;
-	}
+        if(isset($this->player_up))
+            return Players::where('plyr_id', '=', $this->player_up->plyr_id)->first();
+    }
+
+    public function getPlayerNames(){
+
+        $player_names = [];
+        foreach($this->players as $player)
+            array_push($player_names, $player->getName()['first_name']);
+
+        return $player_names;
+    }
 
 	public function getPlayerColors(){
 
-		return $this->player_colors;
+		$player_colors = [];
+        foreach($this->players as $player)
+            array_push($player_colors, ['plyr_id' => $player->getPlyrID(), 'plyr_color' => $player->getColor()]);
+
+        return $player_colors;
 	}
 
-	public function getUpPlayer(){
-
-		return $this->player_up;
-	}
 }
 
 ?>

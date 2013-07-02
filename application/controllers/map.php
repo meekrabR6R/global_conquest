@@ -20,6 +20,7 @@
         private $init_armies;
         private $player_cards;
         private $player_up;
+        private $winner;
         private $uid;
         private $facebook;
 
@@ -38,13 +39,16 @@
             $this->plyr_data     = $this->game->getPlayers(); //rename this shit
             $this->plyr_count    = $this->game->getPlayerCount();
             $this->plyr_limit    = $this->game->getPlayerLimit();
-            $this->player_list   = $this->game->getPlayerList();
+            $this->player_list   = $this->game->getPlayerNames();
             $this->plyr_nm_color = $this->game->getPlayerColors();//rename this too!
             $this->armies_plcd   = $this->game->armiesPlaced();
+            $this->init_placed   = $this->game->startArmiesPlaced();
+            //maybe player class?
             $this->join_flag     = $this->game->isMember($this->uid);
             $this->init_armies   = $this->game->getInitArmies($this->uid);
             $this->player_cards  = $this->game->getHand($this->uid);
             $this->player_up     = $this->game->getUpPlayer();
+            $this->winner        = $this->game->getWinner();
         }
 
         /**************************************************
@@ -56,7 +60,7 @@
         * work!!
         **************************************************/
         public function get_map() {
-           
+            
             //$facebook = Map_Controller::getFB();
             //$uid = $facebook->getUser();
 
@@ -70,9 +74,8 @@
                     Asset::add('move_armies', 'js/map/move_armies.js', 'jquery');
                     Asset::add('make_game', 'js/map/make_game.js', 'jquery');
                     Asset::add('place_armies', 'js/map/place_armies.js', 'jquery');
+                    Asset::add('continent_check', 'js/map/continent_check.js', 'jquery');
 
-
-                 
                     //$facebook = Map_Controller::getFB();
                     $user = $this->facebook->api('/me');
                 
@@ -95,12 +98,14 @@
                         ->with('plyr_nm_color', $this->plyr_nm_color)
                         ->with('game_maker', $this->game_maker)
                         ->with('maker_color', $maker_color)
+                        ->with('init_armies_placed', $this->init_placed)
                         ->with('armies_plcd', $this->armies_plcd)
                         ->with('init_armies', $this->init_armies)
                         ->with('game_table', $this->game_table)
                         ->with('card_table', $card_table)
                         ->with('player_cards', $this->player_cards)
-                        ->with('player_up', $this->player_up);
+                        ->with('player_up', $this->player_up)
+                        ->with('winner', $this->winner);
 
                       
                 }
@@ -118,14 +123,11 @@
         
         public function post_place(){
 
-            $game_table = Input::get('game_table');
             $armies = Input::get('armies');
             $terr_num = Input::get('terr_num');
-            $game_id = Input::get('game_id');
             $plyr_id = Input::get('uid');
 
-            GameTable::updateArmies($game_table, $armies, $terr_num, $game_id, $plyr_id);
-            $new_initarmies = Plyrgames::where('game_id', '=', $game_id)->where('plyr_id', '=', $plyr_id)->first()->init_armies;
+            $new_initarmies = $this->game->placeArmies($plyr_id, $armies, $terr_num);
             echo $new_initarmies;
         }
 
@@ -133,12 +135,14 @@
         public function post_attack(){
 
             $game_table = Input::get('game_table');
+            $attk_owner = Input::get('attk_owner');
+            $def_owner = Input::get('def_owner');
             $attk_armies = Input::get('attk_armies');
             $def_armies = Input::get('def_armies');
             $attk_id = Input::get('attk_id');
             $def_id = Input::get('def_id');
-
-            GameTable::attack($game_table, $attk_armies, $attk_id, $def_armies, $def_id);
+            //maybe need to shift terrcount shit to post_take_over..
+            echo json_encode($this->game->attack($attk_owner, $def_owner, $attk_armies, $attk_id, $def_armies, $def_id));
         }
 
         public function post_take_over(){
@@ -148,26 +152,22 @@
             $def_armies = Input::get('def_armies');
             $attk_id = Input::get('attk_id');
             $def_id = Input::get('def_id');
-            $attacker_id = Input::get('attacker_id');
+            $attk_owner = Input::get('attacker_id');
+            $def_owner = Input::get('defender_id');
            
-            GameTable::takeOver($game_table, $attk_armies, $attk_id, $attacker_id, $def_armies, $def_id);
+            echo json_encode($this->game->takeOver($attk_owner, $def_owner, $attk_id, $def_id, $attk_armies, $def_armies));
 
         }
 
-       public function post_make_card(){
+        public function post_make_card(){
     
-            $game_id = Input::get('game_id');
-            $card_table = Input::get('card_table');
             $owner_id = Input::get('owner_id');
             $army_type = Input::get('army_type');
             $terr_name = Input::get('terr_name');
 
-            CardTable::insert_card($card_table, $owner_id, $army_type, $terr_name);
-            $game = Plyrgames::where('game_id', '=', $game_id)->where('plyr_id','=', $owner_id)->first();
-            $game->got_card = 1;
-            $game->save();
+            $this->game->awardCard($this->uid, $army_type, $terr_name);
 
-       }
+        }
 
    
         /**********************************************
@@ -193,6 +193,7 @@
 
             $owner_id = Input::get('owner_id');
             $cards = Input::get('data');
+           
             $turn_in = $this->game->isTurnIn($cards);
             if($turn_in)
                 echo $this->game->turnInCards($owner_id, $cards);
@@ -200,15 +201,24 @@
 
         }
 
+        /***************************************************
+        * Process continent bonuses
+        ****************************************************/
+        public function post_continent_bonuses(){
+
+
+            $armies = Input::get('continent_bonuses');
+
+            echo Plyrgames::addContinentArmies($this->uid, $this->game_id, $armies);
+            
+        }
+
         public function get_test(){
 
-            $cards = [['name' => 'a', 'value' => 'Infantry'], ['name' => 'b', 'value' => 'Cavalry'], ['name' => 'c', 'value' => 'Cannon']];
-
-            if($this->game->isTurnIn($cards))
-                echo 'turn in!';
-            else
-                echo 'nope';
+            $player = new Player('1075847234', 20);
+            $player->toggleArmiesSetStatus(20);
         }
+
         /***********************************************
         * Updates army counts in territories in which
         * armies were removed and added during end of
@@ -224,8 +234,7 @@
             $from_amount = Input::get('from_amount');
             $to_amount = Input::get('to_amount');
 
-            GameTable::moveArmies($game_table, $from_id, $to_id, $from_amount, $to_amount);
-            Plyrgames::nextTurn($user_id, $game_id);
+            $this->game->moveArmies($user_id, $from_id, $to_id, $from_amount, $to_amount);
         }
 
         /***************************************************
@@ -235,7 +244,8 @@
 
             $user_id = Input::get('user_id');
             $game_id = Input::get('game_id');
-            var_dump(Plyrgames::nextTurn($user_id, $game_id));
+           
+            $this->game->nextTurn($user_id);
         }
 
     }

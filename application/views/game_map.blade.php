@@ -24,23 +24,25 @@
             var upPlayer = '';
             @if(isset($player_up))           
                 var upPlayer = {{ $player_up->plyr_id; }};
+                var turnArmiesSet = {{ $player_up->turn_armies_set; }}
             @endif
-            @if(isset($game_state))
-                var init_armies = {{ $init_armies; }};
+
+            
+            @if(isset($game_state) && $init_armies !== null)
+                init_armies = {{ $init_armies; }};
             @endif
             var plyr_id = [];
             var plyr_nm_color = [];
             var plyr_fn = [];
-            
+            var game_state = [];
             @if(isset($game_state))
-                var game_state = [];
                 @foreach($game_state as $state)
                     game_state.push({'terr' : 'terr'+{{ $state->id - 1; }}, 'owner_id' : '{{ $state->owner_id; }}', 'army_cnt' : {{ $state->army_cnt; }} });
                 @endforeach
             @endif
         
             @foreach($plyr_data as $player)
-                plyr_id.push( '{{ $player->plyr_id; }}' );
+                plyr_id.push( '{{ $player->getPlyrID(); }}' );
             @endforeach
             
             @foreach($plyr_fn as $player)
@@ -49,20 +51,15 @@
             
             @if(isset($plyr_nm_color))
                 @foreach($plyr_nm_color as $player)
-                    @foreach($player as $x)
-                        plyr_nm_color.push({'plyr_id':'{{ $x->plyr_id }}','color': '{{ $x->plyr_color; }}'});
-                    @endforeach
+                    plyr_nm_color.push({'plyr_id':'{{ $player['plyr_id'] }}','color': '{{ $player['plyr_color']; }}'});
                 @endforeach
             @endif
 
-           
             @if(isset($player_cards))
                 var plyr_cards = [];
                 @foreach($player_cards as $card)
-
                     plyr_cards.push({'army_type' : '{{ $card['army_type']; }}', 'terr_name' : '{{ $card['terr_name']; }}' });
                 @endforeach
-                console.log(plyr_cards);
             @endif
         
         </script>
@@ -80,30 +77,46 @@
                 <div class='span2 sidebar'>
                     <h1>{{ $game_title; }}</h1>
 
-                    @if($join_flag == 0 && ($plyr_count < $plyr_limit)) 
-                        <input id="join_btn" type="button" class="btn btn-inverse" value="join">
-                        <div id="color_pick2"></div>
-                    @endif
-
-                    @if($join_flag == 1 && ($plyr_count < $plyr_limit))
-                      
-                            <p>WAITING FOR OTHERS TO JOIN!</p>
-                       
-                    @endif
-
-                    @if($armies_plcd == false && ($plyr_count == $plyr_limit) || isset($player_up->plyr_id) == $uid && $init_armies > 0)
+                     @if($winner)
                         <div class="hero-unit">
-                            <p>WE NEED TO PLACE SOME ARMIES!!</p>
-                        
-                            <div id="place_armies"><p>{{ $init_armies; }} ARMIES REMANING</p></div>
+                            <h5>{{ $winner->getName()['first_name'] }} is victorious!</h5>
                         </div>
-                    @endif
+                    @else
 
-                    @if(isset($player_up->plyr_id))
-                        @if($player_up->plyr_id != $uid)
+                        @if($join_flag == 0 && ($plyr_count < $plyr_limit)) 
+                            <input id="join_btn" type="button" class="btn btn-inverse" value="join">
+                            <div id="color_pick2"></div>
+                        @endif
+
+                        @if($join_flag == 1 && ($plyr_count < $plyr_limit))
                             <div class="hero-unit">
-                                 <h5>WAIT IN LINE, YOUNG BLOOD.</h5>
+                                <h5>WAITING FOR OTHERS TO JOIN!</h5>
                             </div>
+                        @endif
+
+                        @if($init_armies_placed == false && ($plyr_count == $plyr_limit)) 
+                            <div class="hero-unit">
+                                <h5>INITIAL ARMY PLACEMENTS:</h5>
+                            
+                                <div id="place_armies"><h5>{{ $init_armies; }} ARMIES REMANING</h5></div>
+                            </div>
+                        @endif
+
+                        @if(isset($player_up->plyr_id) && $player_up->plyr_id == $uid && $init_armies > 0 && $init_armies_placed == true)
+                            <div class="hero-unit">
+                                <h5>PLACE ARMIES: </h5>
+                            
+                                <div id="place_armies"><h5>{{ $init_armies; }} ARMIES REMANING</h5></div>
+                            </div>
+                        @endif
+
+                        @if(isset($player_up->plyr_id) && $init_armies_placed == true)
+                            @if($player_up->plyr_id != $uid)
+                                <div class="hero-unit">
+                                     <h5>WAIT IN LINE, YOUNG BLOOD.</h5></br>
+                                     <h5>{{ $player_up->first_name }} is pwning the world.</h5>
+                                </div>
+                            @endif
                         @endif
                     @endif
 
@@ -116,13 +129,14 @@
                     <div class="tabbable"> 
                         <ul class="nav nav-tabs">
 
-                            @if($armies_plcd == true && $player_up->plyr_id == $uid)
-                                <li class="active"><a href="#tab1" data-toggle="tab">attack</a></li>
-                                <li id="mov_btn"><a href="#tab2" data-toggle="tab">move armies</a></li>
-                            @else
-                                <li id="place_btn" class="active"><a href="#tab1" data-toggle="tab">place armies</a></li>
+                            @if(!$winner)
+                                @if($armies_plcd == true && $player_up->plyr_id == $uid)
+                                    <li class="active"><a href="#tab1" data-toggle="tab">attack</a></li>
+                                    <li id="mov_btn"><a href="#tab2" data-toggle="tab">move armies</a></li>
+                                @else
+                                    <li id="place_btn" class="active"><a href="#tab1" data-toggle="tab">place armies</a></li>
+                                @endif
                             @endif
-
                             <li><a href="#tab3" data-toggle="tab">cards</a></li>
                             <li><a href="#tab4" data-toggle="tab">players</a></li>
 
@@ -136,7 +150,8 @@
 
                                 <div class="row">
                                     <div class="span1"></div>
-                                  
+                                        
+                                       
                                         @if($armies_plcd == true && $player_up->plyr_id == $uid)
                                             <div class="span5" id="select"></div>
                                             <div class="span2">
@@ -145,6 +160,7 @@
                                                 <div class="span7">
                                                     <p id="place">Click one of your countries to place armies.</p>
                                         @endif
+                                     
 
                                     </div>
                                     <div class="span2" id="defend"></div>
@@ -249,7 +265,23 @@
                 
                 </div>
             </div>
-    
+
+            <a id="click" href="#myModal" role="button" class="btn" data-toggle="modal">Launch demo modal</a>
+            
+            <!-- Modal -->
+            <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="myModalLabel">Modal header</h3>
+                </div>
+                <div class="modal-body">
+                    <p>One fine body…</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                    <button class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
     </body>
 </html>
 

@@ -21,7 +21,6 @@ class Player{
 
     	$this->card_table = 'cards'.$game_id;
     	$this->game_table = 'game'.$game_id;
-
 		$this->name = $this->setName();
 		$this->color = $this->record->plyr_color;
 		$this->init_armies = $this->record->init_armies;
@@ -71,7 +70,7 @@ class Player{
     ****************************************/
     public function isWinner(){
 
-       if($this->record->winner == true)
+       if($this->record->winner)
             return true;
 
         return false;

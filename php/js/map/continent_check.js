@@ -8,7 +8,7 @@ var continentBonuses = 0;
 
 $(document).ready(function(){
 
-	if(typeof init_armies !== "undefined"){
+	if(typeof init_armies !== "undefined" && user_id == upPlayer){
 		if(init_armies > 0 && turnArmiesSet == false){
 		    game_state.forEach(function(territory){
 

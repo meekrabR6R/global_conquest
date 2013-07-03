@@ -74,7 +74,7 @@
                     Asset::add('move_armies', 'js/map/move_armies.js', 'jquery');
                     Asset::add('make_game', 'js/map/make_game.js', 'jquery');
                     Asset::add('place_armies', 'js/map/place_armies.js', 'jquery');
-                    Asset::add('continent_check', 'js/map/continent_check.js', 'jquery');
+                    //Asset::add('continent_check', 'js/map/continent_check.js', 'jquery');
 
                     //$facebook = Map_Controller::getFB();
                     $user = $this->facebook->api('/me');
@@ -215,8 +215,7 @@
 
         public function get_test(){
 
-            $player = new Player('1075847234', 20);
-            $player->toggleArmiesSetStatus(20);
+            var_dump($this->game->getPlayers());
         }
 
         /***********************************************

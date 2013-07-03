@@ -56,6 +56,7 @@ class Games_Controller extends Base_Controller{
         $game_table = 'game'.$game_id;
         
         $plyr_count = Plyrgames::where('game_id','=', $game_id)->count();
+        $continents = array();
 
         $plyr_join = array(
             'plyr_id' => Input::get('uid'),
@@ -77,15 +78,29 @@ class Games_Controller extends Base_Controller{
             $plyr_id = array();
             $index = 0;
             for($i = 0; $i <= 41; $i++){
+
                 array_push($plyr_id, $tot_players[$index++]->plyr_id);
                 if($index == $plyr_count)
                     $index = 0;
+
+                if($i <= 8)
+                    array_push($continents, 'north_america');
+                if($i >= 9 && $i <= 12)
+                    array_push($continents, 'south_america');
+                if($i >= 13 && $i <= 19)
+                    array_push($continents, 'europe');
+                if($i >= 20 && $i <= 25)
+                    array_push($continents, 'africa');
+                if($i >= 26 && $i <= 37)
+                    array_push($continents, 'asia');
+                if($i >= 38 && $i <= 41)
+                    array_push($continents, 'australia');
             }
             
             shuffle($plyr_id);
-
+            $index = 0;
             foreach($plyr_id as $id)
-                $insert = DB::query("insert into ".$game_table." (owner_id) values('".$id."')");        
+                $insert = DB::query("insert into ".$game_table." (continent, owner_id) values('".$continents[$index++]."', '".$id."')");        
         }   
     }
     

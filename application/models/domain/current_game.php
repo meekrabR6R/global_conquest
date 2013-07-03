@@ -34,20 +34,11 @@ class CurrentGame{
         //sets turn order
 		if($this->game->turns_set == 0 && $this->player_count == $this->game->plyrs)
            $this->makeTurns($this->game, $game_id, $plyr_records, $this->player_count);
+        
         //processes 'up player's' army count (export to own method)
         elseif($this->player_count == $this->game->plyrs){
         	$this->player_up = Plyrgames::where('game_id','=', $game_id)->where('trn_active','=',true)->first();
-
-            if($this->player_up->turn_armies_set == false && $this->player_up->init_armies === 0){
-                $turn_armies = Plyrgames::getTurnArmies($game_id, $this->player_up->plyr_id);
-
-                $this->player_up->init_armies = $turn_armies;
-                $this->player_up->save();
-
-                $this->player_up->turn_armies_set = true;
-                $this->player_up->save();
-            }
-           
+            $this->makeTurnArmies();
         }
 	
 	}
@@ -243,10 +234,8 @@ class CurrentGame{
 
         foreach($this->players as $player){
 
-            if($player->isWinner() == true)
+            if($player->isWinner())
                 return $player;
-
-            return false;
         }
     }
 
@@ -267,6 +256,74 @@ class CurrentGame{
             else
                 return $this->getBonusArmies($turn_ins - 1) + 5;
         }
+    }
+
+    /***********************************
+    * Sets turn armies.
+    ***********************************/
+    private function makeTurnArmies(){
+
+        if($this->player_up->turn_armies_set == false && $this->player_up->init_armies === 0){
+            $turn_armies = Plyrgames::getTurnArmies($this->game_id, $this->player_up->plyr_id);
+            $turn_armies += $this->continentBonuses();
+
+            $this->player_up->init_armies = $turn_armies;
+            $this->player_up->save();
+
+            $this->player_up->turn_armies_set = true;
+            $this->player_up->save();
+        }
+    }
+    /**********************************
+    * Gets continent bonuses for up
+    * player
+    ***********************************/
+    private function continentBonuses(){
+
+        $northAmeriCount = 0;
+        $southAmeriCount = 0;
+        $euroCount = 0;
+        $afriCount = 0;
+        $asiaCount = 0;
+        $aussieCount = 0;
+        
+        $continentBonuses = 0;
+
+        foreach($this->game_state as $territory){
+
+            if($territory->owner_id == $this->player_up->plyr_id){
+                    $continent = $territory->continent; 
+                    
+                    if($continent == 'north_america')
+                        $northAmeriCount++;
+                    if($continent == 'south_america')
+                        $southAmeriCount++;
+                    if($continent == 'europe')
+                        $euroCount++;
+                    if($continent == 'africa')
+                        $afriCount++;
+                    if($continent == 'asia')
+                        $asiaCount++;
+                    if($continent == 'australia')
+                        $aussieCount++;
+            }
+        }
+
+        if($northAmeriCount == 9)
+            $continentBonuses += 5;
+        if($southAmeriCount == 4)
+            $continentBonuses += 2;
+        if($euroCount == 7)
+            $continentBonuses += 5;
+        if($afriCount == 6)
+            $continentBonuses += 3;
+        if($asiaCount == 12)
+            $continentBonuses += 7;
+        if($aussieCount == 4)
+            $continentBonuses += 2;
+
+        return $continentBonuses;
+
     }
 
 	/********************************************************************

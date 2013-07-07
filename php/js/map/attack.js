@@ -34,11 +34,12 @@ function roll_attk(){
         def_armies = 1;
         
     roll_process(attk_armies, def_armies, attk_terr, def_terr);
-    
+   
     if(def_terr.data.armies === 0)
         victory_process(attk_terr, def_terr, attk_armies);
-        
-    battle_process(attk_terr, def_terr); 
+    
+    else
+        battle_process(attk_terr, def_terr); 
 }
 
 /**********************************************************
@@ -151,75 +152,79 @@ function roll_process(attk_armies, def_armies, attk_terr, def_terr){
 function victory_process(attk_terr, def_terr, attk_armies){
 
     $("#roll").attr("disabled", true);
-        def_terr.data.owner_name = attk_terr.data.owner_name;
-        var mov_armies = prompt("How many armies would you like to move?:");//maybe a popup plugin instead.
-        
-        while (1){
+  
+    var armies = "";
+    
+   
+    for(i=parseInt(attk_armies); i < attk_terr.data.armies; i++)
+        armies += '<option id="'+i+'">'+i+'</option>';
+
+    $('#takeover_select').html('<select id="army_amount">'+armies+'</select>');
+
+    takeOver(attk_terr, def_terr);
+}
+
+
+function takeOver(attkTerr, defTerr){
+
+    $('#take_over').modal({keyboard:false});
+    
+    $('#occupy').click(function(){
+        //null check b/c attkTerr and defTerr must be set to null at
+        //end of anonymous function to prevent memory leak
+        if(attkTerr !== null && defTerr !== null){
+
+            alert('attk:'+attkTerr.id+' def:'+defTerr.id);
+            var def_id_holder = defTerr.data.owner_id;
+            var mov_armies = parseInt($("#takeover_select").find(":selected").text());
             
-            if (mov_armies > attk_terr.data.armies - 1) {
-                mov_armies = prompt("You cannot move that many armies!");//maybe a popup plugin instead.
-                if(mov_armies <= attk_terr.data.armies - 1)
-                    break;
-            }
-            else if(attk_armies === "3" && mov_armies < 3){
-                mov_armies = prompt("You must move at least 3 armies!");//maybe a popup plugin instead.
-                if (mov_armies >= 3) 
-                    break;
-                
-            }
-            else if(attk_armies === "2" && mov_armies < 2){
-                mov_armies = prompt("You must move at least 2 armies!");//maybe a popup plugin instead.
-                if (mov_armies >= 2) 
-                    break;
-            }
-            else if(attk_armies === "1" && mov_armies < 1){
-                mov_armies = prompt("You must move at least 1 armies!");//maybe a popup plugin instead.
-                if (mov_armies >= 1) 
-                    break;
-            }   
-            else 
-                break;
-        }
-        
-        var def_id_holder = def_terr.data.owner_id;
+            attkTerr.data.armies -= mov_armies;
+            defTerr.data.armies = mov_armies;
+            defTerr.data.owner_id = attkTerr.data.owner_id;
+            defTerr.data.color = attkTerr.data.color;
 
-        attk_terr.data.armies -= mov_armies;
-        def_terr.data.armies = mov_armies;
-        def_terr.data.owner_id = attk_terr.data.owner_id;
-        def_terr.data.color = attk_terr.data.color;
-
-        $.get(BASE+'/card_status?game_id='+game_id,
-            {owner_id: attk_terr.data.owner_id,
-            game_id: game_id},
-            function(result){
-                    
-                var res = JSON.parse(result); 
-                if(res.got_card == 0){
-                    console.log(res.got_card);
-                    makeCard(res.owner_id, game_id );
-                }
-            }
-        );
-
-        $.post(BASE+'/take_over?game_id='+game_id,
-               {game_table: game_table,
-                attk_id: attk_terr.data.pk_id,
-                def_id: def_terr.data.pk_id,
-                attacker_id: attk_terr.data.owner_id,
+            $.post(BASE+'/take_over?game_id='+game_id,
+                {game_table: game_table,
+                attk_id: attkTerr.data.pk_id,
+                def_id: defTerr.data.pk_id,
+                attacker_id: attkTerr.data.owner_id,
                 defender_id: def_id_holder,
-                attk_armies: attk_terr.data.armies,
-                def_armies: def_terr.data.armies},
+                attk_armies: attkTerr.data.armies,
+                def_armies: defTerr.data.armies},
                 
                 function(result){
                     var terr = JSON.parse(result); 
-                    if(terr.attk_terr === 42){
+                    if(terr.attkTerr === 42){
                         alert('You are victorious!');
                         location.reload();
                     }
                 }
-        );
+            );
 
-        set_clicks();
+            $.get(BASE+'/card_status?game_id='+game_id,
+                {owner_id: attkTerr.data.owner_id,
+                game_id: game_id},
+                function(result){
+                        
+                    var res = JSON.parse(result); 
+                    if(res.got_card == 0){
+                        console.log(res.got_card);
+                        makeCard(res.owner_id, game_id );
+                    }
+
+                    $('#take_over').modal('hide');
+            
+                }
+            );
+            
+            battle_process(attkTerr, defTerr); 
+            //set to null to prevent memory leak (maybe a little hackish)
+            attkTerr = null;
+            defTerr = null;
+        }
+    });
+
+   
 }
 
 /****************************************************
@@ -229,11 +234,11 @@ function victory_process(attk_terr, def_terr, attk_armies){
 * @param def_terr - defender territory node in graph
 *****************************************************/
 function battle_process(attk_terr, def_terr){
-
     if(attk_terr.data.owner_id === user_id){
         $("div[name="+attk_terr.id+"]").html('<h3 style="color:'+attk_terr.data.color+';">'+attk_terr.data.armies+'</h3>');
         $("div[name="+def_terr.id+"]").html('<h3 style="color:'+def_terr.data.color+';">'+def_terr.data.armies+'</h3>');
 
+    
         make_clicks();
     }
 }
@@ -309,7 +314,7 @@ function code_click(continent){
         
                     border_list = [];
                     $("#attack").text(node.id);
-                    
+            
                     node.edges.forEach(function(border){
                         var border_node = graph.get_node(border); 
                         

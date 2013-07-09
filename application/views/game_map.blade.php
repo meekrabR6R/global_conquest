@@ -62,6 +62,63 @@
                 @endforeach
             @endif
         
+        /*************************************************************************************************/
+           //That new joint
+            var GameSpace = {
+                BASE : "{{ URL::base(); }}",
+                user_id : "{{ $uid; }}",
+                user_fn : "{{ $user_fn; }}",
+                game_id : "{{ $game_id; }}",
+                game_table : "{{ $game_table; }}",
+                card_table : "{{ $card_table; }}",
+                plyr_limit : {{ $plyr_limit; }},
+                plyr_count : {{ $plyr_count; }},
+                armies_plcd : {{ json_encode($armies_plcd); }},
+                upPlayer : '',
+                plyr_id : [],
+                plyr_nm_color : [],
+                plyr_fn : [],
+                game_state : [],
+                plyr_cards : []
+            };
+           
+            @if(isset($player_up))           
+                GameSpace.upPlayer = {{ $player_up->plyr_id; }};
+                GameSpace.turnArmiesSet = "{{ $player_up->turn_armies_set; }}";
+            @endif
+
+            
+            @if(isset($game_state) && $init_armies !== null)
+                GameSpace.init_armies = {{ $init_armies; }};
+            @endif
+            
+            @if(isset($game_state))
+                @foreach($game_state as $state)
+                    GameSpace.game_state.push({'terr' : 'terr'+{{ $state->id - 1; }}, 'owner_id' : '{{ $state->owner_id; }}', 'army_cnt' : {{ $state->army_cnt; }} });
+                @endforeach
+            @endif
+        
+            @foreach($plyr_data as $player)
+                GameSpace.plyr_id.push( '{{ $player->getPlyrID(); }}' );
+            @endforeach
+            
+            @foreach($plyr_fn as $player)
+                GameSpace.plyr_fn.push( '{{ $player; }}' );
+            @endforeach
+            
+            @if(isset($plyr_nm_color))
+                @foreach($plyr_nm_color as $player)
+                    GameSpace.plyr_nm_color.push({'plyr_id':'{{ $player['plyr_id'] }}','color': '{{ $player['plyr_color']; }}'});
+                @endforeach
+            @endif
+
+            @if(isset($player_cards))
+                
+                @foreach($player_cards as $card)
+                    GameSpace.plyr_cards.push({'army_type' : '{{ $card['army_type']; }}', 'terr_name' : '{{ $card['terr_name']; }}' });
+                @endforeach
+            @endif
+        
         </script>
         
         {{ Asset::scripts(); }}

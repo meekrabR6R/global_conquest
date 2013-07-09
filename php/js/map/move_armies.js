@@ -1,69 +1,51 @@
 
 /***********************************
-* Sets 'move army' clicks
-************************************/
-$("#mov_btn").ready(function(){
-    
-    $("#mov_btn").click(function(){
+* Move armies namespace
+***********************************/
+var MoveArmies = {
+
+    /***********************************
+    * GameSpace object
+    ***********************************/
+    game: GameSpace,
+    /***********************************
+    * Sets 'move army' clicks
+    ************************************/
+    makeMove: function(){
+
+        $("#mov_btn").ready(function(){
         
-      	set_clicks();
-        
-    
-          
-    });  
-});
+            $("#mov_btn").click(function(){
+                
+              	setClicks();      
+            });  
+        });
+    },
 
+    /************************************
+    * Makes the nodes in each continent
+    * clickable.
+    ************************************/
+    setClicks: function(){
 
-/*******************************************
-* Posts 'from' and 'to' territory ids, as well
-* as army amount.
-* @param fromID - ID of territory from which
-* armies are being moved
-*********************************************/ 
-function moveArmies(){
-    
-    var toTerr = graph.get_node($('#movable').find(":selected").text());
-    var toID = toTerr.data.pk_id;
-    
-    var fromName = $.trim($('#select_text').text().split(':')[1]);
+        MoveArmies.moveClick(".north_america");
+        MoveArmies.moveClick(".south_america");
+        MoveArmies.moveClick(".europe");
+        MoveArmies.moveClick(".africa");
+        MoveArmies.moveClick(".asia");
+        MoveArmies.moveClick(".australia");
+    },
 
-    var fromTerr = graph.get_node(fromName);
-    var fromID = fromTerr.data.pk_id;
-   
-
-    var amount = parseInt($("#army_amount").find(":selected").text());
-   
-    var fromAmount = fromTerr.data.armies - amount;
-    var toAmount = toTerr.data.armies + amount;
-
-    $("div[name="+fromTerr.id+"]").html('<p style="color:'+fromTerr.data.color+';">'+fromAmount+'</p>');
-    $("div[name="+toTerr.id+"]").html('<p style="color:'+toTerr.data.color+';">'+toAmount+'</p>');
-    
-    $('#roll').attr("disabled", true); //change to end turn
-           
-    $.post(BASE+'/move_armies?game_id='+game_id,
-            {game_table: game_table,
-             game_id: game_id,
-             user_id: user_id,
-             from_id: fromID,
-             to_id: toID,
-             from_amount: fromAmount,
-             to_amount: toAmount},
-            function(result){
-                location.reload();
-            }
-    );
-        
-
-}   
-
-function move_click(continent){
+    /**********************************
+    * Sets up clicks
+    ***********************************/
+    moveClick: function(continent){
         
        $(continent).each(function(){
             
-            var node = graph.get_node($(this).attr('name'));
+            var node = MoveArmies.game.graph.get_node($(this).attr('name'));
           
-            if(node.data.owner_id === user_id){   
+            if(node.data.owner_id === MoveArmies.game.user_id){   
                
                 $(this).click(function(){
                     
@@ -71,7 +53,7 @@ function move_click(continent){
                     $("#select_text").text('From: ' + node.id);
                     
                     node.edges.forEach(function(border){
-                        var border_node = graph.get_node(border); 
+                        var border_node = MoveArmies.game.graph.get_node(border); 
                         
                         if(border_node.data.owner_id === node.data.owner_id) 
                             border_list.push(border);
@@ -95,7 +77,7 @@ function move_click(continent){
        
                         var country_select = "To: <select id='movable'>"+mov_options+"</select>";  
                       
-                        $("#select_to").html(country_select + '<input id="mov_armies" type="button" class="btn btn-inverse" value="move" onclick="moveArmies();">');
+                        $("#select_to").html(country_select + '<input id="mov_armies" type="button" class="btn btn-inverse" value="move" onclick="MoveArmies.moveArmies();">');
                        
                     }
                     else{
@@ -108,22 +90,53 @@ function move_click(continent){
                 
         });
         
+    },
+
+    /*******************************************
+    * Posts 'from' and 'to' territory ids, as well
+    * as army amount.
+    * @param fromID - ID of territory from which
+    * armies are being moved
+    *********************************************/ 
+    moveArmies: function (){
+        
+        var toTerr = MoveArmies.game.graph.get_node($('#movable').find(":selected").text());
+        var toID = toTerr.data.pk_id;
+        
+        var fromName = $.trim($('#select_text').text().split(':')[1]);
+
+        var fromTerr = MoveArmies.game.graph.get_node(fromName);
+        var fromID = fromTerr.data.pk_id;
+       
+
+        var amount = parseInt($("#army_amount").find(":selected").text());
+       
+        var fromAmount = fromTerr.data.armies - amount;
+        var toAmount = toTerr.data.armies + amount;
+
+        $("div[name="+fromTerr.id+"]").html('<p style="color:'+fromTerr.data.color+';">'+fromAmount+'</p>');
+        $("div[name="+toTerr.id+"]").html('<p style="color:'+toTerr.data.color+';">'+toAmount+'</p>');
+        
+        $('#roll').attr("disabled", true); //change to end turn
+               
+        $.post(BASE+'/move_armies?game_id='+game_id,
+                {game_table: MoveArmies.game.game_table,
+                 game_id: MoveArmies.game.game_id,
+                 user_id: MoveArmies.game.user_id,
+                 from_id: fromID,
+                 to_id: toID,
+                 from_amount: fromAmount,
+                 to_amount: toAmount},
+                function(result){
+                    location.reload();
+                }
+        );
+        
+
+    }   
 }
 
-/************************************
-* Makes the nodes in each continent
-* clickable.
-************************************/
-function set_clicks(){
-
-    move_click(".north_america");
-    move_click(".south_america");
-    move_click(".europe");
-    move_click(".africa");
-    move_click(".asia");
-    move_click(".australia");
-}
-
+MoveArmies.makeMove();
 
 /**************************************
 * Ends turn
@@ -133,7 +146,7 @@ $("#end").ready(function(){
     $("#end").click(function(){
       
         $.post(BASE+'/end_turn?game_id='+game_id,
-                {user_id: user_id,
+                {user_id: MoveArmies.game.user_id,
                  game_id: game_id},
                  function(result){
                     location.reload();

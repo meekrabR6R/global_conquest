@@ -14,7 +14,7 @@
     </script>
   
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-    <script src="js/map/make_game.js" type="text/javascript"></script>
+    <!--<script src="js/map/make_game.js" type="text/javascript"></script>-->
     <script src="js/front_page/front_page_stuff.js" type="text/javascript"></script>
     <script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     

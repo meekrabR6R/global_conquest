@@ -24,9 +24,9 @@ function roll_attk(){
     var attk_armies = $("#dice").val();
     var def_armies = 0; 
     var attk_id = $("#attack").text();
-    var attk_terr = graph.get_node(attk_id);
+    var attk_terr = GameSpace.graph.get_node(attk_id);
     var def_id = $("#attackable option:selected").val();
-    var def_terr = graph.get_node(def_id);
+    var def_terr = GameSpace.graph.get_node(def_id);
 
     if(def_terr.data.armies > 1)
         def_armies = 2;
@@ -145,8 +145,8 @@ function roll_process(attk_armies, def_armies, attk_terr, def_terr){
 * territories. Checks attacker's 'card status' to determine 
 * whether s/he should receive a card for the victory. If this
 * is the first victory in a turn, a card is awarded.
-* @param: attk_terr - attacker territory node in graph
-* @param: def_terr - defender territory node in graph
+* @param: attk_terr - attacker territory node in GameSpace.graph
+* @param: def_terr - defender territory node in GameSpace.graph
 * @param: attk_armies - number of armies used in attack (1-3)
 *************************************************************/
 function victory_process(attk_terr, def_terr, attk_armies){
@@ -230,8 +230,8 @@ function takeOver(attkTerr, defTerr){
 /****************************************************
 * Updates displayed count and color with 
 * each attack.
-* @param attk_terr - attacker territory node in graph
-* @param def_terr - defender territory node in graph
+* @param attk_terr - attacker territory node in GameSpace.graph
+* @param def_terr - defender territory node in GameSpace.graph
 *****************************************************/
 function battle_process(attk_terr, def_terr){
     if(attk_terr.data.owner_id === user_id){
@@ -306,7 +306,7 @@ function code_click(continent){
      
        $(continent).each(function(){
             
-            var node = graph.get_node($(this).attr('name'));
+            var node = GameSpace.graph.get_node($(this).attr('name'));
           
             if(node.data.owner_id === user_id){   
                
@@ -316,7 +316,7 @@ function code_click(continent){
                     $("#attack").text(node.id);
             
                     node.edges.forEach(function(border){
-                        var border_node = graph.get_node(border); 
+                        var border_node = GameSpace.graph.get_node(border); 
                         
                         if(border_node.data.owner_id !== node.data.owner_id) 
                             border_list.push(border);

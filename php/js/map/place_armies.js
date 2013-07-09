@@ -1,122 +1,138 @@
-/***********************************
-* Sets 'place army' clicks
-************************************/
-$("#place_btn").ready(function(){
 
-    create_clicks(); 
-});
+/********************************
+* Place Armies namespace
+*********************************/
+var PlaceArmies = {
+
+    /***********************************
+    * GameSpace object
+    ***********************************/
+    game: GameSpace,
+    /***********************************
+    * Sets 'place army' clicks
+    ************************************/
+    makePlace: function(){
+
+        $("#place_btn").ready(function(){
+
+            PlaceArmies.createClicks(); 
+        });
+    },
 
 
-/*******************************************
-* Posts placed armies
-*********************************************/ 
-function placeArmies(placeName){
-    
-    var placeTerr = graph.get_node(placeName);
-    var placeID = placeTerr.data.pk_id;
-    
-    //needs to get terr amount from server
-    var amount = parseInt($("#place_amount").find(":selected").text());
-   
-    var newAmount = placeTerr.data.armies + amount;
-
-    $("div[name="+placeTerr.id+"]").html('<h3 style="color:'+placeTerr.data.color+';">'+newAmount+'</h3>');
-               
-    $.post(BASE+'/place?game_id='+game_id,
-             {armies: amount,
-              uid: user_id,
-              game_id: game_id,
-              terr_num: placeTerr.data.pk_id-1,
-              game_table: game_table},
-              function(result){
-                $("#place_armies").html("<p>"+result+" ARMIES REMANING</p>");
-
-                setAmount(placeTerr, result);
-                init_armies = result;
-                if(result == 0)
-                    location.reload();
-              }
-    );
+    /*******************************************
+    * Posts placed armies
+    *********************************************/ 
+    placeArmies: function (placeName){
         
-
-}   
-
-/*********************************************
-* Add placed armies to terr army count and
-* updates place army select drop.
-**********************************************/
-function setAmount(territoryNode, armyAmount){
-
-    var armies = "";
-                   
-    for(i=1; i <= armyAmount; i++)
-        armies += '<option id="'+i+'">'+i+'</option>';
+        var placeTerr = PlaceArmies.game.graph.get_node(placeName);
+        var placeID = placeTerr.data.pk_id;
+        
+        //needs to get terr amount from server
+        var amount = parseInt($("#place_amount").find(":selected").text());
        
-    var newAmount = territoryNode.data.armies + armies;
-    $("#place").html('<select id="place_amount">'+armies+'</select><input id="mov_armies" type="button" class="btn btn-inverse" value="place" onclick="placeArmies(\''+territoryNode.id+'\');"> in '+territoryNode.id);                
-}
+        var newAmount = placeTerr.data.armies + amount;
 
-/*******************************
-* Makes terrs clickable for
-* army placement
-********************************/
-function place_click(continent){
-    
-   $(continent).each(function(){
-           
-        var node = graph.get_node($(this).attr('name'));
-      
-        if(node.data.owner_id === user_id && init_armies > 0){   
-           
-            $(this).click(function(){
-                setAmount(node, init_armies);
-            }); 
-        
-        }
+        $("div[name="+placeTerr.id+"]").html('<h3 style="color:'+placeTerr.data.color+';">'+newAmount+'</h3>');
+                   
+        $.post(BASE+'/place?game_id='+game_id,
+                 {armies: amount,
+                  uid: PlaceArmies.game.user_id,
+                  game_id: PlaceArmies.game.game_id,
+                  terr_num: placeTerr.data.pk_id-1,
+                  game_table: PlaceArmies.game.game_table},
+                  function(result){
+                    $("#place_armies").html("<p>"+result+" ARMIES REMANING</p>");
+
+                    PlaceArmies.setAmount(placeTerr, result);
+                    init_armies = result;
+                    if(result == 0)
+                        location.reload();
+                  }
+        );
             
-    });
+
+    },  
+
+    /*********************************************
+    * Add placed armies to terr army count and
+    * updates place army select drop.
+    **********************************************/
+    setAmount: function(territoryNode, armyAmount){
+
+        var armies = "";
+                       
+        for(i=1; i <= armyAmount; i++)
+            armies += '<option id="'+i+'">'+i+'</option>';
+           
+        var newAmount = territoryNode.data.armies + armies;
+        $("#place").html('<select id="place_amount">'+armies+'</select><input id="mov_armies" type="button" class="btn btn-inverse" value="place" onclick="PlaceArmies.placeArmies(\''+territoryNode.id+'\');"> in '+territoryNode.id);                
+    },
+
+    /*******************************
+    * Makes terrs clickable for
+    * army placement
+    ********************************/
+    placeClicks: function(continent){
         
-}
-
-/****************************
-* Makes territories unclickable
-* with regard to placement.
-*******************************/
-function unClick(continent){
-    $(continent).each(function(){
+       $(continent).each(function(){
                
-        var node = graph.get_node($(this).attr('name'));
-      
-        if(node.data.owner_id === user_id){   
-             $(this).attr("disabled", true);
-        }
-    });
+            var node = PlaceArmies.game.graph.get_node($(this).attr('name'));
+          
+            if(node.data.owner_id === user_id && PlaceArmies.game.init_armies > 0){   
+               
+                $(this).click(function(){
+                    PlaceArmies.setAmount(node, PlaceArmies.game.init_armies);
+                }); 
+            
+            }
+                
+        });
+            
+    },
 
+    /****************************
+    * Makes territories PlaceArmies.unClickable
+    * with regard to placement.
+    *******************************/
+    unClick: function(continent){
+        $(continent).each(function(){
+                   
+            var node = PlaceArmies.game.graph.get_node($(this).attr('name'));
+          
+            if(node.data.owner_id === PlaceArmies.game.user_id){   
+                 $(this).attr("disabled", true);
+            }
+        });
+
+    },
+
+    /**********************
+    * see above ;)
+    **********************/
+    unDoClick: function(){
+
+        PlaceArmies.unClick(".north_america");
+        PlaceArmies.unClick(".south_america");
+        PlaceArmies.unClick(".europe");
+        PlaceArmies.unClick(".africa");
+        PlaceArmies.unClick(".asia");
+        PlaceArmies.unClick(".australia");
+    },
+
+    /************************************
+    * Makes the nodes in each continent
+    * clickable.
+    ************************************/
+    createClicks: function(){
+
+        PlaceArmies.placeClicks(".north_america");
+        PlaceArmies.placeClicks(".south_america");
+        PlaceArmies.placeClicks(".europe");
+        PlaceArmies.placeClicks(".africa");
+        PlaceArmies.placeClicks(".asia");
+        PlaceArmies.placeClicks(".australia");
+    }
 }
 
-/**********************
-* see above ;)
-**********************/
-function unDoClicks(){
-
-    unClick(".north_america");
-    unClick(".south_america");
-    unClick(".europe");
-    unClick(".africa");
-    unClick(".asia");
-    unClick(".australia");
-}
-
-/************************************
-* Makes the nodes in each continent
-* clickable.
-************************************/
-function create_clicks(){
-
-    place_click(".north_america");
-    place_click(".south_america");
-    place_click(".europe");
-    place_click(".africa");
-    place_click(".asia");
-    place_click(".australia");
-}
+PlaceArmies.makePlace();

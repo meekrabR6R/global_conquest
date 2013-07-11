@@ -17,7 +17,7 @@ var MoveArmies = {
         
             $("#mov_btn").click(function(){
                 
-              	setClicks();      
+              	MoveArmies.setClicks();      
             });  
         });
     },

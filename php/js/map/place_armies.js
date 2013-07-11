@@ -35,7 +35,7 @@ var PlaceArmies = {
 
         $("div[name="+placeTerr.id+"]").html('<h3 style="color:'+placeTerr.data.color+';">'+newAmount+'</h3>');
                    
-        $.post(BASE+'/place?game_id='+game_id,
+        $.post(PlaceArmies.game.BASE+'/place?game_id='+PlaceArmies.game.game_id,
                  {armies: amount,
                   uid: PlaceArmies.game.user_id,
                   game_id: PlaceArmies.game.game_id,
@@ -79,7 +79,7 @@ var PlaceArmies = {
                
             var node = PlaceArmies.game.graph.get_node($(this).attr('name'));
           
-            if(node.data.owner_id === user_id && PlaceArmies.game.init_armies > 0){   
+            if(node.data.owner_id === PlaceArmies.game.user_id && PlaceArmies.game.init_armies > 0){   
                
                 $(this).click(function(){
                     PlaceArmies.setAmount(node, PlaceArmies.game.init_armies);

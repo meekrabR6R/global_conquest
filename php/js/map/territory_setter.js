@@ -5,23 +5,23 @@ GameSpace.graph = new Graph();
 
 GameSpace.setUpPlayers = function(){
 
-    if (game_state.length > 0 && typeof plyr_nm_color !== "undefined") {
+    if (GameSpace.game_state.length > 0 && typeof GameSpace.plyr_nm_color !== "undefined") {
         
         for(i=0; i <= 41; i++){
-            var name = $("#"+game_state[i].terr).attr('name');
+            var name = $("#"+GameSpace.game_state[i].terr).attr('name');
             var color = "";
           
-            GameSpace.graph.add_data(name, {owner_id: game_state[i].owner_id, armies: game_state[i].army_cnt, pk_id: (i+1)});
+            GameSpace.graph.add_data(name, {owner_id: GameSpace.game_state[i].owner_id, armies: GameSpace.game_state[i].army_cnt, pk_id: (i+1)});
 
-            for (j=0; j < plyr_nm_color.length; j++) {
+            for (j=0; j < GameSpace.plyr_nm_color.length; j++) {
 
-                if(game_state[i].owner_id == plyr_nm_color[j].plyr_id){
-                    color = plyr_nm_color[j].color;
+                if(GameSpace.game_state[i].owner_id == GameSpace.plyr_nm_color[j].plyr_id){
+                    color = GameSpace.plyr_nm_color[j].color;
                     GameSpace.graph._node_list[i].data.color = color;
                 }
             }
 
-            var orig_armycnt =  game_state[i].army_cnt;
+            var orig_armycnt =  GameSpace.game_state[i].army_cnt;
             
             $("#terr"+i).html('<h3 style="color:'+color+';">'+GameSpace.graph._node_list[i].data.armies+'</h3>');  
             

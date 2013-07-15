@@ -119,7 +119,7 @@ var MoveArmies = {
         
         $('#roll').attr("disabled", true); //change to end turn
                
-        $.post(BASE+'/move_armies?game_id='+game_id,
+        $.post(MoveArmies.game.BASE+'/move_armies?game_id='+MoveArmies.game.game_id,
                 {game_table: MoveArmies.game.game_table,
                  game_id: MoveArmies.game.game_id,
                  user_id: MoveArmies.game.user_id,
@@ -145,9 +145,9 @@ $("#end").ready(function(){
 
     $("#end").click(function(){
       
-        $.post(BASE+'/end_turn?game_id='+game_id,
+        $.post(MoveArmies.game.BASE+'/end_turn?game_id='+MoveArmies.game.game_id,
                 {user_id: MoveArmies.game.user_id,
-                 game_id: game_id},
+                 game_id: MoveArmies.game.game_id},
                  function(result){
                     location.reload();
                  }

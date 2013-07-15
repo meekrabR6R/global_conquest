@@ -167,14 +167,25 @@ var Attack = {
 
         $('#takeover_select').html('<select id="army_amount">'+armies+'</select>');
 
+        $.post(Attack.game.BASE+'/terr_taken?game_id='+Attack.game.game_id,
+                {attk_terr: attk_terr.id,
+                 def_terr: def_terr.id,
+                 attk_armies: attk_armies},
+                 function(result){
+
+        });
+
         Attack.takeOver(attk_terr, def_terr);
     },
 
 
     takeOver: function(attkTerr, defTerr){
 
-        $('#take_over').modal({keyboard:false});
-        
+        $('#take_over').modal({
+            keyboard:false,
+            backdrop:'static'
+        });
+    
         $('#occupy').click(function(){
             //null check b/c attkTerr and defTerr must be set to null at
             //end of anonymous function to prevent memory leak
@@ -289,11 +300,12 @@ var Attack = {
         var form_data = $("#cards_check").serializeArray();
         
         if(form_data.length === 3){
-            $.post(game.BASE+'/card_turn_in?game_id='+game_id,
-                   {owner_id: game.user_id,
+            $.post(Attack.game.BASE+'/card_turn_in?game_id='+Attack.game.game_id,
+                   {owner_id: Attack.game.user_id,
                     data: form_data},
                    function(result){
                         console.log(result);
+                        location.reload();
                    }
             );
         }
@@ -391,5 +403,16 @@ var Attack = {
         $("#select").html('<select id="dice">'+dice_options+'</select>\
             <input id="roll" type="submit" value="roll" onclick="Attack.rollAttack()">\
             <input id="result" type="text" width="100px" value="roll_result">');
+    },
+
+    test: function(){
+    
+        $('document').ready(function(){
+           if(GameSpace.terrUnTaken !== "0")
+                Attack.victoryProcess(GameSpace.graph.get_node(GameSpace.attkHold), GameSpace.graph.get_node(GameSpace.defHold), GameSpace.armiesHold);
+        });
     }
 }
+
+Attack.test();
+

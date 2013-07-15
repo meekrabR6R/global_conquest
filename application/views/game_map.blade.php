@@ -11,10 +11,6 @@
         <!--My scripts-->
         <script type="text/javascript">
             //Interface between PHP and Javascript variables:
-         
-        
-        /*************************************************************************************************/
-           //That new joint
             var GameSpace = {
                 BASE : "{{ URL::base(); }}",
                 user_id : "{{ $uid; }}",
@@ -25,6 +21,7 @@
                 plyr_limit : {{ $plyr_limit; }},
                 plyr_count : {{ $plyr_count; }},
                 armies_plcd : {{ json_encode($armies_plcd); }},
+                join_flag : '{{ $join_flag }}',
                 upPlayer : '',
                 plyr_id : [],
                 plyr_nm_color : [],
@@ -32,9 +29,13 @@
                 game_state : [],
                 plyr_cards : []
             };
-           
+           console.log(GameSpace.join_flag);
             @if(isset($player_up))           
                 GameSpace.upPlayer = {{ $player_up->plyr_id; }};
+                GameSpace.terrUnTaken = "{{ $temp_take_over['beat_terr']; }}";
+                GameSpace.attkHold = "{{ $temp_take_over['attk_terr']; }}";
+                GameSpace.defHold = "{{ $temp_take_over['def_terr']; }}";
+                GameSpace.armiesHold = "{{ $temp_take_over['attk_armies']; }}";
                 GameSpace.turnArmiesSet = "{{ $player_up->turn_armies_set; }}";
             @endif
 
@@ -100,6 +101,12 @@
                             <div class="hero-unit">
                                 <h5>WAITING FOR OTHERS TO JOIN!</h5>
                             </div>
+
+                            <div id="color_pick2"></div>
+                            <script type="text/javascript">
+                                GameSpace.colorSelect();
+                            </script>
+                            
                         @endif
 
                         @if($init_armies_placed == false && ($plyr_count == $plyr_limit)) 
@@ -138,14 +145,22 @@
                         <ul class="nav nav-tabs">
 
                             @if(!$winner)
-                                @if($armies_plcd == true && $player_up->plyr_id == $uid)
-                                    <li class="active"><a href="#tab1" data-toggle="tab">attack</a></li>
-                                    <li id="mov_btn"><a href="#tab2" data-toggle="tab">move armies</a></li>
-                                @else
-                                    <li id="place_btn" class="active"><a href="#tab1" data-toggle="tab">place armies</a></li>
+                                @if(sizeof($player_cards) < 6)
+                                    @if($armies_plcd == true && $player_up->plyr_id == $uid)
+                                        <li class="active"><a href="#tab1" data-toggle="tab">attack</a></li>
+                                        <li id="mov_btn"><a href="#tab2" data-toggle="tab">move armies</a></li>
+                                    @else
+                                        <li id="place_btn" class="active"><a href="#tab1" data-toggle="tab">place armies</a></li>
+                                    @endif
                                 @endif
                             @endif
-                            <li><a href="#tab3" data-toggle="tab">cards</a></li>
+
+                            @if(sizeof($player_cards) == 6)
+                                <li class="active"><a href="#tab3" data-toggle="tab">cards</a></li>
+                            @else
+                                <li><a href="#tab3" data-toggle="tab">cards</a></li>
+                            @endif
+
                             <li><a href="#tab4" data-toggle="tab">players</a></li>
 
                             @if($armies_plcd == true && $player_up->plyr_id == $uid)
@@ -154,7 +169,12 @@
 
                         </ul>
                         <div class="tab-content">
-                            <div class="tab-pane active" id="tab1">
+                           
+                            @if(sizeof($player_cards) < 6)
+                                <div class="tab-pane active" id="tab1">
+                            @else
+                                <div class="tab-pane" id="tab1">
+                            @endif
 
                                 <div class="row">
                                     <div class="span1"></div>
@@ -189,11 +209,17 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane" id="tab3">
+
+                            @if(sizeof($player_cards) == 6)
+                                <div class="tab-pane active" id="tab3">
+                            @else
+                                <div class="tab-pane" id="tab3">
+                            @endif
+
                                 <div class="row" id="cards">
                                     <div class="span1"></div>
 
-                                    <form id="cards_check" action="{{ URL::base() }}/card_turn_in" method="post" onsubmit="return checkCards(this);">
+                                    <form id="cards_check" action="{{ URL::base() }}/card_turn_in" method="post" onsubmit="return Attack.checkCards(this);">
 
                                         @if(isset($player_cards))
                                             @foreach($player_cards as $card)
@@ -273,8 +299,6 @@
                 
                 </div>
             </div>
-
-            <a id="click" href="#myModal" role="button" class="btn" data-toggle="modal">Launch demo modal</a>
             
             <!-- Modal -->
             <div id="take_over" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

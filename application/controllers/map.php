@@ -26,12 +26,13 @@
 
         //constructor
         public function __construct(){
-
+        
             $this->facebook = Map_Controller::getFB();
             $this->uid = $this->facebook->getUser();
 
             $this->game_id = $_GET['game_id'];
             $this->game = new CurrentGame($this->game_id);
+            
             $this->game_title    = $this->game->getTitle();
             $this->game_maker    = $this->game->getGameMaker();
             $this->game_table    = $this->game->getTableName();
@@ -43,6 +44,7 @@
             $this->plyr_nm_color = $this->game->getPlayerColors();//rename this too!
             $this->armies_plcd   = $this->game->armiesPlaced();
             $this->init_placed   = $this->game->startArmiesPlaced();
+            $this->temp_takeover = $this->game->getTempTakeOver();
             //maybe player class?
             $this->join_flag     = $this->game->isMember($this->uid);
             $this->init_armies   = $this->game->getInitArmies($this->uid);
@@ -105,6 +107,7 @@
                         ->with('card_table', $card_table)
                         ->with('player_cards', $this->player_cards)
                         ->with('player_up', $this->player_up)
+                        ->with('temp_take_over', $this->temp_takeover)
                         ->with('winner', $this->winner);
 
                       
@@ -145,6 +148,15 @@
             echo json_encode($this->game->attack($attk_owner, $def_owner, $attk_armies, $attk_id, $def_armies, $def_id));
         }
 
+        public function post_terr_taken(){
+            
+            $attk_terr = Input::get('attk_terr');
+            $def_terr = Input::get('def_terr');
+            $attk_armies = Input::get('attk_armies');
+
+            $this->game->saveTakeOverState($attk_terr, $def_terr, $attk_armies);
+        }
+
         public function post_take_over(){
 
             $game_table = Input::get('game_table');
@@ -154,7 +166,9 @@
             $def_id = Input::get('def_id');
             $attk_owner = Input::get('attacker_id');
             $def_owner = Input::get('defender_id');
-           
+
+            $this->game->unSaveTakeOverState();
+
             echo json_encode($this->game->takeOver($attk_owner, $def_owner, $attk_id, $def_id, $attk_armies, $def_armies));
 
         }
@@ -215,7 +229,13 @@
 
         public function get_test(){
 
-            var_dump($this->game->getPlayers());
+            $taken_colors = Plyrgames::where('game_id', '=', $this->game_id)->get();
+
+            $colors = array();
+            foreach($taken_colors as $color){
+                array_push($colors, $color->plyr_color);
+            }
+            echo json_encode($colors);
         }
 
         /***********************************************
@@ -245,6 +265,22 @@
             $game_id = Input::get('game_id');
            
             $this->game->nextTurn($user_id);
+        }
+
+        /************************************************
+        * Check what colors have been taken and returns
+        * available colors
+        ************************************************/
+        public function get_colors(){
+
+            $taken_colors = Plyrgames::where('game_id', '=', $this->game_id)->get();
+
+            $colors = array();
+            foreach($taken_colors as $color){
+                array_push($colors, $color->plyr_color);
+            }
+            echo json_encode($colors);
+
         }
 
     }

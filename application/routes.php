@@ -45,6 +45,9 @@ Route::get('card_status', array('uses' => 'map@card_status'));
 Route::post('end_turn', array('uses' => 'map@end_turn'));
 Route::post('card_turn_in', array('uses' => 'map@card_turn_in'));
 Route::post('continent_bonuses', array('uses' => 'map@continent_bonuses'));
+Route::post('add_color', array('uses' => 'games@add_color'));
+Route::post('terr_taken', array('uses' => 'map@terr_taken'));
+Route::get('colors', array('uses' => 'map@colors'));
 Route::get('test', array('uses' => 'map@test')); //temporary test route
 /*
 |--------------------------------------------------------------------------

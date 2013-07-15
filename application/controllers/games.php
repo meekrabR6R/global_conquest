@@ -104,6 +104,18 @@ class Games_Controller extends Base_Controller{
         }   
     }
     
+    /************************
+    * Updates color
+    *************************/
+    function post_add_color(){
+
+        $user_id = Input::get('uid');
+        $game_id = Input::get('game_id');
+
+        $player = Plyrgames::where('plyr_id', '=', $user_id)->where('game_id', '=', $game_id)->first();
+        $player->plyr_color = Input::get('plyr_color');
+        $player->save();
+    }
     
     /********
      *Various procedural functions

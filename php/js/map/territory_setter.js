@@ -273,6 +273,7 @@ GameSpace.setTerritories = function(){
     GameSpace.graph.add_edges(GameSpace.graph._node_list[40].id, GameSpace.graph._node_list[38].id);
     GameSpace.graph.add_edges(GameSpace.graph._node_list[40].id, GameSpace.graph._node_list[41].id);
     GameSpace.graph.add_edges(GameSpace.graph._node_list[40].id, GameSpace.graph._node_list[39].id);
+
 };
 
 GameSpace.makeRiskMap = function(){
@@ -296,33 +297,54 @@ GameSpace.pickColors = function(){
   $("#color_pick2").ready(function(){
      
      $("#join_btn").click(function(){
-         
-          $("#color_pick2").html('Choose Color: <select id="color">\
-                                   <option name="blue">blue</option>\
-                                   <option name="green">green</option>\
-                                   </select>\
-                                   <input id="submit_col" type="button"  value="submit">');
-
-       $("#submit_col").ready(function(){
-
-          $("#submit_col").click(function(){
-
-               var color =  $("#color").val();
-               $.post(GameSpace.BASE+'/join?game_id='+GameSpace.game_id,
-                     {uid: GameSpace.user_id,
-                      game_id: GameSpace.game_id,
-                      plyr_color: color},
-                     function(result){
-                          console.log(result);
-                });
-            });
-      });
+          
+        GameSpace.colorSelect();
 
     });
 
   }); 
 }; 
 
+GameSpace.colorSelect = function(){
+
+    $.get(GameSpace.BASE+'/colors?game_id='+GameSpace.game_id,
+        //add controller method, other shit you know the dilly
+        function(result){
+            console.log($.parseJSON(result));
+            var colors = ["blue", "green", "red", "black", "yellow", "pink"];
+            var options = '';
+            colors.forEach(function(color){
+                if($.inArray(color, $.parseJSON(result)) === -1)
+                    options += '<option name="'+color+'">'+color+'</option>'
+            }) 
+
+            $("#color_pick2").html('<h4>Choose Color: </h4><select id="color">\
+                                   '+options+'\
+                                   </select>\
+                                   <input id="submit_col" type="button"  value="submit">');
+
+            $("#submit_col").ready(function(){
+
+               $("#submit_col").click(function(){
+
+                   var color =  $("#color").val();
+                   if(GameSpace.join_flag === '')
+                        var callBack = 'join';
+                   else
+                        var callBack = 'add_color';
+
+                   $.post(GameSpace.BASE+'/'+callBack+'?game_id='+GameSpace.game_id,
+                         {uid: GameSpace.user_id,
+                          game_id: GameSpace.game_id,
+                          plyr_color: color},
+                         function(result){
+                              console.log(result);
+                              location.reload();
+                    });
+                });
+            });
+    });
+}
 
 //shit that happens
 GameSpace.makeRiskMap();

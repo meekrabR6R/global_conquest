@@ -217,7 +217,7 @@ class CurrentGame{
     	 $bonus_armies = $this->getBonusArmies($turn_ins);
 
     	 //maybe this bit needs to be elsewhere?
-    	 $player = Plyrgames::where('plyr_id', '=', $owner_id)->first();
+    	 $player = Plyrgames::where('plyr_id', '=', $owner_id)->where('game_id', '=', $this->game_id)->first();
     	 $player->init_armies += $bonus_armies;
     	 $player->save();
     	 
@@ -393,6 +393,36 @@ class CurrentGame{
 
         Plyrgames::updateTurnArmies($this->game_id, $plyr_id);
     }
+
+    /********************************************************************
+    * Saves state of attacker/defender territories in the event that the
+    * attacker has not yet taken over the defeated defender's territory.
+    **********************************************************************/
+    public function saveTakeOverState($attk_terr, $def_terr, $attk_armies){
+        
+        $this->player_up->attk_terr = $attk_terr;
+        $this->player_up->save();
+
+        $this->player_up->def_terr = $def_terr;
+        $this->player_up->save();
+
+        $this->player_up->attk_armies = $attk_armies;
+        $this->player_up->save();
+
+        $this->player_up->beat_terr = 1;
+        $this->player_up->save();
+
+    }
+
+    /**************************************
+    * Unsaves takeover state
+    ***************************************/
+    public function unSaveTakeOverState(){
+
+        $this->player_up->beat_terr = false;
+        $this->player_up->save();
+    }
+
 	/**********************************
 	* Various getters (ugly, I know)
 	**********************************/
@@ -437,6 +467,17 @@ class CurrentGame{
             return Players::where('plyr_id', '=', $this->player_up->plyr_id)->first();
     }
 
+    public function getTempTakeOver(){
+
+        $take_over = array(
+            'beat_terr' => $this->player_up->beat_terr,
+            'attk_terr' => $this->player_up->attk_terr,
+            'def_terr' => $this->player_up->def_terr,
+            'attk_armies' => $this->player_up->attk_armies
+        );
+
+        return $take_over;
+    }
     public function getPlayerNames(){
 
         $player_names = [];

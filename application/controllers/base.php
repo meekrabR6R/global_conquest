@@ -20,8 +20,8 @@ class Base_Controller extends Controller {
 	public static function getFB(){
 
 		$config = array();
-        $config['appId'] = AppInfo::appID();
-        $config['secret'] = AppInfo::appSecret();
+        $config['appId'] = '535852776460879';
+        $config['secret'] = '2cd3cec829b086b917d886c771d86805';
         return new Facebook($config);
 	}
 

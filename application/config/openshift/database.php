@@ -4,7 +4,7 @@ return array(
 	'connections' => array(
 
 		'mysql' => array(
-			'driver'   => '127.10.85.130',
+			'driver'   => '127.10.85.130:3306',
 			'host'     => 'localhost',
 			'database' => 'globalconq',
 			'username' => 'admincJSTVrE',

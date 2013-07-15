@@ -36,7 +36,6 @@ class Facebook_Controller extends Base_Controller{
 			}
 		}
 		else{
-			phpinfo();
 			var_dump($facebook);
 		    $login = $facebook->getLoginUrl();
 		    echo '<a href="'.$login.'">LOGIN!</a>';

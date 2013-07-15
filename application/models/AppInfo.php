@@ -20,7 +20,8 @@ class AppInfo {
    * @return the appID for this app
    */
   public static function appID() {
-   
+  
+    putenv("FACEBOOK_APP_ID = '535852776460879'");
     return getenv('FACEBOOK_APP_ID');
   }
 
@@ -28,6 +29,7 @@ class AppInfo {
    * @return the appSecret for this app
    */
   public static function appSecret() {
+    putenv("FACEBOOK_SECRET = '2cd3cec829b086b917d886c771d86805'");
     return getenv('FACEBOOK_SECRET');
   }
 

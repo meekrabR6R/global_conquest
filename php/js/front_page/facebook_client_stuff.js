@@ -3,7 +3,7 @@
           // init the FB JS SDK
           FB.init({
             appId      : '535852776460879',    // App ID from the app dashboard
-            channelUrl : 'localhost/globa/php/channel.html', // Channel file for x-domain comms
+            channelUrl : 'globalconq-meekrab.rhcloud.com/channel.html', // Channel file for x-domain comms
             status     : true,                                 // Check Facebook Login status
             cookie     : true,
             xfbml      : true                                  // Look for social plugins on the page

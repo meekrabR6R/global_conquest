@@ -9,6 +9,14 @@ class Create_Games_Plyrgames {
 	 */
 	public function up()
 	{
+		Schema::create('players', function($table) {
+			$table->string('plyr_id', 20);
+			$table->string('first_name', 20);
+			$table->string('last_name', 20);
+			$table->timestamps();
+
+		});
+
 		Schema::create('games', function($table) {
 		// auto incremental id (PK)
 			$table->increments('game_id');

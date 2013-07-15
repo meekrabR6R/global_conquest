@@ -10,7 +10,7 @@
       var user_id = "{{ $_SESSION['user']['id'] }}";
       var user_fn = "{{ $_SESSION['user']['first_name'] }}";
       var user_ln = "{{ $_SESSION['user']['last_name'] }}";
-      var BASE = "{{ URL::base(); }}";
+      var BASE = "https://globalconq-meekrab.rhcloud.com";
     </script>
   
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>

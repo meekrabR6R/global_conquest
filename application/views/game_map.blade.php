@@ -12,7 +12,7 @@
         <script type="text/javascript">
             //Interface between PHP and Javascript variables:
             var GameSpace = {
-                BASE : "https://globalconq-meekrab.rhcloud.com",
+                BASE : "{{ URL::base(); }}",
                 user_id : "{{ $uid; }}",
                 user_fn : "{{ $user_fn; }}",
                 game_id : "{{ $game_id; }}",

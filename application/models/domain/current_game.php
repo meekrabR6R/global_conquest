@@ -175,10 +175,10 @@ class CurrentGame{
     ***************************************************/
     public function isTurnIn($cards){
 
-        $check_123 = ['Cannon', 'Cavalry', 'Infantry'];
-        $check_infantry = ['Infantry', 'Infantry', 'Infantry'];
-        $check_cavalry = ['Cavalry', 'Cavalry', 'Cavalry'];
-        $check_cannon = ['Cannon', 'Cannon', 'Cannon'];
+        $check_123 = array('Cannon', 'Cavalry', 'Infantry');
+        $check_infantry = array('Infantry', 'Infantry', 'Infantry');
+        $check_cavalry = array('Cavalry', 'Cavalry', 'Cavalry');
+        $check_cannon = array('Cannon', 'Cannon', 'Cannon');
 
         $types = array();
         foreach($cards as $card)

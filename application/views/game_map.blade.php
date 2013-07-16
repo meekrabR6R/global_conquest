@@ -88,7 +88,7 @@
 
                      @if($winner)
                         <div class="hero-unit">
-                            <h5>{{ $winner->getName()['first_name'] }} is victorious!</h5>
+                            <h5>{{ $winner_name['first_name'] }} is victorious!</h5>
                         </div>
                     @else
 

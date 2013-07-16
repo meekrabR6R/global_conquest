@@ -21,6 +21,7 @@
         private $player_cards;
         private $player_up;
         private $winner;
+        private $winner_name;
         private $uid;
         private $facebook;
 
@@ -51,6 +52,7 @@
             $this->player_cards  = $this->game->getHand($this->uid);
             $this->player_up     = $this->game->getUpPlayer();
             $this->winner        = $this->game->getWinner();
+            $this->winner_name   = $this->winner->getName();
         }
 
         /**************************************************

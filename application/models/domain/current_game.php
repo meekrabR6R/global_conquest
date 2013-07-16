@@ -24,7 +24,7 @@ class CurrentGame{
     
         //creates player list
         $plyr_records = Plyrgames::where('game_id','=', $game_id)->get();
-        $this->players = [];
+        $this->players = array();
         
         foreach($plyr_records as $plyr_record)
             array_push($this->players, new Player($plyr_record->plyr_id, $game_id));

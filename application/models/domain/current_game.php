@@ -138,7 +138,7 @@ class CurrentGame{
 
         GameTable::takeOver($this->game_table, $attk_armies, $attk_id, $attk_owner, $def_armies, $def_id);
 
-        $territory_count = array;
+        $territory_count = array();
         foreach($this->players as $player){
 
             if($player->getPlyrID() == $attk_owner)

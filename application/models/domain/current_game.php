@@ -468,15 +468,15 @@ class CurrentGame{
     }
 
     public function getTempTakeOver(){
-
-        $take_over = array(
-            'beat_terr' => $this->player_up->beat_terr,
-            'attk_terr' => $this->player_up->attk_terr,
-            'def_terr' => $this->player_up->def_terr,
-            'attk_armies' => $this->player_up->attk_armies
-        );
-
-        return $take_over;
+        if(isset($this->player_up)){
+            $take_over = array(
+                'beat_terr' => $this->player_up->beat_terr,
+                'attk_terr' => $this->player_up->attk_terr,
+                'def_terr' => $this->player_up->def_terr,
+                'attk_armies' => $this->player_up->attk_armies
+            );
+            return $take_over;
+        }
     }
     public function getPlayerNames(){
 

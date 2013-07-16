@@ -481,8 +481,10 @@ class CurrentGame{
     public function getPlayerNames(){
 
         $player_names = array();
-        foreach($this->players as $player)
-            array_push($player_names, $player->getName()['first_name']);
+        foreach($this->players as $player){
+            $name = $player->getName();
+            array_push($player_names, $name['first_name']);
+        }
 
         return $player_names;
     }
@@ -491,7 +493,7 @@ class CurrentGame{
 
 		$player_colors = array();
         foreach($this->players as $player)
-            array_push($player_colors, ['plyr_id' => $player->getPlyrID(), 'plyr_color' => $player->getColor()]);
+            array_push($player_colors, array('plyr_id' => $player->getPlyrID(), 'plyr_color' => $player->getColor());
 
         return $player_colors;
 	}

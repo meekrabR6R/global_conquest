@@ -31,11 +31,13 @@ class Facebook_Controller extends Base_Controller{
 			}
 			catch(FacebookApiException $e){
 				$user = null;
+				phpinfo();
 				$login = $facebook->getLoginUrl();
 		    	echo '<a href="'.$login.'">LOGIN!</a>';
 			}
 		}
 		else{
+			phpinfo();
 		    $login = $facebook->getLoginUrl();
 		    echo '<a href="'.$login.'">LOGIN!</a>';
 		    

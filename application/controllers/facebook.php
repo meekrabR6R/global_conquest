@@ -45,7 +45,7 @@ class Facebook_Controller extends Base_Controller{
 
     }
 
-     private static function new_player($id, $fn, $ln){
+    private static function new_player($id, $fn, $ln){
         
         $player_check = Players::find($id);
 

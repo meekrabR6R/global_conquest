@@ -19,7 +19,7 @@
     <script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     
   </head>
-  <body onload="add_player(); get_games();">
+  <body onload="get_games();">
     <div id="fb-root"></div>
     <script src="js/front_page/facebook_client_stuff.js" type="text/javascript"></script>
 

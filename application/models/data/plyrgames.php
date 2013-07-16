@@ -41,7 +41,9 @@ class Plyrgames extends Eloquent{
         $game_table = 'game'.$game_id;
 
         $bindings = array('owner_id' => $user_id);
-        $terr_count = DB::query('select count(owner_id) as count from '.$game_table.' where owner_id = ?', $bindings)[0]->count;
+        $terrs = DB::query('select count(owner_id) as count from '.$game_table.' where owner_id = ?', $bindings);
+        $terr_count = $terrs[0]->count;
+
         
         $turn_armies = $terr_count / 3;
 

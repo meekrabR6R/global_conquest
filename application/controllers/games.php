@@ -34,9 +34,9 @@ class Games_Controller extends Base_Controller{
         );
      
      
-         Games::create($new_game);
+        Games::create($new_game);
      
-         $game = Games::where('title', '=', $add_game[0])->first();
+        $game = Games::where('title', '=', $add_game[0])->first();
         
         $plyr_game_record = array(
             'plyr_id' => $add_game[3],

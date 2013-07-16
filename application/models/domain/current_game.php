@@ -238,7 +238,7 @@ class CurrentGame{
                 return $player;
         }
 
-        return 0;
+        return false;
     }
 
     /********************************************

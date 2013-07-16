@@ -116,7 +116,8 @@
                         ->with('player_cards', $this->player_cards)
                         ->with('player_up', $this->player_up)
                         ->with('temp_take_over', $this->temp_takeover)
-                        ->with('winner', $this->winner);
+                        ->with('winner', $this->winner)
+                        ->with('winner_name', $this->winner_name);
 
                       
                 }

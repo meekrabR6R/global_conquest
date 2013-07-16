@@ -237,6 +237,8 @@ class CurrentGame{
             if($player->isWinner())
                 return $player;
         }
+
+        return 0;
     }
 
     /********************************************

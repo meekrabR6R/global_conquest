@@ -50,17 +50,18 @@ class CardTable{
     public static function getNumberOfCards($user_id, $card_table){
 
         $bindings = array('owner_id' => $user_id);
-        return  DB::query('select count(owner_id) as count from '.$card_table.' where owner_id = ?', $bindings)[0]->count;
+        $cards = DB::query('select count(owner_id) as count from '.$card_table.' where owner_id = ?', $bindings);
+        return $cards[0]->count;
 
     }
 
     //check if turn in
     public static function isTurnIn($owner_id, $cards){
 
-        $check_123 = ['Infantry', 'Cavalry', 'Cannon'];
-        $check_infantry = ['Infantry', 'Infantry', 'Infantry'];
-        $check_cavalry = ['Cavalry', 'Cavalry', 'Cavalry'];
-        $check_cannon = ['Cannon', 'Cannon', 'Cannon'];
+        $check_123 = array('Infantry', 'Cavalry', 'Cannon');
+        $check_infantry = array('Infantry', 'Infantry', 'Infantry');
+        $check_cavalry = array('Cavalry', 'Cavalry', 'Cavalry');
+        $check_cannon = array('Cannon', 'Cannon', 'Cannon');
 
         $types = array();
         foreach($cards as $card)

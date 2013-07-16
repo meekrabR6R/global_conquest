@@ -54,6 +54,7 @@
             $this->winner        = $this->game->getWinner();
 
             if($this->winner){
+                var_dump($this->winner);
                 $name = $this->winner->getName();
                 $this->winner_name   = $name['first_name'];
             }

@@ -138,7 +138,7 @@ class CurrentGame{
 
         GameTable::takeOver($this->game_table, $attk_armies, $attk_id, $attk_owner, $def_armies, $def_id);
 
-        $territory_count = [];
+        $territory_count = array;
         foreach($this->players as $player){
 
             if($player->getPlyrID() == $attk_owner)
@@ -480,7 +480,7 @@ class CurrentGame{
     }
     public function getPlayerNames(){
 
-        $player_names = [];
+        $player_names = array();
         foreach($this->players as $player)
             array_push($player_names, $player->getName()['first_name']);
 
@@ -489,7 +489,7 @@ class CurrentGame{
 
 	public function getPlayerColors(){
 
-		$player_colors = [];
+		$player_colors = array();
         foreach($this->players as $player)
             array_push($player_colors, ['plyr_id' => $player->getPlyrID(), 'plyr_color' => $player->getColor()]);
 

@@ -37,6 +37,8 @@
                 GameSpace.defHold = "{{ $temp_take_over['def_terr']; }}";
                 GameSpace.armiesHold = "{{ $temp_take_over['attk_armies']; }}";
                 GameSpace.turnArmiesSet = "{{ $player_up->turn_armies_set; }}";
+            @else
+                GameSpace.terrUnTaken = "";
             @endif
 
             
@@ -88,7 +90,7 @@
 
                      @if($winner)
                         <div class="hero-unit">
-                            <h5>{{ $winner_name['first_name'] }} is victorious!</h5>
+                            <h5>{{ $winner_name }} is victorious!</h5>
                         </div>
                     @else
 

@@ -414,5 +414,6 @@ var Attack = {
     }
 }
 
-Attack.test();
+if(GameSpace.terrUnTaken !== "")
+    Attack.test();
 

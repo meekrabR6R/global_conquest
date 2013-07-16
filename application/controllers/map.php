@@ -52,7 +52,13 @@
             $this->player_cards  = $this->game->getHand($this->uid);
             $this->player_up     = $this->game->getUpPlayer();
             $this->winner        = $this->game->getWinner();
-            $this->winner_name   = $this->winner->getName();
+
+            if($this->winner){
+                $name = $this->winner->getName();
+                $this->winner_name   = $name['first_name'];
+            }
+            else
+                $this->winner_name   = '';
         }
 
         /**************************************************

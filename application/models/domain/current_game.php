@@ -493,7 +493,7 @@ class CurrentGame{
 
 		$player_colors = array();
         foreach($this->players as $player)
-            array_push($player_colors, array('plyr_id' => $player->getPlyrID(), 'plyr_color' => $player->getColor());
+            array_push($player_colors, array('plyr_id' => $player->getPlyrID(), 'plyr_color' => $player->getColor()));
 
         return $player_colors;
 	}

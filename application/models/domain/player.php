@@ -48,7 +48,8 @@ class Player{
     public function getTerrCount(){
 
     	$bindings = array('owner_id' => $this->plyr_id);
-    	return DB::query('select count(owner_id) as terr_count from '.$this->game_table.' where owner_id = ?', $bindings)[0]->terr_count;
+        $terrs = DB::query('select count(owner_id) as terr_count from '.$this->game_table.' where owner_id = ?', $bindings); 
+    	return $terrs[0]->terr_count;
     }
 
 
@@ -112,10 +113,10 @@ class Player{
     ***************************************************/
     public function hasTurnIn($hand){
 
-        $check_123 = ['Cannon', 'Cavalry', 'Infantry'];
-        $check_infantry = ['Infantry', 'Infantry', 'Infantry'];
-        $check_cavalry = ['Cavalry', 'Cavalry', 'Cavalry'];
-        $check_cannon = ['Cannon', 'Cannon', 'Cannon'];
+        $check_123 = array('Cannon', 'Cavalry', 'Infantry');
+        $check_infantry = array('Infantry', 'Infantry', 'Infantry');
+        $check_cavalry = array('Cavalry', 'Cavalry', 'Cavalry');
+        $check_cannon = array('Cannon', 'Cannon', 'Cannon');
 
         $types = array();
         foreach($hand as $card)

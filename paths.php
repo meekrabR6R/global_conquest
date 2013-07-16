@@ -24,7 +24,7 @@
 $environments = array(
 
 	'local' => array('http://localhost*', '*.dev'),
-  'openshift' => array('*rhcloud.com*')
+  'openshift' => array('https://globalconq-meekrab.rhcloud.com*')
 
 );
 

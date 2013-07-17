@@ -70,8 +70,8 @@ class Player{
     * Check if player is winner
     ****************************************/
     public function isWinner(){
-
-       if($this->record->winner)
+        
+       if($this->record->winner+0)
             return true;
 
         return false;

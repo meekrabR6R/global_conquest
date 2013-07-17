@@ -48,7 +48,7 @@ class CurrentGame{
     ****************************************/
     public function startArmiesPlaced(){
 
-        return  $this->game->init_placed;
+        return  $this->game->init_placed+0;
     }
 
 

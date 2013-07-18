@@ -36,7 +36,7 @@ class CurrentGame{
            //$this->makeTurns($this->game, $game_id, $plyr_records, $this->player_count);
         
         //processes 'up player's' army count (export to own method)
-        elseif($this->player_count == $this->game->plyrs){
+        if($this->player_count == $this->game->plyrs){
         	$this->player_up = Plyrgames::where('game_id','=', $game_id)->where('trn_active','=',true)->first();
             $this->makeTurnArmies();
         }

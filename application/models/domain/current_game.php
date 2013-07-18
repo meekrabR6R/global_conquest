@@ -104,7 +104,7 @@ class CurrentGame{
  
         //sets next player in queue to 'active'
         $next_plyr = Plyrgames::where('game_id', '=', $this->game_id)->where('turn', '=', $next_turn)->first();
-        $next_plyr->trn_active = 0;
+        $next_plyr->trn_active = 1;
         $next_plyr->save();
         
         return $curr_plyr;
@@ -350,7 +350,7 @@ class CurrentGame{
 
         //maybe export back to Plyrgames
         $player_one = Plyrgames::where('game_id','=', $game_id)->where('turn','=',1)->first();
-        $player_one->trn_active = 1;
+        $player_one->trn_active = 0;
         $player_one->save();
         
     }

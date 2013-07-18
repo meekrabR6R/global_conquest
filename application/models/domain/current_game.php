@@ -37,8 +37,8 @@ class CurrentGame{
         
         //processes 'up player's' army count (export to own method)
         elseif($this->player_count == $this->game->plyrs){
-        	$this->player_up = Plyrgames::where('game_id','=', $game_id)->where('trn_active','=',true)->first();
-            $this->makeTurnArmies();
+        	//$this->player_up = Plyrgames::where('game_id','=', $game_id)->where('trn_active','=',true)->first();
+            //$this->makeTurnArmies();
         }
 	
 	}
@@ -88,7 +88,7 @@ class CurrentGame{
         $curr_plyr->turn_armies_set = false;
         $curr_plyr->save();
 
-        $curr_plyr->trn_active = false+0;
+        $curr_plyr->trn_active = false;
         $curr_plyr->save();
 
         $curr_plyr->got_card = false;

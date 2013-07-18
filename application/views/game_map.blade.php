@@ -29,7 +29,7 @@
                 game_state : [],
                 plyr_cards : []
             };
-           console.log(GameSpace.join_flag);
+         
             @if(isset($player_up))           
                 GameSpace.upPlayer = {{ $player_up->plyr_id; }};
                 GameSpace.terrUnTaken = "{{ $temp_take_over['beat_terr']; }}";

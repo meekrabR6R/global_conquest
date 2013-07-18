@@ -408,13 +408,13 @@ var Attack = {
     test: function(){
     
         $('document').ready(function(){
-            
+
            if(GameSpace.terrUnTaken !== "0" && GameSpace.graph.get_node(GameSpace.attkHold) != null)
                 Attack.victoryProcess(GameSpace.graph.get_node(GameSpace.attkHold), GameSpace.graph.get_node(GameSpace.defHold), GameSpace.armiesHold);
         });
     }
 }
-alert(GameSpace.terrUnTaken)
-if(GameSpace.terrUnTaken !== "")
+
+if(GameSpace.terrUnTaken === "1" && GameSpace.user_id === GameSpace.upPlayer)
     Attack.test();
 

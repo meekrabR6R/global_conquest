@@ -408,7 +408,8 @@ var Attack = {
     test: function(){
     
         $('document').ready(function(){
-           if(GameSpace.terrUnTaken !== "0")
+            alert(GameSpace.graph.get_node(GameSpace.attkHold))
+           if(GameSpace.terrUnTaken !== "0" && GameSpace.graph.get_node(GameSpace.attkHold) != null)
                 Attack.victoryProcess(GameSpace.graph.get_node(GameSpace.attkHold), GameSpace.graph.get_node(GameSpace.defHold), GameSpace.armiesHold);
         });
     }

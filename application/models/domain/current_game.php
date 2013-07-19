@@ -31,6 +31,10 @@ class CurrentGame{
         
         $this->player_count = sizeof($this->players);
 
+        
+        var_dump($this->game->turns_set+0)
+        die()
+        
         //sets turn order
 		if($this->game->turns_set+0 === 0 && $this->player_count == $this->game->plyrs)
            $this->makeTurns($this->game, $game_id, $plyr_records, $this->player_count);

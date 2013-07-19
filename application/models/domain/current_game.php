@@ -43,7 +43,7 @@ class CurrentGame{
        // elseif($this->player_count == $this->game->plyrs){
         //	$this->player_up = Plyrgames::where('game_id','=', $game_id)->where('trn_active','=',true)->first();
           //  $this->makeTurnArmies();
-        }
+        //}
 	
 	}
 

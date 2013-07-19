@@ -33,7 +33,7 @@ class CurrentGame{
 
         
         var_dump($this->game->turns_set+0)
-        die()
+        die();
         
         //sets turn order
 		if($this->game->turns_set+0 === 0 && $this->player_count == $this->game->plyrs)

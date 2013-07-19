@@ -33,16 +33,16 @@ class CurrentGame{
 
         
         var_dump($this->game->turns_set+0)
-        die();
+
         
         //sets turn order
-		if($this->game->turns_set+0 === 0 && $this->player_count == $this->game->plyrs)
-           $this->makeTurns($this->game, $game_id, $plyr_records, $this->player_count);
+		//if($this->game->turns_set+0 === 0 && $this->player_count == $this->game->plyrs)
+         //  $this->makeTurns($this->game, $game_id, $plyr_records, $this->player_count);
         
         //processes 'up player's' army count (export to own method)
-        elseif($this->player_count == $this->game->plyrs){
-        	$this->player_up = Plyrgames::where('game_id','=', $game_id)->where('trn_active','=',true)->first();
-            $this->makeTurnArmies();
+       // elseif($this->player_count == $this->game->plyrs){
+        //	$this->player_up = Plyrgames::where('game_id','=', $game_id)->where('trn_active','=',true)->first();
+          //  $this->makeTurnArmies();
         }
 	
 	}

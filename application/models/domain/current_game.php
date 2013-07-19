@@ -32,7 +32,7 @@ class CurrentGame{
         $this->player_count = sizeof($this->players);
 
         
-        var_dump($this->game->turns_set+0)
+        var_dump($this->game->turns_set+0);
 
         
         //sets turn order

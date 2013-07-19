@@ -32,7 +32,7 @@ class CurrentGame{
         $this->player_count = sizeof($this->players);
 
         //sets turn order
-		if(!$this->game->turns_set && $this->player_count == $this->game->plyrs)
+		if($this->game->turns_set === 0 && $this->player_count == $this->game->plyrs)
            $this->makeTurns($this->game, $game_id, $plyr_records, $this->player_count);
         
         //processes 'up player's' army count (export to own method)
@@ -265,7 +265,7 @@ class CurrentGame{
     ***********************************/
     private function makeTurnArmies(){
 
-        if(!$this->player_up->turn_armies_set && $this->player_up->init_armies === 0){
+        if($this->player_up->turn_armies_set === 0 && $this->player_up->init_armies === 0){
             $turn_armies = Plyrgames::getTurnArmies($this->game_id, $this->player_up->plyr_id);
             $turn_armies += $this->continentBonuses();
 

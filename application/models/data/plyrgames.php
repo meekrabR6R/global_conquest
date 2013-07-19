@@ -50,7 +50,6 @@ class Plyrgames extends Eloquent{
         if($turn_armies < 3)
             $turn_armies = 3;
 
-        //consider factoring in continent bullshit here..
         return $turn_armies;
     }
 

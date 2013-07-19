@@ -265,7 +265,7 @@ class CurrentGame{
     ***********************************/
     private function makeTurnArmies(){
 
-        if($this->player_up->turn_armies_set == 0 && $this->player_up->init_armies === 0){
+        if($this->player_up->turn_armies_set == 0 && $this->player_up->init_armies == 0){
             $turn_armies = Plyrgames::getTurnArmies($this->game_id, $this->player_up->plyr_id);
             $turn_armies += $this->continentBonuses();
 

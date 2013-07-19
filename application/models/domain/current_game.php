@@ -33,8 +33,7 @@ class CurrentGame{
 
         //sets turn order
 		if($this->game->turns_set+0 === 0 && $this->player_count == $this->game->plyrs)
-            var_dump($this->game->turns_set+0);
-           //$this->makeTurns($this->game, $game_id, $plyr_records, $this->player_count);
+           $this->makeTurns($this->game, $game_id, $plyr_records, $this->player_count);
         
         //processes 'up player's' army count (export to own method)
         elseif($this->player_count == $this->game->plyrs){

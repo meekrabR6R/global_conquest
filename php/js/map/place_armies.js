@@ -62,8 +62,12 @@ var PlaceArmies = {
 
         var armies = "";
                        
-        for(i=1; i <= armyAmount; i++)
-            armies += '<option id="'+i+'">'+i+'</option>';
+        for(i=1; i <= armyAmount; i++){
+            if(i === 1)
+                armies += '<option id="'+i+' selected">'+i+'</option>';
+            else
+                armies += '<option id="'+i+'">'+i+'</option>';
+        }
            
         var newAmount = territoryNode.data.armies + armies;
         $("#place").html('<select id="place_amount">'+armies+'</select><input id="mov_armies" type="button" class="btn btn-inverse" value="place" onclick="PlaceArmies.placeArmies(\''+territoryNode.id+'\');"> in '+territoryNode.id);                

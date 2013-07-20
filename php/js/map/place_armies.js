@@ -31,9 +31,9 @@ var PlaceArmies = {
         //needs to get terr amount from server
         var amount = parseInt($("#place_amount").find(":selected").text());
        
-        var newAmount = placeTerr.data.armies + amount;
+        placeTerr.data.armies += amount;
 
-        $("div[name="+placeTerr.id+"]").html('<h3 style="color:'+placeTerr.data.color+';">'+newAmount+'</h3>');
+        $("div[name="+placeTerr.id+"]").html('<h3 style="color:'+placeTerr.data.color+';">'+placeTerr.data.armies+'</h3>');
                    
         $.post(PlaceArmies.game.BASE+'/place?game_id='+PlaceArmies.game.game_id,
                  {armies: amount,
@@ -64,7 +64,7 @@ var PlaceArmies = {
                        
         for(i=1; i <= armyAmount; i++){
             if(i === 1)
-                armies += '<option id="'+i+' selected">'+i+'</option>';
+                armies += '<option id="'+i+'" selected>'+i+'</option>';
             else
                 armies += '<option id="'+i+'">'+i+'</option>';
         }

@@ -28,6 +28,7 @@ var Attack = {
     rollAttack: function(){
         
         var attk_armies = $("#dice").val();
+
         var def_armies = 0; 
         var attk_id = $("#attack").text();
         var attk_terr = GameSpace.graph.get_node(attk_id);
@@ -42,7 +43,7 @@ var Attack = {
         Attack.rollProcess(attk_armies, def_armies, attk_terr, def_terr);
        
         if(def_terr.data.armies === 0)
-            Attack.victoryProcess(attk_terr, def_terr, attk_armies);
+            Attack.victoryProcess(attk_terr, def_terr);
         
         else
             Attack.battleProcess(attk_terr, def_terr); 
@@ -85,26 +86,26 @@ var Attack = {
             if (def_terr.data.armies > 0) 
                 def_terr.data.armies--;  
         }
-        else{
-            if(attk_terr.data.armies > 1){
-                
-                attk_terr.data.armies--;
-
-                if(attk_terr.data.armies <= 3){
-
-                    if(attk_terr.data.armies === 3)
-                        attk_armies = 2;
-                    if(attk_terr.data.armies <= 2)
-                        attk_armies = 1;
-
-                    Attack.diceMaker(attk_armies);
-                }
-            }
+        
+        else if(attk_terr.data.armies > 1){
             
-            if(attk_terr.data.armies === 1)
-                $("#roll").attr("disabled", true);     
-        } 
-        if(attk_armies > 1 && def_armies > 1){  
+            attk_terr.data.armies--;
+
+            if(attk_terr.data.armies <= 3){
+
+                if(attk_terr.data.armies === 3)
+                    attk_armies = 2;
+                if(attk_terr.data.armies <= 2)
+                    attk_armies = 1;
+
+                Attack.diceMaker(attk_armies);
+            }
+        }
+        
+        if(attk_terr.data.armies === 1)
+            $("#roll").attr("disabled", true);     
+        
+        else if(attk_armies > 1 && def_armies > 1){  
             if(attk_roll[1] > def_roll[1]){
                 
                 if (def_terr.data.armies > 0) 
@@ -154,11 +155,16 @@ var Attack = {
     victoryProcess: function(attk_terr, def_terr, attk_armies){
 
         $("#roll").attr("disabled", true);
-      
+        
+        if(typeof attk_armies === 'undefined')
+            var attackers = $("#dice").val();
+        else
+            var attackers = attk_armies;
+
         var armies = "";
         
        
-        for(i=parseInt(attk_armies); i < attk_terr.data.armies; i++)
+        for(i=parseInt(attackers); i < attk_terr.data.armies; i++)
             armies += '<option id="'+i+'">'+i+'</option>';
 
         $('#takeover_select').html('<select id="army_amount">'+armies+'</select>');
@@ -166,7 +172,7 @@ var Attack = {
         $.post(Attack.game.BASE+'/terr_taken?game_id='+Attack.game.game_id,
                 {attk_terr: attk_terr.id,
                  def_terr: def_terr.id,
-                 attk_armies: attk_armies},
+                 attk_armies: attackers},
                  function(result){
 
         });
@@ -410,6 +416,6 @@ var Attack = {
     }
 }
 
-if(GameSpace.terrUnTaken === "1" && GameSpace.user_id === GameSpace.upPlayer)
+if(GameSpace.terrUnTaken == "1" && GameSpace.user_id == GameSpace.upPlayer)
     Attack.test();
 

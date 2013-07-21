@@ -390,7 +390,7 @@ var Attack = {
     diceMaker: function(attk_count){
 
         var dice_options = '';
-        for(i=1; i <= attk_count; i++){
+        for(i=attk_count; i >= 1; i--){
             dice_options += '<option id="'+i+'">'+i+'</option>';
                                
         }

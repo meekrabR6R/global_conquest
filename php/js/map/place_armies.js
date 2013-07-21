@@ -43,7 +43,7 @@ var PlaceArmies = {
                   game_table: PlaceArmies.game.game_table},
                   function(result){
                     $("#place_armies").html("<p>"+result+" ARMIES REMANING</p>");
-
+                    PlaceArmies.game.init_armies = result;
                     PlaceArmies.setAmount(placeTerr, result);
                     init_armies = result;
                     if(result == 0)

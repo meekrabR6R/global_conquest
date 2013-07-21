@@ -92,15 +92,11 @@ var Attack = {
 
                 if(attk_terr.data.armies <= 3){
 
-                    var dice_options = '';
-
-                    if(attk_terr.data.armies == 3)
+                    if(attk_terr.data.armies === 3)
                         attk_armies = 2;
-                    if(attk_terr.data.armies == 2)
+                    if(attk_terr.data.armies <= 2)
                         attk_armies = 1;
 
-                    
-                    //make into a function
                     Attack.diceMaker(attk_armies);
                 }
             }
@@ -349,7 +345,6 @@ var Attack = {
                             else
                                 attk_count = 1;
                             
-                            //make into a function
                             Attack.diceMaker(attk_count);
 
                             var terr_options = "";

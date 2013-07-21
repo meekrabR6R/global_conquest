@@ -33,13 +33,17 @@ class Facebook_Controller extends Base_Controller{
 				$user = null;
 			
 				$login = $facebook->getLoginUrl();
-		    	echo '<a href="'.$login.'">LOGIN!</a>';
+		    	//echo '<a href="'.$login.'">LOGIN!</a>';
+		    	return View::make('home.login')
+		    		->with('login', $login);
 			}
 		}
 		else{
 	
 		    $login = $facebook->getLoginUrl();
-		    echo '<a href="'.$login.'">LOGIN!</a>';
+		    //echo '<a href="'.$login.'">LOGIN!</a>';
+		    return View::make('home.login')
+		    		->with('login', $login);
 		    
 		}
 

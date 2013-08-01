@@ -128,6 +128,7 @@ var MoveArmies = {
                  from_amount: fromAmount,
                  to_amount: toAmount},
                 function(result){
+                    $("#mov_armies").attr('disabled', true);
                     location.reload();
                 }
         );

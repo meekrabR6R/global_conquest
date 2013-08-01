@@ -46,8 +46,10 @@ var PlaceArmies = {
                     PlaceArmies.game.init_armies = result;
                     PlaceArmies.setAmount(placeTerr, result);
                     init_armies = result;
-                    if(result == 0)
+                    if(result == 0){
+                        $("#mov_armies").attr('disabled', true);
                         location.reload();
+                    }
                   }
         );
             

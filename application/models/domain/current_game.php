@@ -106,6 +106,8 @@ class CurrentGame{
         $next_plyr = Plyrgames::where('game_id', '=', $this->game_id)->where('turn', '=', $next_turn)->first();
         $next_plyr->trn_active = 1;
         $next_plyr->save();
+
+        CurrentGame::sendNotification($next_plyr->plyr_id);
         
         return $curr_plyr;
     }
@@ -499,6 +501,32 @@ class CurrentGame{
 
         return $player_colors;
 	}
+
+    public static function sendNotification($player_id){
+
+        $facebook = CurrentGame::getFB();
+
+        $data = array(
+            'href' => 'https://globalconq-meekrab.rhcloud.com/',
+            'access_token' => $facebook->getAppId() . '|' . $facebook->getApiSecret(),
+            'template' => 'You have some conquering to do.'
+        );
+
+        try {
+
+           $test = $facebook->api("/".$player_id."/notifications", 'POST', $data);
+        }
+        catch (FacebookApiException $e){
+        }
+    }
+
+    public static function getFB(){
+
+        $config = array();
+        $config['appId'] = '535852776460879';
+        $config['secret'] = '2cd3cec829b086b917d886c771d86805';
+        return new Facebook($config);
+    }
 
 }
 

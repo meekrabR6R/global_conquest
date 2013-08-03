@@ -8,15 +8,6 @@ class Games_Controller extends Base_Controller{
     
     public $restful = true;
 
-    public function get_games(){
-     
-        $result = Games::all();
-         
-        foreach($result as $game){
-            echo  '<tr><td><a href="'. URL::base() .'/map?game_id='. $game->game_id .'>'. $game->title .'</a></td></tr>';
-        }
-    }
-
     public function post_new_game(){
         
         $new_game = Input::get('data'); 

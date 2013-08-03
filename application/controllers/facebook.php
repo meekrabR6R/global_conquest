@@ -14,7 +14,7 @@ class Facebook_Controller extends Base_Controller{
 			try{
 			     $user = $facebook->api('/me');
 			     $friend_list = $facebook->api(array('method' => 'fql.query',
-						'query' => "SELECT uid FROM user WHERE is_app_user = '1'
+						'query' => "SELECT uid,name FROM user WHERE is_app_user = '1'
 						AND uid IN (SELECT uid2 FROM friend
 						WHERE uid1 = '" . $uid . "');"));
 			     
@@ -23,8 +23,16 @@ class Facebook_Controller extends Base_Controller{
 			     
 			     Facebook_Controller::new_player($user['id'], $user['first_name'], $user['last_name']);
 
+			     //move to model
+			     $games = array();
+			     foreach(Games::all() as $game){
+			     	$player_count = Plyrgames::where('game_id', '=', $game->game_id)->count();
+			     	array_push($games, array('game_id' => $game->game_id, 'game_title' => $game->title, 'player_count' => $player_count, 'player_max' => $game->plyrs, 'active' => $game->active));
+			     }
+
 			     return View::make('home.index')
-				   ->with('games', Games::all())
+				   ->with('games', $games)
+				   ->with('players', Plyrgames::all())
 				   ->with('user', $user)
 				   ->with('img_loc', $img_loc)
 				   ->with('list', $friend_list);

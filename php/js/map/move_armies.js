@@ -115,7 +115,7 @@ var MoveArmies = {
 
         var amount = parseInt(textAmount, 10);  
 
-        var fromAmount = fromTerr.data.armies - amount;
+        var fromAmount = fromTerr.data.armies - amount; 
         var toAmount = toTerr.data.armies + amount;
 
         $("div[name="+fromTerr.id+"]").html('<p style="color:'+fromTerr.data.color+';">'+fromAmount+'</p>');

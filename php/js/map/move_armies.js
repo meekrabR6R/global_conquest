@@ -107,11 +107,10 @@ var MoveArmies = {
         var fromTerr = MoveArmies.game.graph.get_node(fromName);
         var fromID = fromTerr.data.pk_id;
 
-        var textAmount = $("#place_amount").find(":selected").text();
+        var textAmount = $("#select_from").find(":selected").text();
          //Safari 'fix'
-        if($("#place_amount").find(":last").text()+''+$("#place_amount").find(":last").text() === $("#place_amount").find(":selected").text()){
-            textAmount = $("#place_amount").find(":last").text();
-            alert(textAmount);
+        if($("#select_from").find(":last").text()+''+$("#select_from").find(":last").text() === $("#select_from").find(":selected").text()){
+            textAmount = $("#select_from").find(":last").text();
         }
 
         var amount = parseInt(textAmount, 10);

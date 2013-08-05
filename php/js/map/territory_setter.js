@@ -6,11 +6,11 @@ GameSpace.graph = new Graph();
 GameSpace.setUpPlayers = function(){
 
     if (GameSpace.game_state.length > 0 && typeof GameSpace.plyr_nm_color !== "undefined") {
-        
+
         for(i=0; i <= 41; i++){
             var name = $("#"+GameSpace.game_state[i].terr).attr('name');
             var color = "";
-          
+
             GameSpace.graph.add_data(name, {owner_id: GameSpace.game_state[i].owner_id, armies: GameSpace.game_state[i].army_cnt, pk_id: (i+1)});
 
             for (j=0; j < GameSpace.plyr_nm_color.length; j++) {
@@ -22,10 +22,9 @@ GameSpace.setUpPlayers = function(){
             }
 
             var orig_armycnt =  GameSpace.game_state[i].army_cnt;
-            
-            $("#terr"+i).html('<h3 style="color:'+color+';">'+GameSpace.graph._node_list[i].data.armies+'</h3>');  
-            
-            
+
+            $("#terr"+i).html('<h3 style="color:'+color+';">'+GameSpace.graph._node_list[i].data.armies+'</h3>');
+
         }
     }
 };

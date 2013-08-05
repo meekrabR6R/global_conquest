@@ -350,11 +350,11 @@ class CurrentGame{
         $game->turns_set = 1;
         $game->save();
 
-        //maybe export back to Plyrgames
+        //maybe export back to Plyrgames //add notif stuff here too.
         $player_one = Plyrgames::where('game_id','=', $game_id)->where('turn','=',1)->first();
         $player_one->trn_active = 1;
         $player_one->save();
-        
+        CurrentGame::sendNotification($player_one->plyr_id);
     }
 
     /********************************************

@@ -43,7 +43,7 @@
 
             
             @if(isset($game_state) && $init_armies !== null)
-                GameSpace.init_armies = {{ $init_armies; }};
+                GameSpace.init_armies = parseInt({{ $init_armies; }}, 10);
             @endif
             
             @if(isset($game_state))

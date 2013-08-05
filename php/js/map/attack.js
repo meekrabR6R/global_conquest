@@ -155,16 +155,16 @@ var Attack = {
     victoryProcess: function(attk_terr, def_terr, attk_armies){
 
         $("#roll").attr("disabled", true);
-        
+
+        var attackers = 0;
         if(typeof attk_armies === 'undefined')
-            var attackers = $("#dice").val();
+            attackers = $("#dice").val();
         else
-            var attackers = attk_armies;
+            attackers = attk_armies;
 
         var armies = "";
-        
-       
-        for(i=parseInt(attackers); i < attk_terr.data.armies; i++)
+
+        for(i=parseInt(attackers, 10); i < attk_terr.data.armies; i++)
             armies += '<option id="'+i+'">'+i+'</option>';
 
         $('#takeover_select').html('<select id="army_amount">'+armies+'</select>');
@@ -187,15 +187,22 @@ var Attack = {
             keyboard:false,
             backdrop:'static'
         });
-    
+
         $('#occupy').click(function(){
             //null check b/c attkTerr and defTerr must be set to null at
             //end of anonymous function to prevent memory leak
             if(attkTerr !== null && defTerr !== null){
 
                 var def_id_holder = defTerr.data.owner_id;
-                var mov_armies = parseInt($("#takeover_select").find(":selected").text());
-                
+
+                var textAmount = $("#takeover_select").find(":selected").text();
+                 //Safari 'fix'
+                if($("#takeover_select").find(":last").text()+''+$("#takeover_select").find(":last").text() === $("#takeover_select").find(":selected").text()){
+                    textAmount = $("#takeover_select").find(":last").text();
+                }
+
+                var mov_armies = parseInt(textAmount, 10);
+
                 attkTerr.data.armies -= mov_armies;
                 defTerr.data.armies = mov_armies;
                 defTerr.data.owner_id = attkTerr.data.owner_id;
@@ -209,9 +216,9 @@ var Attack = {
                     defender_id: def_id_holder,
                     attk_armies: attkTerr.data.armies,
                     def_armies: defTerr.data.armies},
-                    
+
                     function(result){
-                        var terr = JSON.parse(result); 
+                        var terr = JSON.parse(result);
                         if(terr.attkTerr === 42){
                             alert('You are victorious!');
                             location.reload();

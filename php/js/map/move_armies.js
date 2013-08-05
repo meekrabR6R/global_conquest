@@ -113,7 +113,7 @@ var MoveArmies = {
             textAmount = $("#select_from").find(":last").text();
         }
 
-        var amount = parseInt(textAmount, 10);
+        var amount = parseInt(textAmount, 10);  
 
         var fromAmount = fromTerr.data.armies - amount;
         var toAmount = toTerr.data.armies + amount;

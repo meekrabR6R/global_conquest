@@ -90,9 +90,9 @@
               @foreach($players as $player)
                 @if($player->game_id == $game['game_id'] && $player->trn_active)
                   
-                  @foreach($list as $profile)
-                    @if($profile['uid'] == $player->plyr_id)
-                      {{ $profile['name'] }}
+                  @foreach($player_profiles as $profile)
+                    @if($profile->plyr_id == $player->plyr_id && $profile->plyr_id != $user['id'])
+                      {{ $profile->first_name.' '. $profile->last_name }}
                     @endif
                   @endforeach
                   

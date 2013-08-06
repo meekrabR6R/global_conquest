@@ -33,6 +33,7 @@ class Facebook_Controller extends Base_Controller{
 			     return View::make('home.index')
 				   ->with('games', $games)
 				   ->with('players', Plyrgames::all())
+				   ->with('player_profiles', Players::all())
 				   ->with('user', $user)
 				   ->with('img_loc', $img_loc)
 				   ->with('list', $friend_list);

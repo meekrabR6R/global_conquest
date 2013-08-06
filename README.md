@@ -1,5 +1,5 @@
 Global Conquest
-
+===============
 This app is an online board game inspired by Risk. I developed it because my friends and I were dissatisfied with
 all of the online Risk-inspired apps we found. It is currently in testing, but will be available at some point on 
 Facebook's App Center. 

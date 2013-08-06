@@ -10,4 +10,4 @@ and is fairly well organized using the MVC framework 'Laravel.' Perhaps the most
 developing this app was to ditch PHP for Ruby ;). 
 
 
-(I will likely be rebuilding this in Node.js at sometime in the not too distant future.) :)
+(I will likely be rebuilding this in Node.js at some point in the not too distant future.) :)

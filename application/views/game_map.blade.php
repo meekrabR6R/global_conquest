@@ -53,7 +53,7 @@
             @endif
         
             @foreach($plyr_data as $player)
-                GameSpace.plyr_id.push( '{{ $player->getPlyrID(); }}' );
+                GameSpace.plyr_id.push( '{{ $player["player"]->getPlyrID(); }}' );
             @endforeach
             
             @foreach($plyr_fn as $player)
@@ -103,15 +103,16 @@
                             <div class="hero-unit">
                                 <h5>WAITING FOR OTHERS TO JOIN!</h5>
                             </div>
+                        @endif
 
+                        @if($join_flag == 1 && !$plyr_data[0]["color"]) 
                             <div id="color_pick2"></div>
                             <script type="text/javascript">
                                 GameSpace.colorSelect();
                             </script>
-                            
                         @endif
 
-                        @if($init_armies_placed == false && ($plyr_count == $plyr_limit)) 
+                        @if($init_armies_placed == false && ($plyr_count == $plyr_limit) && $plyr_data[0]["color"]) 
                             <div class="hero-unit">
                                 <h5>INITIAL ARMY PLACEMENTS:</h5>
                             
@@ -136,10 +137,6 @@
                             @endif
                         @endif
                     @endif
-
-                    <input type="button" class="btn btn-inverse" value="bug report">
-                    <input type="button" class="btn btn-inverse" value="stats">
-                    <input type="button" class="btn btn-inverse" value="rules">
                 </div>
                 <div class='span10 main'>
                     </br>

@@ -26,9 +26,8 @@ class CurrentGame{
         $plyr_records = Plyrgames::where('game_id','=', $game_id)->get();
         $this->players = array();
         
-        foreach($plyr_records as $plyr_record){
+        foreach($plyr_records as $plyr_record)
             array_push($this->players, array('player' => new Player($plyr_record->plyr_id, $game_id), 'color' => $plyr_record->plyr_color));
-        }
         
         $this->player_count = sizeof($this->players);
 

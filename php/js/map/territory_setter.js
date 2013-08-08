@@ -314,8 +314,8 @@ GameSpace.colorSelect = function(){
             var options = '';
             colors.forEach(function(color){
                 if($.inArray(color, $.parseJSON(result)) === -1)
-                    options += '<option name="'+color+'">'+color+'</option>'
-            }) 
+                    options += '<option name="'+color+'">'+color+'</option>';
+            });
 
             $("#color_pick2").html('<h4>Choose Color: </h4><select id="color">\
                                    '+options+'\

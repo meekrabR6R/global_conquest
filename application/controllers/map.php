@@ -10,7 +10,7 @@
         private $game_maker;
         private $game_table;
         private $game_state;
-        private $plyr_data; //rename this shit
+        private $plyr_data; //rename this
         private $plyr_count;
         private $plyr_limit;
         private $player_list;
@@ -38,7 +38,7 @@
             $this->game_maker    = $this->game->getGameMaker();
             $this->game_table    = $this->game->getTableName();
             $this->game_state    = $this->game->getGameState();
-            $this->plyr_data     = $this->game->getPlayers(); //rename this shit
+            $this->plyr_data     = $this->game->getPlayers(); //rename this
             $this->plyr_count    = $this->game->getPlayerCount();
             $this->plyr_limit    = $this->game->getPlayerLimit();
             $this->player_list   = $this->game->getPlayerNames();
@@ -92,7 +92,7 @@
                     //this is stupid and needs to be changed.
                     $maker_color = Plyrgames::where('plyr_id', '=', $this->game_maker)->first()->plyr_color; 
                     $card_table = 'cards'.$this->game_id; //temporary!
-                    
+                   
                     return View::make('game_map')   
                         ->with('game', $this->game)
                         ->with('game_id', $this->game_id)

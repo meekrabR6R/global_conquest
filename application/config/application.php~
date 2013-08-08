@@ -13,7 +13,7 @@ return array(
 	|
 	*/
 
-	'url' => ' //globalconq-meekrab.rhcloud.com', 
+	'url' => '',//globalconq-meekrab.rhcloud.com', 
 
 	/*
 	|--------------------------------------------------------------------------

@@ -16,7 +16,8 @@
 	  		<h2>Welcome to Global Conquest!</h2>
 	  	</div>
 	  	<div class="row">
-	  		<a href="{{ $login }}" class="btn btn-primary btn-large btn-block">Login</a>
+        <h2>Currently under maintenance. Bug Nick about it. :)</h2>
+	  		<!--<a href="{{ $login }}" class="btn btn-primary btn-large btn-block">Login</a>-->
 	  	</div>
 	</div>
   </body>

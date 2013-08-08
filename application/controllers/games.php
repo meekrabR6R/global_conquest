@@ -65,6 +65,9 @@ class Games_Controller extends Base_Controller{
             $tot_players = DB::query('select players.plyr_id from players, plyr_games 
                           where  players.plyr_id = plyr_games.plyr_id
                           and plyr_games.game_id = ?', $game_id);
+
+            $game->active = 1;
+            $game->save();
             
             $plyr_id = array();
             $index = 0;

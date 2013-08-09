@@ -6,6 +6,7 @@
     <!-- css -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+
     <!---scripts-->
     <script type="text/javascript">
       var user_id = "{{ $_SESSION['user']['id'] }}";
@@ -21,14 +22,17 @@
     
   </head>
   <body>
+    <header class="navbar navbar-fixed-top navbar-inverse">
+      <h3>Global Conquest</h3>
+    </header>
     <div id="fb-root"></div>
     <script src="js/front_page/facebook_client_stuff.js" type="text/javascript"></script>
 
     <div class="container">
-      <h1>Global Conquest</h1>
       </br>
       </br>
-        <h4>Create a New Game:</h4>
+      </br>
+        <h2>Create a New Game</h2>
        
        <form class="form-horizontal" id="new_game" action="{{ URL::base(); }}/new_game" method="post" onsubmit="return checkForm(this); ">
         <div class="form-group">
@@ -68,40 +72,8 @@
         </div>
       </form>
 
-        <!--<form class="form-horizontal" id="new_game" action="{{ URL::base(); }}/new_game" method="post" onsubmit="return checkForm(this); ">      
-          <div class="row">
-           <div id="error" class="control-group span3">
-              <label class="col-lg-2 control-label" for="title">Game Title:</label> 
-              <input class="form-control" name="title" type="text">
-              <span id="error_text" class="help-inline"></span>
-           </div>
-            <div class="span3"> 
-            Players: 
-            
-            <select class="form-control" name="num_plyrs">
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-              <option>6</option>
-            </select>
-            </div>
-            <div class="span3"> 
-            Type: 
-            <select class="form-control" name="type">
-              <option>Public</option>
-              <option>Private</option>
-            </select>
-            </div>  
-            </div> 
-            <div class="form-actions">
-              <button type="submit" class="btn btn-primary">Make Game</button>
-              <input name="maker_id" type="hidden" value="{{ $_SESSION['user']['id'] }}">
-              <span id="game_made" class="help-inline"></span>
-            </div>
-        </form> -->
-        
-        <h4>Games in Progress:</h4>
+      
+        <h2>Games in Progress</h2>
         
         <table class="table table-bordered table-hover">
           <tr>

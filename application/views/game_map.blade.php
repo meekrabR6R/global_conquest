@@ -82,9 +82,22 @@
         <script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 
     </head>
+
     <body onload="Attack.makeAttack();"> 
+        <header class="navbar navbar-fixed-top navbar-inverse">
+            <div class="navbar-inner">
+                <div class="head container">
+                    <h3 class="app_title">Global Conquest</h3>
+                    <nav>
+                        <ul class="nav pull-right"> 
+                            <li><a class="navbar-link app_home" href="{{ URL::base() }}/">Home</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
         <div class="container">
-           
+            
            
             <div id='content' class='row-fluid'>
                 
@@ -302,14 +315,18 @@
             
             <!-- Modal -->
             <div id="take_over" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-header">
-                    <h3 id="myModalLabel">How many armies would you like to move?</h3>
-                </div>
-                <div class="modal-body">
-                   <p>Armies </p><div id="takeover_select"></div>
-                </div>
-                <div class="modal-footer">
-                    <button id="occupy" class="btn btn-primary">Move armies</button>
+                <div class="modal-dialog">
+                    <div class="modal-content"> 
+                        <div class="modal-header">
+                            <h3 id="myModalLabel">How many armies would you like to move?</h3>
+                        </div>
+                        <div class="modal-body">
+                           <p>Armies </p><div id="takeover_select"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="occupy" class="btn btn-primary">Move armies</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 

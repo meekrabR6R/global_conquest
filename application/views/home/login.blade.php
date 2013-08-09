@@ -19,7 +19,7 @@
 	  	<div class="row">
         <h2>I know I just sent you a message full of all kinds of exciting news about the app, 
             but I closed it again for more maintenance. Deal with it. :)</h2>
-	  		<!--<a href="{{ $login }}" class="btn btn-primary btn-large btn-block">Login</a>-->
+	  		<a href="{{ $login }}" class="btn btn-primary btn-large btn-block">Login</a>
 	  	</div>
 	</div>
   </body>

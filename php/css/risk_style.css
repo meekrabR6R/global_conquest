@@ -4,11 +4,28 @@ body{
     font-size:20px;
 }
 
+header {
+    position: fixed;
+}
 
 .container{
     width:90%;
 }
 
+.head {
+    overflow: hidden;
+}
+
+.app_title {
+  float: left;
+  margin-right: 10px;
+  padding-top: 9px;
+  line-height: 1;
+}
+.app_home {
+    margin-top: 20px;
+    float:right;
+}
 #game_map{
 
 }

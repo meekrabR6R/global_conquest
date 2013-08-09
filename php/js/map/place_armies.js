@@ -80,7 +80,7 @@ var PlaceArmies = {
         }
 
         var newAmount = territoryNode.data.armies + armies;
-        $("#place").html('<select id="place_amount">'+armies+'</select><input id="mov_armies" type="button" class="btn btn-inverse" value="place" onclick="PlaceArmies.placeArmies(\''+territoryNode.id+'\');"> in '+territoryNode.id);
+        $("#place").html('<select id="place_amount">'+armies+'</select>&nbsp;<input id="mov_armies" type="button" class="btn btn-inverse" value="place" onclick="PlaceArmies.placeArmies(\''+territoryNode.id+'\');"> in '+territoryNode.id);
     },
 
     /*******************************

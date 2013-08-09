@@ -27,8 +27,8 @@ body{
 
 #terr0{
     position:absolute;
-    left:3%;
-    top:7%;
+    left:1%;
+    top:3%;
 }
 #terr1{
     position:absolute;

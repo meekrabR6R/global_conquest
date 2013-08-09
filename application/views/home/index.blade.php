@@ -5,6 +5,7 @@
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- css -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
     <!---scripts-->
     <script type="text/javascript">
       var user_id = "{{ $_SESSION['user']['id'] }}";
@@ -29,17 +30,55 @@
       </br>
         <h4>Create a New Game:</h4>
        
-        <form id="new_game" action="{{ URL::base(); }}/new_game" method="post" onsubmit="return checkForm(this); ">      
+       <form class="form-horizontal" id="new_game" action="{{ URL::base(); }}/new_game" method="post" onsubmit="return checkForm(this); ">
+        <div class="form-group">
+          <label class="col-lg-2 control-label" for="title">Game Title</label> 
+          <div id="error" class="col-lg-10">
+            <input class="form-control" name="title" placeholder="Game Title" type="text">
+            <span id="error_text" class="help-inline"></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="players" class="col-lg-2 control-label">Players</label>
+          <div class="col-lg-10">
+            <select class="form-control" name="num_plyrs">
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-lg-2 control-label" for="title">Type</label> 
+          <div class="col-lg-offset-2 col-lg-10">
+             <select class="form-control" name="type">
+              <option>Public</option>
+              <option>Private</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-lg-offset-2 col-lg-10">
+            <button type="submit" class="btn btn-default">Make Game</button>
+            <input name="maker_id" type="hidden" value="{{ $_SESSION['user']['id'] }}">
+            <span id="game_made" class="help-inline"></span>
+          </div>
+        </div>
+      </form>
+
+        <!--<form class="form-horizontal" id="new_game" action="{{ URL::base(); }}/new_game" method="post" onsubmit="return checkForm(this); ">      
           <div class="row">
-            <div id="error" class="control-group span3">
-              <label class="control-label" for="title">Game Title:</label> 
-              <input name="title" type="text">
+           <div id="error" class="control-group span3">
+              <label class="col-lg-2 control-label" for="title">Game Title:</label> 
+              <input class="form-control" name="title" type="text">
               <span id="error_text" class="help-inline"></span>
-            </div>
-            <div class="span3">
+           </div>
+            <div class="span3"> 
             Players: 
             
-            <select name="num_plyrs">
+            <select class="form-control" name="num_plyrs">
               <option>2</option>
               <option>3</option>
               <option>4</option>
@@ -47,20 +86,20 @@
               <option>6</option>
             </select>
             </div>
-            <div class="span3">
+            <div class="span3"> 
             Type: 
-            <select name="type">
+            <select class="form-control" name="type">
               <option>Public</option>
               <option>Private</option>
             </select>
-            </div> 
+            </div>  
             </div> 
             <div class="form-actions">
               <button type="submit" class="btn btn-primary">Make Game</button>
               <input name="maker_id" type="hidden" value="{{ $_SESSION['user']['id'] }}">
               <span id="game_made" class="help-inline"></span>
             </div>
-        </form>
+        </form> -->
         
         <h4>Games in Progress:</h4>
         

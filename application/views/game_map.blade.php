@@ -3,9 +3,12 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
          <title>Global Conquest</title>
         <!--CSS -->
-         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
         {{ Asset::styles(); }}
         
         <!--My scripts-->
@@ -85,7 +88,7 @@
            
             <div id='content' class='row-fluid'>
                 
-                <div class='span2 sidebar'>
+                <div class='col-lg-2 sidebar'>
                     <h1>{{ $game_title; }}</h1>
 
                      @if($winner)
@@ -138,7 +141,7 @@
                         @endif
                     @endif
                 </div>
-                <div class='span10 main'>
+                <div class='col-lg-10 main'>
                     </br>
                     <div class="tabbable"> 
                         <ul class="nav nav-tabs">
@@ -176,34 +179,34 @@
                             @endif
 
                                 <div class="row">
-                                    <div class="span1"></div>
+                                    <div class="col-lg-1"></div>
                                         
                                        
                                         @if($armies_plcd == true && $player_up->plyr_id == $uid)
-                                            <div class="span5" id="select"></div>
-                                            <div class="span2">
+                                            <div class="col-lg-5" id="select"></div>
+                                            <div class="col-lg-2">
                                                 <p id="attack">Click one of your countries to begin attacking.</p>
                                         @else
-                                                <div class="span7">
+                                                <div class="col-lg-7">
                                                     <p id="place">Click one of your countries to place armies.</p>
                                         @endif
                                      
 
                                     </div>
-                                    <div class="span2" id="defend"></div>
+                                    <div class="col-lg-2" id="defend"></div>
                                 </div>
 
                             </div>
                             <div class="tab-pane" id="tab2">
                                 <div class="row">
-                                    <div class="span1"></div>
-                                    <div class="span1">
+                                    <div class="col-lg-1"></div>
+                                    <div class="col-lg-1">
                                         <div id="select_text">SELECT COUNTRY</div>
                                     </div>
-                                    <div class="span4">
+                                    <div class="col-lg-4">
                                         <div id="select_from"></div>
                                     </div>
-                                    <div class="span4">
+                                    <div class="col-lg-4">
                                         <div id="select_to"></div>
                                     </div>
                                 </div>
@@ -216,13 +219,13 @@
                             @endif
 
                                 <div class="row" id="cards">
-                                    <div class="span1"></div>
+                                    <div class="col-lg-1"></div>
 
                                     <form id="cards_check" action="{{ URL::base() }}/card_turn_in" method="post" onsubmit="return Attack.checkCards(this);">
 
                                         @if(isset($player_cards))
                                             @foreach($player_cards as $card)
-                                                <div class="card span2">
+                                                <div class="card col-lg-2">
                                                     <h6>{{ $card['army_type'] }}</h6></br>
                                                     </br>
                                                     <h7>{{ $card['terr_name'] }}</h7>
@@ -231,7 +234,7 @@
                                             @endforeach
                                         @endif
 
-                                        <div class="span1">
+                                        <div class="col-lg-1">
                                              <button type="submit" class="btn btn-primary">Turn In</button>
                                         </div>
                                     </form>
@@ -248,8 +251,8 @@
                         </div>
                     </div>
 
-                    <div id="image">
-                        <img id="game_map" src="{{ URL::base(); }}/images/map.jpg">
+                    <div id="image" class="img-responsive">
+                        <img id="game_map" class="img-responsive" src="{{ URL::base(); }}/images/map.jpg">
                     
                         <div class="north_america" id="terr0" name="alaska"></div>
                         <div class="north_america" id="terr1" name="alberta"></div>
@@ -294,8 +297,6 @@
                         <div class="australia" id="terr40" name="new_guinea"></div>
                         <div class="australia" id="terr41" name="west_australia"></div>
                     </div>
-                    
-                
                 </div>
             </div>
             
@@ -305,7 +306,7 @@
                     <h3 id="myModalLabel">How many armies would you like to move?</h3>
                 </div>
                 <div class="modal-body">
-                   <p>Armies: </p><div id="takeover_select"></div>
+                   <p>Armies </p><div id="takeover_select"></div>
                 </div>
                 <div class="modal-footer">
                     <button id="occupy" class="btn btn-primary">Move armies</button>

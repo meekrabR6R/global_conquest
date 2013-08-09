@@ -301,7 +301,7 @@
             </div>
             
             <!-- Modal -->
-            <div id="take_over" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div id="take_over" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-header">
                     <h3 id="myModalLabel">How many armies would you like to move?</h3>
                 </div>

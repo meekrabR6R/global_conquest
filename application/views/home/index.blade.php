@@ -22,16 +22,27 @@
     
   </head>
   <body>
-    <header class="navbar navbar-fixed-top navbar-inverse">
+    <header class="navbar navbar-inverse">
       <h3>Global Conquest</h3>
     </header>
     <div id="fb-root"></div>
     <script src="js/front_page/facebook_client_stuff.js" type="text/javascript"></script>
 
     <div class="container">
-      </br>
-      </br>
-      </br>
+        <div class="alert alert-info">
+        <p>Most of the site is now mobile friendly. However,
+           the actual map still is not. I'm working on it though. :)
+           </br>
+           Other upcoming changes:</br>
+           - A system to store game records (rolls, wins/losses, etc.)</br>
+           - A game message board</br>
+           - A leaderboard</br>
+
+           Not sure when I'll get to these things.. but they'll happen
+           (eventually).</br>
+
+           Let me know if you encounter any bugs.</br></p>
+        </div>
         <h2>Create a New Game</h2>
        
        <form class="form-horizontal" id="new_game" action="{{ URL::base(); }}/new_game" method="post" onsubmit="return checkForm(this); ">

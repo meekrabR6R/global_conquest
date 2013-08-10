@@ -74,53 +74,55 @@ var Attack = {
             def_roll[i] = Math.floor((Math.random()*6)+1);
             def_result += def_roll[i] + ", ";
         }
-        
+
         if(attk_armies > 1)
-            attk_roll.sort(function(a,b){return b-a});
-        
+            attk_roll.sort(function(a,b){return b-a;});
+
         if(def_armies > 1)
-            def_roll.sort(function(a,b){return b-a});
-        
-        
+            def_roll.sort(function(a,b){return b-a;});
+
         if(attk_roll[0] > def_roll[0]){
-            if (def_terr.data.armies > 0) 
-                def_terr.data.armies--;  
+            if (def_terr.data.armies > 0)
+                def_terr.data.armies--;
         }
-        
+
         else if(attk_terr.data.armies > 1){
-            
+
             attk_terr.data.armies--;
 
             if(attk_terr.data.armies <= 3){
 
                 if(attk_terr.data.armies === 3)
                     attk_armies = 2;
-                if(attk_terr.data.armies <= 2)
+                if(attk_terr.data.armies === 2)
                     attk_armies = 1;
 
-                Attack.diceMaker(attk_armies);
+                if(attk_terr.data.armies > 1)
+                    Attack.diceMaker(attk_armies);
+                else
+                    $("#roll").attr("disabled", true);
             }
         }
-        
+
         if(attk_terr.data.armies === 1)
-            $("#roll").attr("disabled", true);     
-        
-        else if(attk_armies > 1 && def_armies > 1){  
+            $("#roll").attr("disabled", true);
+
+        else if(attk_armies > 1 && def_armies > 1){
             if(attk_roll[1] > def_roll[1]){
-                
-                if (def_terr.data.armies > 0) 
+
+                if (def_terr.data.armies > 0)
                     def_terr.data.armies--;
-                    
+
                 if(def_terr.data.armies === 0){
                     $("#roll").attr("disabled", true);
                 }
             }
             else{
-                if(attk_terr.data.armies > 1) 
+                if(attk_terr.data.armies > 1)
                     attk_terr.data.armies--;
-                
+
                 if(attk_terr.data.armies === 1)
-                    $("#roll").attr("disabled", true);     
+                    $("#roll").attr("disabled", true);
             }
         }
 
@@ -260,8 +262,6 @@ var Attack = {
         if(attk_terr.data.owner_id === Attack.game.user_id){
             $("div[name="+attk_terr.id+"]").html('<h3 style="color:'+attk_terr.data.color+';">'+attk_terr.data.armies+'</h3>');
             $("div[name="+def_terr.id+"]").html('<h3 style="color:'+def_terr.data.color+';">'+def_terr.data.armies+'</h3>');
-
-        
             Attack.makeClicks();
         }
     },
@@ -327,28 +327,27 @@ var Attack = {
      *@param: continent - class identifier for territory divs in html view
      *********************************************************************/
     codeClick: function(continent){
-         
+
            $(continent).each(function(){
-                
+
                 var node = GameSpace.graph.get_node($(this).attr('name'));
-              
-                if(node.data.owner_id === Attack.game.user_id){   
-                   
+
+                if(node.data.owner_id === Attack.game.user_id){
+
                     $(this).click(function(){
-            
                         border_list = [];
                         $("#attack").text(node.id);
-                
+
                         node.edges.forEach(function(border){
-                            var border_node = GameSpace.graph.get_node(border); 
-                            
-                            if(border_node.data.owner_id !== node.data.owner_id) 
+                            var border_node = GameSpace.graph.get_node(border);
+
+                            if(border_node.data.owner_id !== node.data.owner_id)
                                 border_list.push(border);
-                                    
+
                         });
-                        
+
                         if(node.data.armies > 1) {
-                          
+
                             var attk_count;
 
                             if(node.data.armies > 3)
@@ -357,16 +356,16 @@ var Attack = {
                                 attk_count = 2;
                             else
                                 attk_count = 1;
-                            
+
                             Attack.diceMaker(attk_count);
 
                             var terr_options = "";
                             var def_count = 0;
-                            
-                            for(i=0; i < border_list.length; i++) 
+
+                            for(i=0; i < border_list.length; i++)
                                 terr_options+="<option id='"+border_list[i]+"'>"+border_list[i]+"</option>";
-                                    
-                            var country_select = "<select id='attackable'>"+terr_options+"</select>";  
+
+                            var country_select = "<select id='attackable'>"+terr_options+"</select>";
                             $("#defend").html(country_select);
                         }
                         else{
@@ -403,11 +402,12 @@ var Attack = {
     diceMaker: function(attk_count){
 
         var dice_options = '';
+
         for(i=attk_count; i >= 1; i--){
             dice_options += '<option id="'+i+'">'+i+'</option>';
-                               
+
         }
-                            
+
         $("#select").html('<select id="dice">'+dice_options+'</select>\
             <input id="roll" type="submit" value="roll" onclick="Attack.rollAttack()">\
             <input id="result" type="text" width="100px" value="roll_result">');

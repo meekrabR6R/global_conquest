@@ -84,7 +84,7 @@
     </head>
 
     <body onload="Attack.makeAttack();"> 
-        <header class="navbar navbar-fixed-top navbar-inverse">
+        <header class="navbar  navbar-inverse">
             <div class="navbar-inner">
                 <div class="head container">
                     <h3 class="app_title">Global Conquest</h3>
@@ -97,16 +97,14 @@
             </div>
         </header>
         <div class="container">
-            
-           
             <div id='content' class='row-fluid'>
                 
                 <div class='col-lg-2 sidebar'>
                     <h1>{{ $game_title; }}</h1>
 
                      @if($winner)
-                        <div class="hero-unit">
-                            <h5>{{ $winner_name }} is victorious!</h5>
+                        <div class="alert aler-info">
+                            <h4>{{ $winner_name }} is victorious!</h4>
                         </div>
                     @else
 
@@ -116,8 +114,8 @@
                         @endif
 
                         @if($join_flag == 1 && ($plyr_count < $plyr_limit))
-                            <div class="hero-unit">
-                                <h5>WAITING FOR OTHERS TO JOIN!</h5>
+                            <div class="alert">
+                                <h4>WAITING FOR OTHERS TO JOIN!</h4>
                             </div>
                         @endif
 
@@ -129,26 +127,26 @@
                         @endif
 
                         @if($init_armies_placed == false && ($plyr_count == $plyr_limit) && $plyr_data[0]["color"]) 
-                            <div class="hero-unit">
-                                <h5>INITIAL ARMY PLACEMENTS:</h5>
+                            <div class="alert alert-info">
+                                <h4>INITIAL ARMY PLACEMENTS:</h4>
                             
-                                <div id="place_armies"><h5>{{ $init_armies; }} ARMIES REMANING</h5></div>
+                                <div id="place_armies"><h4>{{ $init_armies; }} ARMIES REMANING</h4></div>
                             </div>
                         @endif
 
                         @if(isset($player_up->plyr_id) && $player_up->plyr_id == $uid && $init_armies > 0 && $init_armies_placed == true)
-                            <div class="hero-unit">
-                                <h5>PLACE ARMIES: </h5>
+                            <div class="alert alert-info">
+                                <h4>PLACE ARMIES: </h4>
                             
-                                <div id="place_armies"><h5>{{ $init_armies; }} ARMIES REMANING</h5></div>
+                                <div id="place_armies"><h4>{{ $init_armies; }} ARMIES REMANING</h4></div>
                             </div>
                         @endif
 
                         @if(isset($player_up->plyr_id) && $init_armies_placed == true)
                             @if($player_up->plyr_id != $uid)
-                                <div class="hero-unit">
-                                     <h5>WAIT IN LINE, YOUNG BLOOD.</h5></br>
-                                     <h5>{{ $player_up->first_name }} is pwning the world.</h5>
+                                <div class="alert alert-info">
+                                     <h4>WAIT IN LINE, YOUNG BLOOD.</h4></br>
+                                     <h4>{{ $player_up->first_name }} is pwning the world.</h4>
                                 </div>
                             @endif
                         @endif
@@ -309,6 +307,12 @@
                         <div class="australia" id="terr39" name="indonesia"></div>
                         <div class="australia" id="terr40" name="new_guinea"></div>
                         <div class="australia" id="terr41" name="west_australia"></div>
+                    </div>
+                    <div class="alert">
+                        <p>Recent Fixes:</br>
+                            1. Fixed a bug which was causing attacker to continue attacking with 2 armies when</br>
+                              available armies dropped to 2 (should only be allowed to attack with 1 at this point).
+                        </p>
                     </div>
                 </div>
             </div>

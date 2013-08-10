@@ -5,11 +5,11 @@ body{
 }
 
 header {
-    position: fixed;
+  
 }
-
 .container{
-    width:90%;
+    position:relative;
+    width:100%;
 }
 
 .head {
@@ -25,9 +25,6 @@ header {
 .app_home {
     margin-top: 20px;
     float:right;
-}
-#game_map{
-
 }
 
 #image{

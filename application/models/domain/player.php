@@ -8,7 +8,7 @@ class Player{
 	private $num_terrs;
 	private $card_table;
 	private $game_table;
-    private $game_id;
+        private $game_id;
 	private $cards;
 	private $record;
 

@@ -1,7 +1,7 @@
 <?php 
 
 /**********************************************
-* THIS CONTROLLER CLASS NEEDS A SHIT LOAD OF
+* THIS CONTROLLER CLASS NEEDS 
 * CLEANING UP!
 ***********************************************/
 class Games_Controller extends Base_Controller{

@@ -70,9 +70,9 @@ return array(
 		'mysql' => array(
 			'driver'   => 'mysql',
 			'host'     => 'localhost',
-			'database' => 'global_conq',
+			'database' => 'globalconq',
 			'username' => 'root',
-			'password' => '',
+			'password' => 'nm17bann',
 			'charset'  => 'utf8',
 			'prefix'   => '',
 		),

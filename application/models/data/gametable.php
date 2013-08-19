@@ -22,7 +22,7 @@ class GameTable{
                 $new_table =  Schema::create($game_table, function($table){
                             $table->increments('id');
                             $table->string('continent');
-                            $table->string('owner_id');
+                            $table->string('owner_id',20);
                             $table->integer('army_cnt')->default(1);
                         });
 

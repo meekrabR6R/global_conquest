@@ -9,8 +9,8 @@ class Turn_Armies_Set {
 	 */
 	public function up()
 	{
-		DB::query("alter table plyr_games add column turn_armies_set bit(1) not null default 0");
-		DB::query("alter table plyr_games modify column turn_armies_set bit(1) after trn_active");
+		//DB::query("alter table plyr_games add column turn_armies_set bit(1) not null default 0");
+		//DB::query("alter table plyr_games modify column turn_armies_set bit(1) after trn_active");
 	}
 
 	/**

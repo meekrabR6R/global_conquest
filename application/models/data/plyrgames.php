@@ -63,7 +63,7 @@ class Plyrgames extends Eloquent{
         if($territory_count['attk_terr'] == 42){
            
             $attacker = Plyrgames::where('game_id', '=', $game_id)->where('plyr_id', '=', $attk_owner)->first();
-            $attacker->winner = 1;
+            $attacker->winner = true;
             $attacker->save();
         }
 

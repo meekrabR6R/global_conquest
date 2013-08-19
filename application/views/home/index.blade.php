@@ -30,18 +30,7 @@
 
     <div class="container">
         <div class="alert alert-info">
-        <p>Most of the site is now mobile friendly. However,
-           the actual map still is not. I'm working on it though. :)
-           </br>
-           Other upcoming changes:</br>
-           - A system to store game records (rolls, wins/losses, etc.)</br>
-           - A game message board</br>
-           - A leaderboard</br>
-
-           Not sure when I'll get to these things.. but they'll happen
-           (eventually).</br>
-
-           Let me know if you encounter any bugs.</br></p>
+        <!--news here -->
         </div>
         <h2>Create a New Game</h2>
        

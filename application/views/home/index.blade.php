@@ -46,7 +46,7 @@
             <li>When a player loses, the turn rotation still lands on them.</li>
             <li>Notification does not appear for winner/loser</li>
           </ul>
-          <h3>Let me know if you find any bugs.</h3>
+          <h3>Let me know if you find any bugs. (A lot of changes were made, and it's always possible there could be unintended consequences..)</h3>
         </div>
         <h2>Create a New Game</h2>
        

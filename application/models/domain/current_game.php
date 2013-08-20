@@ -13,7 +13,7 @@ class CurrentGame{
 	private $player_up;
 	private $card_tabe;
     private $plyr_records;
-
+    private $player_profile;
 	//constructor
 	public function __construct($game_id){
 
@@ -27,9 +27,15 @@ class CurrentGame{
         //creates player list
         $this->plyr_records = Plyrgames::where('game_id','=', $game_id)->get();
         $this->players = array();
-        
+        $this->player_profile = array();
+
+        //sloppy, i know.. :)
         foreach($this->plyr_records as $plyr_record){
-            array_push($this->players, array('player' => new Player($plyr_record->plyr_id, $game_id), 'color' => $plyr_record->plyr_color));
+            $player = new Player($plyr_record->plyr_id, $game_id);
+            $player_name = $player->getName();
+
+            array_push($this->players, array('player' => $player, 'color' => $plyr_record->plyr_color));
+            array_push($this->player_profile, array('first_name' => $player_name['first_name'], 'plyr_id' => $player->getPlyrID(), 'color' => $plyr_record->plyr_color));
         }
         
         $this->player_count = sizeof($this->players);
@@ -489,6 +495,9 @@ class CurrentGame{
 		return $this->game->plyrs;
 	}
 
+    public function getPlayerProfile(){
+        return $this->player_profile;
+    }
     public function getUpPlayer(){
 
         if(isset($this->player_up))

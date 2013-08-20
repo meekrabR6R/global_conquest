@@ -25,6 +25,7 @@
         private $winner_name;
         private $uid;
         private $facebook;
+        private $player_profile;
 
         //constructor
         public function __construct(){
@@ -54,6 +55,7 @@
             $this->player_cards  = $this->game->getHand($this->uid);
             $this->player_up     = $this->game->getUpPlayer();
             $this->winner        = $this->game->getWinner();
+            $this->player_profile = $this->game->getPlayerProfile();
 
             if($this->winner){
                 $name = $this->winner->getName();
@@ -120,7 +122,8 @@
                         ->with('temp_take_over', $this->temp_takeover)
                         ->with('winner', $this->winner)
                         ->with('winner_name', $this->winner_name)
-                        ->with('turn_ins', $this->turn_ins);
+                        ->with('turn_ins', $this->turn_ins)
+                        ->with('player_profile', $this->player_profile);
 
                       
                 }

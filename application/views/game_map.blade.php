@@ -259,9 +259,9 @@
                                 <div class="row">
                                     <div class="span1"></div>
                                     @foreach($plyr_data as $player)
-                                        <div class="player_profile span2" style="background-color: {{ $player["player"]->getColor() }};">
-                                            <p>{{ $player["player"]->getName()['first_name'] }}</p>
-                                            <img src="http://graph.facebook.com/{{ $player['player']->getPlyrId() }}/picture"><br>
+                                        <div class="player_profile span2" style="background-color: {{ $player["player"]->getColor(); }};">
+                                            <p>{{ $player["player"]->getName()['first_name']; }}</p>
+                                            <img src="http://graph.facebook.com/{{ $player['player']->getPlyrId(); }}/picture"><br>
                                         </div>
                                     @endforeach
                                 </div>

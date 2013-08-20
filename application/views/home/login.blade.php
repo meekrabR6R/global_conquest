@@ -20,10 +20,10 @@
 	  		<h2>Welcome to Global Conquest!</h2>
 	  	</div>
 	  	<div class="row">
-        <div class="alert alert-warning">
+       <!-- <div class="alert alert-warning">
         <h2>The app is currently under maintenance. However, it can be accessed through your facebook app list! :)</h2>
-        </div>
-	  		<!--<a href="{{ $login }}" class="btn btn-primary">Login</a>-->
+        </div>-->
+	  		<a href="{{ $login }}" class="btn btn-primary">Login</a>
 	  	</div>
 	</div>
   </body>

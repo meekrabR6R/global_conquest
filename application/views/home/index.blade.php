@@ -30,7 +30,23 @@
 
     <div class="container">
         <div class="alert alert-info">
-        <!--news here -->
+          <h3>Recent Changes</h3>
+          <ul>
+            <li>Added basic player info to 'players' section on game map (player color/name/pic)</li>
+            <li>Added turn-in count to 'cards' section of game map</li>
+            <li>Adjusted presentation logic to preven 1st player from being able to place first turn armies before everyone else has placed initial armies.</li>
+            <li>Autodisabled 'roll' and 'place armies' buttons while resulting javascript executes (generally lasts less than 15 ms). I think the weird 2-army
+                attack bug was being caused by the button being clicked too many times before previous rolls were finished executing. The new slowdown is barely
+                noticable.</li>
+          </ul>
+          <br>
+          <h3>Known Issues</h3>
+          <ul>
+            <li>No territory bonus for card turn-ins (yet)</li>
+            <li>When a player loses, the turn rotation still lands on them.</li>
+            <li>Notification does not appear for winner/loser</li>
+          </ul>
+          <h3>Let me know if you find any bugs.</h3>
         </div>
         <h2>Create a New Game</h2>
        
@@ -73,7 +89,7 @@
       </form>
 
       
-        <h2>Games in Progress</h2>
+        <h2>Games</h2>
         
         <table class="table table-bordered table-hover">
           <tr>

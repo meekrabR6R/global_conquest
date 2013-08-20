@@ -17,8 +17,6 @@ var Attack = {
             Attack.makeClicks();
         });
     },
-     
-
 
     /*******************************************************
      *Controls roll mechanics. Sets the amount of dice
@@ -59,6 +57,7 @@ var Attack = {
      ***********************************************************/
     rollProcess: function(attk_armies, def_armies, attk_terr, def_terr){
 
+        $("#roll").attr("disabled", true);
         var attk_result = "";
         var def_result = "";
 
@@ -138,7 +137,8 @@ var Attack = {
                 def_id: def_terr.data.pk_id},
                 function(result){
                     console.log(result);
-
+                    if(attk_terr.data.armies > 1 && def_terr.data.armies > 0)
+                        $("#roll").removeAttr("disabled");
                 }
         )
     },

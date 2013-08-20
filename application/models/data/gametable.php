@@ -60,6 +60,11 @@ class GameTable{
         $curr_initarmies = $curr_game->init_armies;
         $curr_game->init_armies = ($curr_initarmies - $armies);
         $curr_game->save();
+
+        if($curr_game->init_armies == 0 && $curr_game->init_placed == false) {
+            $curr_game->init_placed = 1;
+            $curr_game->save();
+        }
     }
 
     /*****************************************************************************************

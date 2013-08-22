@@ -32,8 +32,8 @@
         <div class="alert alert-warning">
            <h3>I am temporarily shutting the game down while I work out some of the issues we uncovered. It should be back up by Sunday.</h3>
         </div>
-        <h2>Create a New Game</h2>
-       <!--
+       <!--  <h2>Create a New Game</h2>
+      
        <form class="form-horizontal" id="new_game" action="{{ URL::base(); }}/new_game" method="post" onsubmit="return checkForm(this); ">
         <div class="form-group">
           <label class="col-lg-2 control-label" for="title">Game Title</label> 

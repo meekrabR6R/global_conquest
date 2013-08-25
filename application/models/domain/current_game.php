@@ -105,14 +105,29 @@ class CurrentGame{
 
         $curr_turn = $curr_plyr->turn;
         $tot_plyrs = Games::where('game_id', '=',$this->game_id)->first()->plyrs;
-
+        
+        //not very pretty...
         if($curr_turn < $tot_plyrs)
             $next_turn = $curr_turn + 1;
         else
             $next_turn = 1;
- 
+
+        $defeat_check = true;
+
+        while($defeat_check == true){
+         
+            $next_plyr = Plyrgames::where('game_id', '=', $this->game_id)->where('turn', '=', $next_turn)->first();
+            $defeat_check = $next_plyr->defeated;
+
+            if($defeat_check == false)
+                break;
+
+            if($next_turn < $tot_plyrs)
+                $next_turn++;
+            else
+                $next_turn = 1;
+        }
         //sets next player in queue to 'active'
-        $next_plyr = Plyrgames::where('game_id', '=', $this->game_id)->where('turn', '=', $next_turn)->first();
         $next_plyr->trn_active = 1;
         $next_plyr->save();
 
@@ -246,7 +261,7 @@ class CurrentGame{
         foreach($this->players as $player){
 
             if($player['player']->isWinner())
-                return $player;
+                return $player['player'];
         }
 
         return false;

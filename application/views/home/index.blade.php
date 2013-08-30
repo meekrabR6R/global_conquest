@@ -42,7 +42,7 @@
             </ul>
             <h4>Remaining (Known) Issues</h4>
             <ul>
-              <li>"Mike's Mystery Bug" is still out there. I couldn't replicate it on my local build. Keen an eye out.</li>
+              <li>"Mike's Mystery Bug" is still out there. I couldn't replicate it on my local build. Keep an eye out.</li>
               <li>Territory card bonus is still not set (just realized that as I was typing this).</li>
             </ul>
         </div>

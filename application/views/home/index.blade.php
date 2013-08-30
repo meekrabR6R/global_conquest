@@ -29,8 +29,13 @@
     <script src="js/front_page/facebook_client_stuff.js" type="text/javascript"></script>
 
     <div class="container">
+<<<<<<< HEAD
         <div class="alert alert-warning">
            <h3>I am temporarily shutting the game down while I work out some of the issues we uncovered. It should be back up by Sunday.</h3>
+=======
+        <div class="alert alert-info">
+        <!--news here -->
+>>>>>>> updates
         </div>
         <h2>Create a New Game</h2>
       

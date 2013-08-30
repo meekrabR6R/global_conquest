@@ -24,7 +24,7 @@ var Attack = {
      *reductions from attacks, and army movements on victory.
      ********************************************************/
     rollAttack: function(){
-        
+        $("#roll").attr("disabled", true);
         var attk_armies = $("#dice").val();
 
         var def_armies = 0; 
@@ -57,7 +57,6 @@ var Attack = {
      ***********************************************************/
     rollProcess: function(attk_armies, def_armies, attk_terr, def_terr){
 
-        $("#roll").attr("disabled", true);
         var attk_result = "";
         var def_result = "";
 

@@ -29,13 +29,22 @@
     <script src="js/front_page/facebook_client_stuff.js" type="text/javascript"></script>
 
     <div class="container">
-<<<<<<< HEAD
-        <div class="alert alert-warning">
-           <h3>I am temporarily shutting the game down while I work out some of the issues we uncovered. It should be back up by Sunday.</h3>
-=======
+      
         <div class="alert alert-info">
         <!--news here -->
->>>>>>> updates
+            <h4>Recent Changes</h4>
+            <ul>
+              <li>Defeated players are no longer included in turn rotation</li>
+              <li>Defeated players cards are now passed to defeater</li>
+              <li>Victory notification fixed</li>
+              <li>First player in rotation is no longer able to set first turn armies during initial placement</li>
+              <li>'2-army' bug might really be fixed for good...</li>
+            </ul>
+            <h4>Remaining (Known) Issues</h4>
+            <ul>
+              <li>"Mike's Mystery Bug" is still out there. I couldn't replicate it on my local build. Keen an eye out.</li>
+              <li>Territory card bonus is still not set (just realized that as I was typing this).</li>
+            </ul>
         </div>
         <h2>Create a New Game</h2>
       

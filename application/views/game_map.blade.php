@@ -119,7 +119,7 @@
                             </div>
                         @endif
 
-                        @if($join_flag == 1 && !$plyr_data[0]["color"]) 
+                        @if($join_flag == 1 && (!$plyr_data[0]["color"] && $plyr_data[0]["player"]->getPlyrID() == $uid)) 
                             <div id="color_pick2"></div>
                             <script type="text/javascript">
                                 GameSpace.colorSelect();
@@ -158,7 +158,7 @@
                         <ul class="nav nav-tabs">
 
                             @if(!$winner)
-                                @if(sizeof($player_cards) < 6)
+                                @if(sizeof($player_cards) < 6 && $player_up)
                                     @if($armies_plcd == true && $player_up->plyr_id == $uid)
                                         <li class="active"><a href="#tab1" data-toggle="tab">attack</a></li>
                                         <li id="mov_btn"><a href="#tab2" data-toggle="tab">move armies</a></li>
@@ -196,10 +196,10 @@
                                         @if($armies_plcd == true && $player_up->plyr_id == $uid)
                                             <div class="col-lg-5" id="select"></div>
                                             <div class="col-lg-2">
-                                                <p id="attack">Click one of your countries to begin attacking.</p>
+                                                <p id="attack">Click country to begin attack.</p>
                                         @else
                                                 <div class="col-lg-7">
-                                                    <p id="place">Click one of your countries to place armies.</p>
+                                                    <p id="place">Click country to place armies.</p>
                                         @endif
                                      
 
@@ -228,7 +228,7 @@
                             @else
                                 <div class="tab-pane" id="tab3">
                             @endif
-
+                                <br>
                                 <div class="row" id="cards">
                                     <div class="col-lg-1"></div>
 
@@ -245,8 +245,9 @@
                                             @endforeach
                                         @endif
 
-                                        <div class="col-lg-1">
+                                        <div class="col-lg-2">
                                              <button type="submit" class="btn btn-primary">Turn In</button>
+                                             <h5>Turn In Count: {{ $turn_ins }}</h5>
                                         </div>
                                     </form>
 
@@ -254,14 +255,26 @@
                             </br>
                             </div>
                             <div class="tab-pane" id="tab4">
-                                <p>Howdy, I'm in Section 4.</p>
+                                <br>
+                                <div class="row">
+                                    <div class="span1"></div>
+                                    @foreach($player_profile as $prof)
+                                        <div class="player_profile span2" style="background-color: {{ $prof['color']; }};">
+                               
+                                 
+                                            <p>{{ $prof['first_name']; }}</p>
+                                            <img src="http://graph.facebook.com/{{ $prof['plyr_id']; }}/picture"><br>
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
+
                             <div class="tab-pane" id="tab5">
                                  <input id="end" type="button" class="btn btn-inverse" value="end turn">
                             </div>
                         </div>
                     </div>
-
+                    <br>
                     <div id="image" class="img-responsive">
                         <img id="game_map" class="img-responsive" src="{{ URL::base(); }}/images/map.jpg">
                     
@@ -307,12 +320,6 @@
                         <div class="australia" id="terr39" name="indonesia"></div>
                         <div class="australia" id="terr40" name="new_guinea"></div>
                         <div class="australia" id="terr41" name="west_australia"></div>
-                    </div>
-                    <div class="alert">
-                        <p>Recent Fixes:</br>
-                            1. Fixed a bug which was causing attacker to continue attacking with 2 armies when</br>
-                              available armies dropped to 2 (should only be allowed to attack with 1 at this point).
-                        </p>
                     </div>
                 </div>
             </div>

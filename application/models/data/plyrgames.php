@@ -72,6 +72,9 @@ class Plyrgames extends Eloquent{
             $defender = Plyrgames::where('game_id', '=', $game_id)->where('plyr_id', '=', $def_owner)->first();
             $defender->defeated = 1;
             $defender->save();
+            
+            $bindings = array('attk_owner' => $attk_owner, 'def_owner' => $def_owner);
+            DB::query('update cards'.$game_id.' set owner_id = ? where owner_id = ?', $bindings);
         }
 
     }

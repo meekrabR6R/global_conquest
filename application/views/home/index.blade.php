@@ -29,11 +29,16 @@
     <script src="js/front_page/facebook_client_stuff.js" type="text/javascript"></script>
 
     <div class="container">
+<<<<<<< HEAD
+        <div class="alert alert-warning">
+           <h3>I am temporarily shutting the game down while I work out some of the issues we uncovered. It should be back up by Sunday.</h3>
+=======
         <div class="alert alert-info">
         <!--news here -->
+>>>>>>> updates
         </div>
         <h2>Create a New Game</h2>
-       
+      
        <form class="form-horizontal" id="new_game" action="{{ URL::base(); }}/new_game" method="post" onsubmit="return checkForm(this); ">
         <div class="form-group">
           <label class="col-lg-2 control-label" for="title">Game Title</label> 
@@ -73,7 +78,7 @@
       </form>
 
       
-        <h2>Games in Progress</h2>
+        <h2>Games</h2>
         
         <table class="table table-bordered table-hover">
           <tr>

@@ -10,6 +10,7 @@
         private $game_maker;
         private $game_table;
         private $game_state;
+        private $turn_ins;
         private $plyr_data; //rename this
         private $plyr_count;
         private $plyr_limit;
@@ -24,6 +25,7 @@
         private $winner_name;
         private $uid;
         private $facebook;
+        private $player_profile;
 
         //constructor
         public function __construct(){
@@ -46,12 +48,14 @@
             $this->armies_plcd   = $this->game->armiesPlaced();
             $this->init_placed   = $this->game->startArmiesPlaced();
             $this->temp_takeover = $this->game->getTempTakeOver();
+            $this->turn_ins      = $this->game->getTurnInCount();
             //maybe player class?
             $this->join_flag     = $this->game->isMember($this->uid);
             $this->init_armies   = $this->game->getInitArmies($this->uid);
             $this->player_cards  = $this->game->getHand($this->uid);
             $this->player_up     = $this->game->getUpPlayer();
             $this->winner        = $this->game->getWinner();
+            $this->player_profile = $this->game->getPlayerProfile();
 
             if($this->winner){
                 $name = $this->winner->getName();
@@ -117,7 +121,9 @@
                         ->with('player_up', $this->player_up)
                         ->with('temp_take_over', $this->temp_takeover)
                         ->with('winner', $this->winner)
-                        ->with('winner_name', $this->winner_name);
+                        ->with('winner_name', $this->winner_name)
+                        ->with('turn_ins', $this->turn_ins)
+                        ->with('player_profile', $this->player_profile);
 
                       
                 }

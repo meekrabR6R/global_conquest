@@ -17,8 +17,6 @@ var Attack = {
             Attack.makeClicks();
         });
     },
-     
-
 
     /*******************************************************
      *Controls roll mechanics. Sets the amount of dice
@@ -26,7 +24,7 @@ var Attack = {
      *reductions from attacks, and army movements on victory.
      ********************************************************/
     rollAttack: function(){
-        
+        $("#roll").attr("disabled", true);
         var attk_armies = $("#dice").val();
 
         var def_armies = 0; 
@@ -138,7 +136,8 @@ var Attack = {
                 def_id: def_terr.data.pk_id},
                 function(result){
                     console.log(result);
-
+                    if(attk_terr.data.armies > 1 && def_terr.data.armies > 0)
+                        $("#roll").removeAttr("disabled");
                 }
         )
     },
@@ -166,7 +165,7 @@ var Attack = {
 
         var armies = "";
 
-        for(i=parseInt(attackers, 10); i < attk_terr.data.armies; i++)
+        for(i=attk_terr.data.armies-1; i >= parseInt(attackers, 10); i--)
             armies += '<option id="'+i+'">'+i+'</option>';
 
         $('#takeover_select').html('<select id="army_amount">'+armies+'</select>');
@@ -199,9 +198,9 @@ var Attack = {
 
                 var textAmount = $("#takeover_select").find(":selected").text();
                  //Safari 'fix'
-                if($("#takeover_select").find(":last").text()+''+$("#takeover_select").find(":last").text() === $("#takeover_select").find(":selected").text()){
-                    textAmount = $("#takeover_select").find(":last").text();
-                }
+                //if($("#takeover_select").find(":last").text()+''+$("#takeover_select").find(":last").text() === $("#takeover_select").find(":selected").text()){
+                  //  textAmount = $("#takeover_select").find(":last").text();
+                //}
 
                 var mov_armies = parseInt(textAmount, 10);
 
@@ -221,8 +220,8 @@ var Attack = {
 
                     function(result){
                         var terr = JSON.parse(result);
-                        if(terr.attkTerr === 42){
-                            alert('You are victorious!');
+                    
+                        if(terr.attk_terr == 42){
                             location.reload();
                         }
                     }

@@ -25,6 +25,7 @@ var PlaceArmies = {
     *********************************************/
     placeArmies: function (placeName){
 
+        $("#mov_armies").attr('disabled', true);
         var placeTerr = PlaceArmies.game.graph.get_node(placeName);
         var placeID = placeTerr.data.pk_id;
 
@@ -58,6 +59,8 @@ var PlaceArmies = {
                         $("#mov_armies").attr('disabled', true);
                         location.reload();
                     }
+                    else
+                        $("#mov_armies").removeAttr('disabled');
                   }
         );
 

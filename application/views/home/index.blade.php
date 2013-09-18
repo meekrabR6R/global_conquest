@@ -32,22 +32,11 @@
       
         <div class="alert alert-info">
         <!--news here -->
-            <h4>Recent Changes</h4>
-            <ul>
-              <li>Defeated players are no longer included in turn rotation</li>
-              <li>Defeated players cards are now passed to defeater</li>
-              <li>Victory notification fixed</li>
-              <li>First player in rotation is no longer able to set first turn armies during initial placement</li>
-              <li>'2-army' bug might really be fixed for good...</li>
-            </ul>
-            <h4>Remaining (Known) Issues</h4>
-            <ul>
-              <li>"Mike's Mystery Bug" is still out there. I couldn't replicate it on my local build. Keep an eye out.</li>
-              <li>Territory card bonus is still not set (just realized that as I was typing this).</li>
-            </ul>
+            <h4>Shutting things down for a while..</h4>
+            
         </div>
         <h2>Create a New Game</h2>
-      
+      <!--
        <form class="form-horizontal" id="new_game" action="{{ URL::base(); }}/new_game" method="post" onsubmit="return checkForm(this); ">
         <div class="form-group">
           <label class="col-lg-2 control-label" for="title">Game Title</label> 
@@ -85,7 +74,7 @@
           </div>
         </div>
       </form>
-
+      -->
       
         <h2>Games</h2>
         

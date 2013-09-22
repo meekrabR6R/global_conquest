@@ -88,18 +88,6 @@ var Attack = {
 
             attk_terr.data.armies--;
 
-            if(attk_terr.data.armies <= 3){
-
-                if(attk_terr.data.armies === 3)
-                    attk_armies = 2;
-                if(attk_terr.data.armies === 2)
-                    attk_armies = 1;
-
-                if(attk_terr.data.armies > 1)
-                    Attack.diceMaker(attk_armies);
-                else
-                    $("#roll").attr("disabled", true);
-            }
         }
 
         if(attk_terr.data.armies === 1)
@@ -123,7 +111,20 @@ var Attack = {
                     $("#roll").attr("disabled", true);
             }
         }
+        
+        if(attk_terr.data.armies <= 3){
 
+            if(attk_terr.data.armies === 3)
+                attk_armies = 2;
+            if(attk_terr.data.armies === 2)
+                attk_armies = 1;
+
+            if(attk_terr.data.armies > 1)
+                Attack.diceMaker(attk_armies);
+            else
+                $("#roll").attr("disabled", true);
+        }
+        
         $("#result").val(attk_result + " /// " + def_result);
 
         $.post(Attack.game.BASE+'/attack?game_id='+Attack.game.game_id,
@@ -355,7 +356,7 @@ var Attack = {
                                 attk_count = 2;
                             else
                                 attk_count = 1;
-
+                  
                             Attack.diceMaker(attk_count);
 
                             var terr_options = "";
@@ -411,7 +412,7 @@ var Attack = {
             <input id="roll" type="submit" value="roll" onclick="Attack.rollAttack()">\
             <input id="result" type="text" width="100px" value="roll_result">');
     },
-
+    hi:"hi",
     test: function(){
     
         $('document').ready(function(){
@@ -424,4 +425,5 @@ var Attack = {
 
 if(GameSpace.terrUnTaken == "1" && GameSpace.user_id == GameSpace.upPlayer)
     Attack.test();
+
 

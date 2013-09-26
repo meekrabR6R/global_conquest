@@ -33,7 +33,6 @@
         <div class="alert alert-info">
         <!--news here -->
             <h4>Shutting things down for a while..</h4>
-            
         </div>
         <h2>Create a New Game</h2>
       <!--
@@ -75,9 +74,9 @@
         </div>
       </form>
       -->
-      
-        <h2>Games</h2>
         
+        <h2>Games</h2>
+        <a href="leaderboard">leaderboard</a>
         <table class="table table-bordered table-hover">
           <tr>
             <th>Game</th>

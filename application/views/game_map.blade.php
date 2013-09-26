@@ -260,10 +260,10 @@
                                     <div class="span1"></div>
                                     @foreach($player_profile as $prof)
                                         <div class="player_profile span2" style="background-color: {{ $prof['color']; }};">
-                               
-                                 
                                             <p>{{ $prof['first_name']; }}</p>
                                             <img src="http://graph.facebook.com/{{ $prof['plyr_id']; }}/picture"><br>
+                                            <p id ="{{ $prof['plyr_id'] }}">Cards: {{ $prof['card_count'] }}</p>
+                                            <p id="{{ $prof['plyr_id'] }}">Territories: {{ $prof['terr_count'] }}</p>
                                         </div>
                                     @endforeach
                                 </div>

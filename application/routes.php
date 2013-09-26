@@ -34,6 +34,7 @@
 Route::get('/', array('uses' => 'facebook@login'));
 Route::post('/', array('uses' =>'facebook@login'));
 Route::get('map', array('uses' => 'map@map'));
+Route::get('leaderboard', array('uses' => 'leaderboard@leaderboard'));
 Route::get('games', array('uses' => 'games@games'));
 Route::post('new_game', array('uses' => 'games@new_game'));
 Route::post('join', array('uses' => 'games@join'));

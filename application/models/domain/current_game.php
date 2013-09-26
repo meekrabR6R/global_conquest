@@ -35,7 +35,15 @@ class CurrentGame{
             $player_name = $player->getName();
 
             array_push($this->players, array('player' => $player, 'color' => $plyr_record->plyr_color));
-            array_push($this->player_profile, array('first_name' => $player_name['first_name'], 'plyr_id' => $player->getPlyrID(), 'color' => $plyr_record->plyr_color));
+            
+            array_push($this->player_profile, 
+                array('first_name' => $player_name['first_name'], 
+                      'plyr_id' => $player->getPlyrID(), 
+                      'color' => $plyr_record->plyr_color,
+                      'card_count' => $this->getCardCount($plyr_record->plyr_id),
+                      'terr_count' => $player->getTerrCount()
+                    )
+            );
         }
         
         $this->player_count = sizeof($this->players);
@@ -185,7 +193,6 @@ class CurrentGame{
     public function getHand($user_id){
 
     	$card_state = CardTable::getCardTableState($this->card_table);
-        $cards = CardTable::getNumberOfCards($user_id, $this->card_table); //keep this here for 'if 5' 
         $player_cards = array();
        
         foreach($card_state as $card){
@@ -195,7 +202,15 @@ class CurrentGame{
 
         return $player_cards;
     }
-
+    
+    /************************************************
+    * Gets player card count
+    ************************************************/
+    private function getCardCount($user_id) {
+        $cards = CardTable::getNumberOfCards($user_id, $this->card_table);
+        return $cards;
+    }
+    
     /***************************************************
     * Checks if turn in
     ***************************************************/

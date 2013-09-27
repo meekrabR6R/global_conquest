@@ -24,6 +24,11 @@
   <body>
     <header class="navbar navbar-inverse">
       <h3>Global Conquest</h3>
+      <nav>
+          <ul class="nav pull-right"> 
+              <li><a class="navbar-link app_home" href="leaderboard">Leader Board</a></li>
+          </ul>
+      </nav>
     </header>
     <div id="fb-root"></div>
     <script src="js/front_page/facebook_client_stuff.js" type="text/javascript"></script>
@@ -76,7 +81,7 @@
       -->
         
         <h2>Games</h2>
-        <a href="leaderboard">leaderboard</a>
+      
         <table class="table table-bordered table-hover">
           <tr>
             <th>Game</th>

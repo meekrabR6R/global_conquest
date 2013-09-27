@@ -26,8 +26,29 @@
     </header>
     <div class="container">
 	    <table class="table table-bordered table-hover">
-	      <tr><th>Player</th><th>2-Player</th><th>3-Player</th><th>4-Player</th><th>5-Player</th><th>6-Player</th></tr>
-	      <tr><td>PooBear</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+	      <tr>
+              <th>Player</th>
+              <th>2-Player</th>
+              <th>3-Player</th>
+              <th>4-Player</th>
+              <th>5-Player</th>
+              <th>6-Player</th>
+              <th>Points</th>
+          </tr>
+	      @foreach($player_stats as $stat)
+              <tr>
+                <td>
+                  <img src="http://graph.facebook.com/{{ $stat['player']->plyr_id }}/picture"><br>
+                  {{ $stat['player']->first_name}} {{ $stat['player']->last_name }}
+                </td>
+                <td>{{ $stat['player']->two_win }}</td>
+                <td>{{ $stat['player']->three_win }}</td>
+                <td>{{ $stat['player']->four_win }}</td>
+                <td>{{ $stat['player']->five_win }}</td>
+                <td>{{ $stat['player']->six_win }}</td>
+                <td>{{ $stat['total'] }}</td>
+              </tr>
+          @endforeach
 	    </table>
 	  </div>
   </body>

@@ -5,6 +5,10 @@
       public $restful = true;
       
       public function get_leaderboard() {
-          return View::make('leaderboard');   
+
+      	  $player_stats = Players::getLeaderboardStats();
+         
+          return View::make('leaderboard')
+          				->with('player_stats', $player_stats);   
       }
   }

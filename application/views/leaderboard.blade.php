@@ -9,6 +9,7 @@
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
     {{ Asset::styles(); }}
+     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
   </head>
   <body>

@@ -204,26 +204,34 @@ var Attack = {
                 //}
 
                 var mov_armies = parseInt(textAmount, 10);
+                var attackerID = attkTerr.data.owner_id;
 
                 attkTerr.data.armies -= mov_armies;
                 defTerr.data.armies = mov_armies;
                 defTerr.data.owner_id = attkTerr.data.owner_id;
                 defTerr.data.color = attkTerr.data.color;
-
+                
                 $.post(Attack.game.BASE+'/take_over?game_id='+Attack.game.game_id,
-                    {game_table: Attack.game.game_table,
-                    attk_id: attkTerr.data.pk_id,
-                    def_id: defTerr.data.pk_id,
-                    attacker_id: attkTerr.data.owner_id,
-                    defender_id: def_id_holder,
-                    attk_armies: attkTerr.data.armies,
-                    def_armies: defTerr.data.armies},
+                    { 
+                       game_table: Attack.game.game_table,
+                       attk_id: attkTerr.data.pk_id,
+                       def_id: defTerr.data.pk_id,
+                       attacker_id: attackerID,
+                       defender_id: def_id_holder,
+                       attk_armies: attkTerr.data.armies,
+                       def_armies: defTerr.data.armies
+                    },
 
                     function(result){
                         var terr = JSON.parse(result);
                     
                         if(terr.attk_terr == 42){
-                            location.reload();
+                            $.post(Attack.game.BASE+'/update_win?game_id='+Attack.game.game_id,
+                                {plyr_id : attackerID},
+                                function(result) {
+                                   location.reload(); 
+                                }
+                            );
                         }
                     }
                 );
@@ -297,6 +305,12 @@ var Attack = {
                 terr_name: terrName},
                 function(result){
                     console.log(result);
+                    $('#card_list').append('<div class="card col-lg-2">\
+                                            <h6>'+armyType+'</h6></br>\
+                                            </br>\
+                                            <h7>'+terrName+'</h7>\
+                                            <input type="checkbox" name="'+terrName+'" value="'+armyType+'">\
+                                        </div>');
                 }
         );
     },

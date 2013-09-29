@@ -233,7 +233,7 @@
                                     <div class="col-lg-1"></div>
 
                                     <form id="cards_check" action="{{ URL::base() }}/card_turn_in" method="post" onsubmit="return Attack.checkCards(this);">
-
+                                        <div id="card_list">
                                         @if(isset($player_cards))
                                             @foreach($player_cards as $card)
                                                 <div class="card col-lg-2">
@@ -244,7 +244,7 @@
                                                 </div>
                                             @endforeach
                                         @endif
-
+                                        </div>
                                         <div class="col-lg-2">
                                              <button type="submit" class="btn btn-primary">Turn In</button>
                                              <h5>Turn In Count: {{ $turn_ins }}</h5>

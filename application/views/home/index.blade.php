@@ -40,7 +40,7 @@
             <h4>Shutting things down for a while..</h4>
         </div>
         <h2>Create a New Game</h2>
-      <!--
+      
        <form class="form-horizontal" id="new_game" action="{{ URL::base(); }}/new_game" method="post" onsubmit="return checkForm(this); ">
         <div class="form-group">
           <label class="col-lg-2 control-label" for="title">Game Title</label> 
@@ -78,7 +78,6 @@
           </div>
         </div>
       </form>
-      -->
         
         <h2>Games</h2>
       

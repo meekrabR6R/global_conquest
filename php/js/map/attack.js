@@ -205,6 +205,7 @@ var Attack = {
 
                 var mov_armies = parseInt(textAmount, 10);
                 var attackerID = attkTerr.data.owner_id;
+                var defenderID = defTerr.data.owner_id;
                 var defenderFN = defTerr.data.owner_fn;
 
                 attkTerr.data.armies -= mov_armies;
@@ -212,6 +213,24 @@ var Attack = {
                 defTerr.data.owner_id = attkTerr.data.owner_id;
                 defTerr.data.color = attkTerr.data.color;
                 
+                $.get(Attack.game.BASE+'/card_status?game_id='+Attack.game.game_id,
+                    {owner_id: attkTerr.data.owner_id,
+                    game_id: Attack.game.game_id},
+                    function(result){
+                            
+                        var res = JSON.parse(result); 
+                        if(res.got_card == 0){
+                            console.log(res.got_card);
+                            Attack.makeCard(res.owner_id, Attack.game.game_id );
+                            var cardCount = parseInt($('.'+attackerID+' .card_count').text(), 10) + 1;
+                            $('.'+attackerID+' .card_count').html(cardCount);
+                        }
+
+                        $('#take_over').modal('hide');
+                
+                    }
+                );
+
                 $.post(Attack.game.BASE+'/take_over?game_id='+Attack.game.game_id,
                     { 
                        game_table: Attack.game.game_table,
@@ -225,7 +244,13 @@ var Attack = {
 
                     function(result){
                         var terr = JSON.parse(result);
-                    
+                        
+                        var attkTerrCount = parseInt($('.'+attackerID+' .terr_count').text(), 10) + 1;
+                        $('.'+attackerID+' .terr_count').html(attkTerrCount);
+                  
+                        var defTerrCount = parseInt($('.'+defenderID+' .terr_count').text(), 10) - 1;
+                        $('.'+defenderID+' .terr_count').html(defTerrCount);
+                        console.log("def " +defTerrCount);
                         if(terr.attk_terr == 42){
                             $.post(Attack.game.BASE+'/update_win?game_id='+Attack.game.game_id,
                                 {plyr_id : attackerID},
@@ -243,22 +268,6 @@ var Attack = {
                     }
                 );
 
-                $.get(Attack.game.BASE+'/card_status?game_id='+Attack.game.game_id,
-                    {owner_id: attkTerr.data.owner_id,
-                    game_id: Attack.game.game_id},
-                    function(result){
-                            
-                        var res = JSON.parse(result); 
-                        if(res.got_card == 0){
-                            console.log(res.got_card);
-                            Attack.makeCard(res.owner_id, Attack.game.game_id );
-                        }
-
-                        $('#take_over').modal('hide');
-                
-                    }
-                );
-                
                 Attack.battleProcess(attkTerr, defTerr); 
                 //set to null to prevent memory leak (maybe a little hackish)
                 attkTerr = null;

@@ -262,8 +262,8 @@
                                         <div class="player_profile span2" style="background-color: {{ $prof['color']; }};">
                                             <p>{{ $prof['first_name']; }}</p>
                                             <img src="http://graph.facebook.com/{{ $prof['plyr_id']; }}/picture"><br>
-                                            <p id ="{{ $prof['plyr_id'] }}">Cards: {{ $prof['card_count'] }}</p>
-                                            <p id="{{ $prof['plyr_id'] }}">Territories: {{ $prof['terr_count'] }}</p>
+                                            <p class="{{ $prof['plyr_id'] }}">Cards: <span class="card_count">{{ $prof['card_count'] }}</span></p>
+                                            <p class="{{ $prof['plyr_id'] }}">Territories: <span class="terr_count">{{ $prof['terr_count'] }}</span></p>
                                         </div>
                                     @endforeach
                                 </div>

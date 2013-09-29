@@ -37,7 +37,25 @@
       
         <div class="alert alert-info">
         <!--news here -->
-            <h4>Shutting things down for a while..</h4>
+            <h4>Recent Changes:</h4>
+            <ul>
+              <li>Added leaderboard. It can be accessed from the link in the top right of the header on the home page.</li>
+              <li>Map page no longer requires a refresh to see newest cards.</li>
+              <li>Added card and territory counts to in-game player profiles. These values are also updated without requiring a page refresh</li>
+              <li>Fixed the '0 0' attack bug. I'm for serial this time.</li>
+            </ul>
+            <h4>Known Issues</h4>
+            <ul>
+              <li>The weird bug that happened to Mike is still out there (maybe)</li>
+              <li>The potential for an accidental negative value for available armies during a high-amount card turn in might
+                  still exist</li>
+            </ul>
+            <h4>Coming Soon</h4>
+            <ul>
+              <li>In-game message board</li>
+              <li>New map that Greg found</li>
+              <li>Game history tracker</li>
+            </ul>
         </div>
         <h2>Create a New Game</h2>
       

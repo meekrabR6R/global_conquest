@@ -68,6 +68,10 @@ class Plyrgames extends Eloquent{
         }
 
         if($territory_count['def_terr'] == 0){
+           
+            $victor = Players::where('plyr_id', '=', $attk_owner)->first();
+            $victor->kill_count = $victor->kill_count + 1;
+            $victor->save();
 
             $defender = Plyrgames::where('game_id', '=', $game_id)->where('plyr_id', '=', $def_owner)->first();
             $defender->defeated = 1;

@@ -26,6 +26,7 @@
         </div>
     </header>
     <div class="container">
+      <h3 class="app_title text-center">Leader Board</h3>
 	    <table class="table table-bordered table-hover">
 	      <tr>
               <th>Player</th>
@@ -34,6 +35,7 @@
               <th>4-Player</th>
               <th>5-Player</th>
               <th>6-Player</th>
+              <th>Kill Count</th>
               <th>Points</th>
           </tr>
 	      @foreach($player_stats as $stat)
@@ -47,10 +49,26 @@
                 <td>{{ $stat['player']->four_win }}</td>
                 <td>{{ $stat['player']->five_win }}</td>
                 <td>{{ $stat['player']->six_win }}</td>
+                <td>{{ $stat['player']->kill_count }}</td>
                 <td>{{ $stat['total'] }}</td>
               </tr>
           @endforeach
 	    </table>
+      <h4>Point System</h4>
+      <p>The point system works as follows:</p>
+      <p>A win in a</p>
+      <ul>
+        <li>2-player game is worth 2 points</li>
+        <li>3-player game is worth 3 points</li>
+        <li>4-player game is worth 4 points</li>
+        <li>5-player game is worth 5 points</li>
+        <li>6-player game is worth 6 points</li>
+      </ul>
+      <p>A kill is worth 1 point.</p>
+      <p>The points are summed, and the total is displayed in the column furthest to the right.<br>
+         The table is sorted from greatest to least. The player with the highest point count is
+         the top-ranked player.
+      </p>
 	  </div>
   </body>
 </html>

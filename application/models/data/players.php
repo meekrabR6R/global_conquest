@@ -15,7 +15,8 @@ class Players extends Eloquent{
 
         foreach($players as $player) {
       	    $player_stat['total'] = ($player->two_win*2) + ($player->three_win*3) +
-      	    ($player->four_win*4) + ($player->five_win*5) + ($player->six_win*6);
+      	    ($player->four_win*4) + ($player->five_win*5) + ($player->six_win*6) +
+            $player->kill_count;
       	    $player_stat['player'] = $player;
             array_push($stats, $player_stat);
         }

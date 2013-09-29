@@ -56,7 +56,7 @@
             @endif
         
             @foreach($plyr_data as $player)
-                GameSpace.plyr_id.push( '{{ $player["player"]->getPlyrID(); }}' );
+                GameSpace.plyr_id.push({ 'id': '{{ $player["player"]->getPlyrID(); }}', 'fn': '{{ $player["player"]->getName()["first_name"] }}'} );
             @endforeach
             
             @foreach($plyr_fn as $player)
@@ -341,6 +341,21 @@
                 </div>
             </div>
 
+             <div id="defeat_message" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content"> 
+                        <div class="modal-header">
+                            <h3 id="myModalLabel">Congratulations!</h3>
+                        </div>
+                        <div class="modal-body">
+                           <p>You defeated</p><p id="defeated"></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="continue" class="btn btn-primary">Continue</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
     </body>
 </html>
 

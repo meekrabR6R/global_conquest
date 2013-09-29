@@ -10,8 +10,14 @@ GameSpace.setUpPlayers = function(){
         for(i=0; i <= 41; i++){
             var name = $("#"+GameSpace.game_state[i].terr).attr('name');
             var color = "";
-
-            GameSpace.graph.add_data(name, {owner_id: GameSpace.game_state[i].owner_id, armies: GameSpace.game_state[i].army_cnt, pk_id: (i+1)});
+            var first_name;
+            for(z=0; z <= GameSpace.plyr_id.length; z++) {
+                if(GameSpace.plyr_id[z].id === GameSpace.game_state[i].owner_id) {
+                  first_name = GameSpace.plyr_id[z].fn;
+                  break;
+                }
+            } 
+            GameSpace.graph.add_data(name, {owner_id: GameSpace.game_state[i].owner_id, owner_fn: first_name, armies: GameSpace.game_state[i].army_cnt, pk_id: (i+1)});
 
             for (j=0; j < GameSpace.plyr_nm_color.length; j++) {
 
@@ -310,7 +316,7 @@ GameSpace.colorSelect = function(){
         //add controller method, other shit you know the dilly
         function(result){
             console.log($.parseJSON(result));
-            var colors = ["blue", "green", "red", "black", "yellow", "pink"];
+            var colors = ["blue", "green", "red", "black", "purple", "orange"];
             var options = '';
             colors.forEach(function(color){
                 if($.inArray(color, $.parseJSON(result)) === -1)

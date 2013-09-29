@@ -205,6 +205,7 @@ var Attack = {
 
                 var mov_armies = parseInt(textAmount, 10);
                 var attackerID = attkTerr.data.owner_id;
+                var defenderFN = defTerr.data.owner_fn;
 
                 attkTerr.data.armies -= mov_armies;
                 defTerr.data.armies = mov_armies;
@@ -232,6 +233,12 @@ var Attack = {
                                    location.reload(); 
                                 }
                             );
+                        } else if(terr.def_terr == 0) {
+                            $('#defeated').html(""+defenderFN+"!");
+                            $('#defeat_message').modal();
+                            $('#continue').click(function() { 
+                                location.reload() 
+                            });
                         }
                     }
                 );

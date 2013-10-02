@@ -175,10 +175,11 @@ var Attack = {
                  def_terr: def_terr.id,
                  attk_armies: attackers},
                  function(result){
+                    Attack.takeOver(attk_terr, def_terr);
 
         });
 
-        Attack.takeOver(attk_terr, def_terr);
+        
     },
 
 
@@ -250,6 +251,7 @@ var Attack = {
                         var defTerrCount = parseInt($('.'+defenderID+' .terr_count').text(), 10) - 1;
                         $('.'+defenderID+' .terr_count').html(defTerrCount);
                         console.log("def " +defTerrCount);
+                       
                         if(terr.attk_terr == 42){
                             $.post(Attack.game.BASE+'/update_win?game_id='+Attack.game.game_id,
                                 {plyr_id : attackerID},

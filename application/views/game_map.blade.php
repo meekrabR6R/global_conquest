@@ -158,12 +158,14 @@
                         <ul class="nav nav-tabs">
 
                             @if(!$winner)
-                                @if(sizeof($player_cards) < 6 && $player_up)
+                                @if((sizeof($player_cards) < 6 && $player_up) || $init_armies_placed == false && ($plyr_count == $plyr_limit) && $plyr_data[0]["color"]) 
                                     @if($armies_plcd == true && $player_up->plyr_id == $uid)
                                         <li class="active"><a href="#tab1" data-toggle="tab">attack</a></li>
                                         <li id="mov_btn"><a href="#tab2" data-toggle="tab">move armies</a></li>
                                     @else
-                                        <li id="place_btn" class="active"><a href="#tab1" data-toggle="tab">place armies</a></li>
+                                        @if($player_up->plyr_id == $uid)
+                                            <li id="place_btn" class="active"><a href="#tab1" data-toggle="tab">place armies</a></li>
+                                        @endif
                                     @endif
                                 @endif
                             @endif

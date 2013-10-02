@@ -39,12 +39,6 @@ var Attack = {
             def_armies = 1;
             
         Attack.rollProcess(attk_armies, def_armies, attk_terr, def_terr);
-       
-        if(def_terr.data.armies === 0)
-            Attack.victoryProcess(attk_terr, def_terr);
-        
-        else
-            Attack.battleProcess(attk_terr, def_terr); 
     },
 
     /**********************************************************
@@ -137,6 +131,11 @@ var Attack = {
                 def_id: def_terr.data.pk_id},
                 function(result){
                     console.log(result);
+                    if(def_terr.data.armies === 0)
+                         Attack.victoryProcess(attk_terr, def_terr);
+                    else
+                        Attack.battleProcess(attk_terr, def_terr); 
+                    
                     if(attk_terr.data.armies > 1 && def_terr.data.armies > 0)
                         $("#roll").removeAttr("disabled");
                 }

@@ -39,10 +39,10 @@
         <!--news here -->
             <h4>Recent Changes:</h4>
             <ul>
-              <li>Added leaderboard. It can be accessed from the link in the top right of the header on the home page.</li>
-              <li>Map page no longer requires a refresh to see newest cards.</li>
-              <li>Added card and territory counts to in-game player profiles. These values are also updated without requiring a page refresh</li>
-              <li>Fixed the '0 0' attack bug. I'm for serial this time.</li>
+              <li>'Place' tab now displays during initial placement. 
+                  Previously, player was prevented from placing armies if s/he had clicked on 'Cards' 
+                  or 'Players' during initial placement.</li>
+              <li>Fixed issue which caused moved armies to potentially not be updated correctly on the server.</li>
             </ul>
             <h4>Known Issues</h4>
             <ul>

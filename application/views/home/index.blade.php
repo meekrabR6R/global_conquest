@@ -37,7 +37,7 @@
       
         <div class="alert alert-info">
         <!--news here -->
-            <h4>Recent Changes:</h4>
+            <h4>Recent Changes (10/02/2013):</h4>
             <ul>
               <li>'Place' tab now displays during initial placement. 
                   Previously, player was prevented from placing armies if s/he had clicked on 'Cards' 

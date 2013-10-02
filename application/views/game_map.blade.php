@@ -56,7 +56,7 @@
             @endif
         
             @foreach($plyr_data as $player)
-                GameSpace.plyr_id.push({ 'id': '{{ $player["player"]->getPlyrID(); }}', 'fn': '{{ $player["player"]->getName()["first_name"] }}'} );
+                GameSpace.plyr_id.push({ 'id': '{{ $player["player"]->getPlyrID(); }}', 'fn': '{{ $player["player"]->getName() }}'} );
             @endforeach
             
             @foreach($plyr_fn as $player)

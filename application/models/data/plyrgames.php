@@ -65,6 +65,10 @@ class Plyrgames extends Eloquent{
             $attacker = Plyrgames::where('game_id', '=', $game_id)->where('plyr_id', '=', $attk_owner)->first();
             $attacker->winner = true;
             $attacker->save();
+            
+            $winner = Players::where('plyr_id', '=', $attacker->plyr_id)->first();
+            $message = 'Comrade '.$winner->first_name.' is victorious!';
+            Plyrgames::notifyAll($game_id, $message);
         }
 
         if($territory_count['def_terr'] == 0){
@@ -79,8 +83,33 @@ class Plyrgames extends Eloquent{
             
             $bindings = array('attk_owner' => $attk_owner, 'def_owner' => $def_owner);
             DB::query('update cards'.$game_id.' set owner_id = ? where owner_id = ?', $bindings);
+            
+            $loser = Players::where('plyr_id', '=', $defender->plyr_id)->first();
+            $message = 'Comrade '.$loser->first_name.' has fallen in battle..'; 
+            Plyrgames::notifyAll($game_id, $message); 
         }
+    }
 
+    private static function sendNotification($player_id, $message){
+        $facebook = CurrentGame::getFB();
+
+        $data = array(
+            'href' => 'https://globalconq-meekrab.rhcloud.com/',
+            'access_token' => $facebook->getAppId() . '|' . $facebook->getApiSecret(),
+            'template' => $message
+        );
+
+        try {
+            $test = $facebook->api("/".$player_id."/notifications", 'POST', $data);
+        } catch (FacebookApiException $e){}
+    }
+
+    private static function notifyAll($game_id, $message) {
+        $players = Plyrgames::where('game_id', '=', $game_id)->get();
+
+        foreach($players as $player) {
+            Plyrgames::sendNotification($player->plyr_id, $message);
+        }
     }
     
 }

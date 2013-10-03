@@ -39,6 +39,7 @@
         <!--news here -->
             <h4>Recent Changes (10/02/2013):</h4>
             <ul>
+              <li>Now all playes in game are notified when a player is defeated and when a player wins.</li>
               <li>'Place' tab now displays during initial placement. 
                   Previously, player was prevented from placing armies if s/he had clicked on 'Cards' 
                   or 'Players' during initial placement.</li>

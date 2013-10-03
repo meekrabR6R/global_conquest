@@ -29,7 +29,7 @@
 
         //constructor
         public function __construct(){
-        
+            
             $this->facebook = Map_Controller::getFB();
             $this->uid = $this->facebook->getUser();
 

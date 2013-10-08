@@ -166,9 +166,9 @@
                                         <li class="active"><a href="#tab1" data-toggle="tab">attack</a></li>
                                         <li id="mov_btn"><a href="#tab2" data-toggle="tab">move armies</a></li>
                                     @else
-                                        @if($player_up->plyr_id == $uid)
-                                            <li id="place_btn" class="active"><a href="#tab1" data-toggle="tab">place armies</a></li>
-                                        @endif
+                              
+                                        <li id="place_btn" class="active"><a href="#tab1" data-toggle="tab">place armies</a></li>
+                              
                                     @endif
                                 @endif
                             @endif

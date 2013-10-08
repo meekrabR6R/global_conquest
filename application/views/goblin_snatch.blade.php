@@ -19,12 +19,12 @@
         <div class="navbar-inner">
             <div class="head container">
                 <h3 class="app_title">Goblin Snatcher</h3>
+                <nav>
+                  <ul class="nav pull-right"> 
+                    <li><a class="navbar-link app_home" href="map?game_id={{ $game_id }}">Go Back to Game</a></li>
+                  </ul>
+                </nav>
             </div>
-            <nav>
-              <ul class="nav pull-right"> 
-                  <li><a class="navbar-link app_home" href="map?game_id={{ $game_id }}">Go Back to Game</a></li>
-              </ul>
-          </nav>
         </div>
     </header>
     <div class="container">

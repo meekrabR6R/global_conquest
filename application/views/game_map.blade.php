@@ -117,6 +117,7 @@
                         @if($join_flag == 1 && ($plyr_count < $plyr_limit))
                             <div class="alert">
                                 <h4>WAITING FOR OTHERS TO JOIN!</h4>
+                                <p>Maybe you'd like to <a href="goblin?game_id={{ $game_id }}">catch some goblins</a> while you wait?</p>
                             </div>
                         @endif
 
@@ -148,6 +149,7 @@
                                 <div class="alert alert-info">
                                      <h4>WAIT IN LINE, YOUNG BLOOD.</h4></br>
                                      <h4>{{ $player_up->first_name }} is pwning the world.</h4>
+                                     <p>Maybe you'd like to <a href="goblin?game_id={{ $game_id }}">catch some goblins</a> while you wait?</p>
                                 </div>
                             @endif
                         @endif

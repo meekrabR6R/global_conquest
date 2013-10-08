@@ -25,7 +25,8 @@ Route::post('continent_bonuses', array('uses' => 'map@continent_bonuses'));
 Route::post('add_color', array('uses' => 'games@add_color'));
 Route::post('terr_taken', array('uses' => 'map@terr_taken'));
 Route::get('colors', array('uses' => 'map@colors'));
-Route::get('test', array('uses' => 'map@test')); //temporary test route
+Route::get('goblin', array('uses' => 'goblin@goblin_snatcher'));
+
 /*
 |--------------------------------------------------------------------------
 | Application 404 & 500 Error Handlers

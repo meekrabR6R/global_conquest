@@ -37,19 +37,13 @@
       
         <div class="alert alert-info">
         <!--news here -->
-            <h4>Recent Changes (10/02/2013):</h4>
+            <h4>Recent Changes (10/07/2013):</h4>
             <ul>
-              <li>Now all playes in game are notified when a player is defeated and when a player wins.</li>
-              <li>'Place' tab now displays during initial placement. 
-                  Previously, player was prevented from placing armies if s/he had clicked on 'Cards' 
-                  or 'Players' during initial placement.</li>
-              <li>Fixed issue which caused moved armies to potentially not be updated correctly on the server.</li>
+              <li>Goblin-catching minigame to bide your time while you wait for your turn/players to join!</li>
             </ul>
             <h4>Known Issues</h4>
             <ul>
-              <li>The weird bug that happened to Mike is still out there (maybe)</li>
-              <li>The potential for an accidental negative value for available armies during a high-amount card turn in might
-                  still exist</li>
+              <li>Still no territory bonus for turns ins...I keep forgetting..</li>
             </ul>
             <h4>Coming Soon</h4>
             <ul>

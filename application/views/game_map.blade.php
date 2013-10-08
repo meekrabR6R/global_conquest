@@ -133,6 +133,10 @@
                                 <h4>INITIAL ARMY PLACEMENTS:</h4>
                             
                                 <div id="place_armies"><h4>{{ $init_armies; }} ARMIES REMANING</h4></div>
+
+                                @if($init_armies == 0)
+                                  <p>Maybe you'd like to <a href="goblin?game_id={{ $game_id }}">catch some goblins</a> while you wait?</p>
+                                @endif
                             </div>
                         @endif
 

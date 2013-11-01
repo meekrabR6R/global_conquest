@@ -297,7 +297,6 @@
             echo json_encode($colors);
 
         }
-
     }
     
 ?>

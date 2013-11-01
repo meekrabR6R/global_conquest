@@ -57,7 +57,12 @@ var PlaceArmies = {
                     init_armies = result;
                     if(result == 0){
                         $("#mov_armies").attr('disabled', true);
-                        location.reload();
+                        $.get(PlaceArmies.game.BASE+'/map?game_id='+PlaceArmies.game.game_id,
+                              function(r) {
+                                 location.reload();
+                              }
+                        );
+                       
                     }
                     else
                         $("#mov_armies").removeAttr('disabled');

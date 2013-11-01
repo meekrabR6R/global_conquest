@@ -39,16 +39,16 @@
         <!--news here -->
             <h4>Recent Changes (10/07/2013):</h4>
             <ul>
-              <li>Goblin-catching minigame to bide your time while you wait for your turn/players to join!</li>
+              <li>Fixed the 'post-initial-placement-phil' issue that almost none of you experienced.</li>
+              <li>Placed length limit on game titles.</li>
             </ul>
             <h4>Known Issues</h4>
             <ul>
               <li>Still no territory bonus for turns ins...I keep forgetting..</li>
             </ul>
-            <h4>Coming Soon</h4>
+            <h4>Coming "Soon"</h4>
             <ul>
               <li>In-game message board</li>
-              <li>New map that Greg found</li>
               <li>Game history tracker</li>
             </ul>
         </div>

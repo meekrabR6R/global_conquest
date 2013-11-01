@@ -8,7 +8,7 @@ class Games_Controller extends Base_Controller{
     
     public $restful = true;
 
-    public function post_new_game(){
+    public function post_new_game() {
         
         $new_game = Input::get('data'); 
         $add_game = array();
@@ -16,6 +16,8 @@ class Games_Controller extends Base_Controller{
         foreach($new_game as $x)
             $add_game[] = $x['value'];
          
+        if(strlen($add_game[0]) > 20)
+            $add_game[0] = substr($add_game[0],0,20);
         
         $new_game = array(
             'title' => $add_game[0],

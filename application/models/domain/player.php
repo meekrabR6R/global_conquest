@@ -12,7 +12,7 @@ class Player{
     private $cards;
     private $record;
 
-	public function __construct($user_id, $game_id){
+    public function __construct($user_id, $game_id){
 
         $this->game_id = $game_id;
         $this->plyr_id = $user_id;
@@ -25,16 +25,16 @@ class Player{
         $this->init_armies = $this->record->init_armies;
         $this->num_terrs = $this->getTerrCount();
         $this->cards = $this->getHand();
-	}
+    }
 
-	/*************************************
-	* Sets first and last name of player.
-	**************************************/
-	private function setName(){
-		$player = Players::where('plyr_id', '=', $this->plyr_id)->first();
-		$name = array('first_name' => $player->first_name, 'last_name' => $player->last_name);
-		return $name;
-	}
+    /*************************************
+    * Sets first and last name of player.
+    **************************************/
+    private function setName(){
+        $player = Players::where('plyr_id', '=', $this->plyr_id)->first();
+        $name = array('first_name' => $player->first_name, 'last_name' => $player->last_name);
+        return $name;
+    }
 
 	
     /****************************************

@@ -42,9 +42,9 @@ class Player{
     *****************************************/
     public function getTerrCount(){
 
-    	$bindings = array('owner_id' => $this->plyr_id);
+        $bindings = array('owner_id' => $this->plyr_id);
         $terrs = DB::query('select count(owner_id) as terr_count from '.$this->game_table.' where owner_id = ?', $bindings); 
-    	return $terrs[0]->terr_count;
+        return $terrs[0]->terr_count;
     }
 
 

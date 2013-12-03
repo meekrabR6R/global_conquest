@@ -7,8 +7,8 @@ class Facebook_Controller extends Base_Controller{
     
     //There has to be a better way to handle this!
     public function get_login() {
-    	$facebook = Facebook_Controller::getFB();
-		$uid = $facebook->getUser();
+      $facebook = Facebook_Controller::getFB();
+		  $uid = $facebook->getUser();
 		
 		if($uid){
 			
@@ -59,8 +59,8 @@ class Facebook_Controller extends Base_Controller{
     }
 
     public function post_login(){
-    	$facebook = Facebook_Controller::getFB();
-		$uid = $facebook->getUser();
+      $facebook = Facebook_Controller::getFB();
+		  $uid = $facebook->getUser();
 		
 		if($uid){
 			

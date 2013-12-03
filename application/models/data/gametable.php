@@ -95,7 +95,7 @@ class GameTable{
     **************************************************************************************************/
     public static function takeOver($game_table, $attk_armies, $attk_id, $attk_owner, $def_armies, $def_id){
 
-	    $bindings = array('army_cnt' => $attk_armies, 'id' => $attk_id);
+        $bindings = array('army_cnt' => $attk_armies, 'id' => $attk_id);
         DB::query('update '.$game_table.' set army_cnt = ? where id = ?', $bindings);
 
         $bindings = array('army_cnt' => $def_armies, 'id' => $def_id);

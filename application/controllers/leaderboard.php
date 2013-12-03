@@ -6,14 +6,14 @@
       
       public function get_leaderboard() {
 
-      	  $player_stats = Players::getLeaderboardStats();
+        $player_stats = Players::getLeaderboardStats();
          
-          return View::make('leaderboard')
-          				->with('player_stats', $player_stats);   
+        return View::make('leaderboard')
+          ->with('player_stats', $player_stats);   
       }
 
-      public function post_update_win() {
-      	  $plyr_id = Input::get('plyr_id');
-      	  Players::updateLeaderboardStats($plyr_id);
+      public function post_update_win() { 
+        $plyr_id = Input::get('plyr_id');
+        Players::updateLeaderboardStats($plyr_id);
       }
   }

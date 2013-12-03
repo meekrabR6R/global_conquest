@@ -1,44 +1,39 @@
 <?php
 class Player{
     
-	private $plyr_id;
-	private $name;
-	private $color;
-	private $init_armies;
-	private $num_terrs;
-	private $card_table;
-	private $game_table;
+    private $plyr_id;
+    private $name;
+    private $color;
+    private $init_armies;
+    private $num_terrs;
+    private $card_table;
+    private $game_table;
     private $game_id;
-	private $cards;
-	private $record;
+    private $cards;
+    private $record;
 
 	public function __construct($user_id, $game_id){
 
         $this->game_id = $game_id;
-		$this->plyr_id = $user_id;
-		$this->record = Plyrgames::where('game_id', '=', $game_id)
-    			 		   		 ->where('plyr_id', '=', $this->plyr_id)->first();
-
-    	$this->card_table = 'cards'.$game_id;
-    	$this->game_table = 'game'.$game_id;
-		$this->name = $this->setName();
-		$this->color = $this->record->plyr_color;
-		$this->init_armies = $this->record->init_armies;
-		$this->num_terrs = $this->getTerrCount();
-		$this->cards = $this->getHand();
-		
-		
+        $this->plyr_id = $user_id;
+        $this->record = Plyrgames::where('game_id', '=', $game_id)
+                                 ->where('plyr_id', '=', $this->plyr_id)->first();
+        $this->card_table = 'cards'.$game_id;
+        $this->game_table = 'game'.$game_id;
+        $this->name = $this->setName();
+        $this->color = $this->record->plyr_color;
+        $this->init_armies = $this->record->init_armies;
+        $this->num_terrs = $this->getTerrCount();
+        $this->cards = $this->getHand();
 	}
 
 	/*************************************
 	* Sets first and last name of player.
 	**************************************/
 	private function setName(){
-
 		$player = Players::where('plyr_id', '=', $this->plyr_id)->first();
 		$name = array('first_name' => $player->first_name, 'last_name' => $player->last_name);
 		return $name;
-
 	}
 
 	
@@ -96,19 +91,19 @@ class Player{
     ******************************************/
     private function getHand(){
 
-    	$card_state = CardTable::getCardTableState($this->card_table);
+        $card_state = CardTable::getCardTableState($this->card_table);
         //$cards = CardTable::getNumberOfCards($user_id, $this->card_table); //keep this here for 'if 5' 
         $player_cards = array();
        
         foreach($card_state as $card){
-           if($card->owner_id == $this->plyr_id)
+            if($card->owner_id == $this->plyr_id)
                 array_push($player_cards, array('army_type' => $card->army_type, 'terr_name' => $card->terr_name));   
         }
 
         return $player_cards;
     }
 
-      /***************************************************
+    /***************************************************
     * Checks if turn in
     ***************************************************/
     public function hasTurnIn($hand){
@@ -178,17 +173,16 @@ class Player{
     	return $this->plyr_id;
     }
 
-	public function getName(){
-		return $this->name;
-	}  
+    public function getName(){
+        return $this->name;
+    }  
 
-	public function getColor(){
-		return $this->color;
-	}
+    public function getColor(){
+        return $this->color;
+    }
 
-	public function getInitArmies(){
-		return $this->init_armies;
-	}
-
+    public function getInitArmies(){
+        return $this->init_armies;
+    }
 }
 ?>

@@ -3,15 +3,15 @@
 class CurrentGame{
 
 	//fields
-	private $game;
+    private $game;
     private $game_id;
-	private $game_maker;
-	private $game_table;
-	private $game_state;
-	private $players;
-	private $player_count;
-	private $player_up;
-	private $card_tabe;
+    private $game_maker;
+    private $game_table;
+    private $game_state;
+    private $players;
+    private $player_count;
+    private $player_up;
+    private $card_tabe;
     private $plyr_records;
     private $player_profile;
 	//constructor
@@ -49,12 +49,12 @@ class CurrentGame{
         $this->player_count = sizeof($this->players);
 
         //sets turn order
-		if($this->game->turns_set == 0 && $this->player_count == $this->game->plyrs)
+        if($this->game->turns_set == 0 && $this->player_count == $this->game->plyrs)
            $this->makeTurns($this->game, $game_id, $this->plyr_records, $this->player_count);
         
         //processes 'up player's' army count (export to own method)
         elseif($this->player_count == $this->game->plyrs && $this->turnReady()){
-        	$this->player_up = Plyrgames::where('game_id','=', $game_id)->where('trn_active','=',true)->first();
+            $this->player_up = Plyrgames::where('game_id','=', $game_id)->where('trn_active','=',true)->first();
             $this->makeTurnArmies();
         }
 	
@@ -159,10 +159,7 @@ class CurrentGame{
     * and checks new counts of each.
     ******************************************/
     public function attack($attk_owner, $def_owner, $attk_armies, $attk_id, $def_armies, $def_id){
-
-        GameTable::attack($this->game_table, $attk_armies, $attk_id, $def_armies, $def_id);
-
-     
+        GameTable::attack($this->game_table, $attk_armies, $attk_id, $def_armies, $def_id); 
     }
 
     /****************************************
@@ -192,7 +189,7 @@ class CurrentGame{
     ******************************************/
     public function getHand($user_id){
 
-    	$card_state = CardTable::getCardTableState($this->card_table);
+        $card_state = CardTable::getCardTableState($this->card_table);
         $player_cards = array();
        
         foreach($card_state as $card){
@@ -386,23 +383,23 @@ class CurrentGame{
 
     }
 
-	/********************************************************************
-	* Sets turn order.
-	*********************************************************************/
-	private function makeTurns($game, $game_id, $plyr_data, $plyr_count){
+    /********************************************************************
+    * Sets turn order.
+    *********************************************************************/
+    private function makeTurns($game, $game_id, $plyr_data, $plyr_count){
 
         $turns = array();
         for($i=1; $i<=$plyr_count; $i++)
             array_push($turns, $i);
-
+        
         shuffle($turns);
-       
+   
         $i = 0;
         foreach($plyr_data as $plyr){
             $plyr->turn = $turns[$i++];
             $plyr->save();
         }
-        
+    
         $game->turns_set = 1;
         $game->save();
 
@@ -486,42 +483,34 @@ class CurrentGame{
 	* Various getters (ugly, I know)
 	**********************************/
 	public function getGameMaker(){
-
 		return $this->game_maker;
 	}
 
 	public function getTableName(){
-
 		return $this->game_table;
 	}
 
 	public function getTitle(){
-
 		return $this->game->title;
 	}
 
 	public function getPlayers(){
-
 		return $this->players;
 	}
 
 	public function getPlayerCount(){
-
 		return $this->player_count;
 	}
 
 	public function getGameState(){
-
 		return $this->game_state;
 	}
 
     public function getTurnInCount(){
-
         return $this->game->turn_ins;
     }
 
 	public function getPlayerLimit(){
-
 		return $this->game->plyrs;
 	}
 
@@ -529,7 +518,6 @@ class CurrentGame{
         return $this->player_profile;
     }
     public function getUpPlayer(){
-
         if(isset($this->player_up))
             return Players::where('plyr_id', '=', $this->player_up->plyr_id)->first();
     }
@@ -545,6 +533,7 @@ class CurrentGame{
             return $take_over;
         }
     }
+
     public function getPlayerNames(){
 
         $player_names = array();
@@ -576,11 +565,9 @@ class CurrentGame{
         );
 
         try {
-
-           $test = $facebook->api("/".$player_id."/notifications", 'POST', $data);
+            $test = $facebook->api("/".$player_id."/notifications", 'POST', $data);
         }
-        catch (FacebookApiException $e){
-        }
+        catch (FacebookApiException $e){}
     }
 
     public static function getFB(){

@@ -159,7 +159,7 @@
             $def_armies = Input::get('def_armies');
             $attk_id = Input::get('attk_id');
             $def_id = Input::get('def_id');
-            //maybe need to shift terrcount shit to post_take_over..
+            //maybe need to shift terrcount to post_take_over..
             echo json_encode($this->game->attack($attk_owner, $def_owner, $attk_armies, $attk_id, $def_armies, $def_id));
         }
 

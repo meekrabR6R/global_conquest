@@ -48,10 +48,10 @@ class Player{
     }
 
 
-	/*************************************
-	* Checks membership status of user for
-	* current game.
-	**************************************/
+   /*************************************
+    * Checks membership status of user for
+    * current game.
+    **************************************/
     public function isMember(){
 
         if($this->record)
